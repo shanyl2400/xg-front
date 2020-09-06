@@ -22,6 +22,7 @@ import OrderDetails from './OrderDetails';
 import OrgDetails from './OrgDetails';
 import OrgOrderList from './OrgOrderList';
 import AuthorOrderList from './AuthorOrderList';
+import Login from './Login';
 function XgRouter() {
     return (
         <Switch>
@@ -99,6 +100,9 @@ function XgRouter() {
             </Route>
             <Route path="/main">
                 <Dashboard />
+            </Route>
+            <Route path="/login">
+                <Login />
             </Route>
         </Switch>
     );

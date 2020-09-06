@@ -30,10 +30,6 @@ function Login(props) {
     let [hasInvalidNamePassword, setHasInvalidNamePassword] = useState(false);
 
     let history = useHistory();
-    let token = sessionStorage.getItem("token");
-    if(token != null){
-        doLogin(props);
-    }
     const doLogin = (props) => {
         let roleId = sessionStorage.getItem("role_id");
         switch(roleId){
@@ -61,6 +57,11 @@ function Login(props) {
             default: 
                 history.push("/main/user_info");
         }
+    }
+
+    let token = sessionStorage.getItem("token");
+    if(token != null){
+        doLogin(props);
     }
     const handleClick = async e => {
         let userRes = await loginAPI(userName, password);

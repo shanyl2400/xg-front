@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { Breadcrumb, Avatar, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import UpdatePasswordModel from '../component/UpdatePasswordModel'
 
 const { Title, Paragraph } = Typography;
 function UserInfo() {
-  const [updatePasswordVisible, setUpdatePasswordVisible] = useState(false)
+  const [updatePasswordVisible, setUpdatePasswordVisible] = useState(false);
+  
+  let history = useHistory();
   let handleUpdatePassword=()=>{
     setUpdatePasswordVisible(true);
   }
@@ -15,6 +18,7 @@ function UserInfo() {
   let handleLogout=()=>{
     sessionStorage.removeItem("token");
     window.location.reload();
+    // history.push("/web/login");
   }
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
