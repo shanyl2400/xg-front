@@ -17,6 +17,7 @@ function UserInfo() {
   }
   let handleLogout=()=>{
     sessionStorage.removeItem("token");
+    window.location = "/";
     window.location.reload();
     // history.push("/web/login");
   }

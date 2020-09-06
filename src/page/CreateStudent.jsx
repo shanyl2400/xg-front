@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, Radio, Cascader, message, Select } from 'antd';
 import IntentSubjectForm from '../component/IntentSubjectForm'
 import options from '../component/address'
+import { useHistory } from "react-router-dom";
 import { listSubjects, createStudentAPI, listOrderSourcesAPI } from '../api/api';
 
 const { Option } = Select;
@@ -117,6 +118,8 @@ function CreateStudent(props) {
     form.submit();
     
   }
+  let history = useHistory();
+
   const onCreateOrder = values => {
     form.validateFields().then(async e=>{
       let address = "";
@@ -169,7 +172,8 @@ function CreateStudent(props) {
       form.resetFields();
       if(res.result.status == 1 || res.result.status == 3){
         console.log("ID:",res.result.id);
-        props.onCreateStudentOrder(res.result.id);
+        // props.onCreateStudentOrder(res.result.id);
+        history.push("/main/student_order/" + res.result.id);
       }
       
     }).catch(err=>{
