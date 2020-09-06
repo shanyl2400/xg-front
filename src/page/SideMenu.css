@@ -1,0 +1,10 @@
+
+.logo {
+    /* height: 7vmin; */
+    width:90%;
+    margin: 2vh 1vh;
+}
+.logo-name{
+    display:inline-block;
+    line-height: 6vmin;
+}  

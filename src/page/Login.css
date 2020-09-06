@@ -1,0 +1,17 @@
+.site-layout-content {
+  background: #fff;
+  padding: 24px;
+  min-height: 480px;
+  width:380px;
+  margin: 0px auto;
+}
+.login-logo{
+    height:80px;
+}
+.site-login-item{
+    margin-top:20px;
+}
+
+.site-login-item button{
+    float:right;
+}
