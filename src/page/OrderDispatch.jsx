@@ -3,11 +3,12 @@ import { Breadcrumb, Tag, Space, Table, Pagination } from 'antd';
 import { listAllStudentAPI } from '../api/api';
 import { getStudentStatus } from '../utils/status';
 import {useHistory } from "react-router-dom";
+import StudentFilter from "../component/StudentFilter";
 
 const pageSize = 10;
 
-async function fetchStudent(page, pageSize) {
-  const rawRes = await listAllStudentAPI(page, pageSize);;
+async function fetchStudent(page, pageSize, data) {
+  const rawRes = await listAllStudentAPI(page, pageSize, data);
   const rawStudents = rawRes.result.students;
   let students = {
     total: rawRes.result.total,
@@ -16,7 +17,7 @@ async function fetchStudent(page, pageSize) {
   for (let i = 0; i < rawStudents.length; i++) {
     students.data.push({
       id: rawStudents[i].id,
-      author: rawStudents[i].author,
+      author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
       address: rawStudents[i].address,
       telephone: rawStudents[i].telephone,
@@ -87,14 +88,19 @@ function OrderDispatch(props) {
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(1, pageSize)
+      let res = await fetchStudent(1, pageSize, 0);
       setStudents(res);
     }
     fetchData();
   }, []);
 
   let handleChangePage = async e => {
-    let res = await fetchStudent(e, pageSize)
+    let res = await fetchStudent(e, pageSize, 0);
+    setStudents(res);
+  }
+  let handleStudentFilter = async e => {
+    console.log(e);
+    let res = await fetchStudent(1, pageSize, e);
     setStudents(res);
   }
 
@@ -104,6 +110,8 @@ function OrderDispatch(props) {
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>派单</Breadcrumb.Item>
       </Breadcrumb>
+
+      <StudentFilter onFilterChange={handleStudentFilter}/>
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

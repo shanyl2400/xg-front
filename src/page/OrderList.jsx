@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
-import { listOrdersAPI } from '../api/api';
+import {Breadcrumb, message, Space, Table, Pagination, Row, Col, Select} from 'antd';
+import { listOrdersAPI, listOrgsAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
-const total = 10;
+import OrderFilter from "../component/OrderFilter";
 const pageSize = 10;
+const { Option } = Select;
+
+let pageIndex = 1;
 function OrderList(props) {
   const columns = [
     {
@@ -58,40 +61,50 @@ function OrderList(props) {
     },
   ];
   let history = useHistory();
-  let [orders, setOrders] = useState({total:0})
-  const fetchData = async (index) => {
-    let res = await listOrdersAPI(index, pageSize);
+  let [orders, setOrders] = useState({total:0});
+
+  const fetchData = async (index, data) => {
+    let res = await listOrdersAPI(index, pageSize, data);
     if(res.err_msg == "success"){
       setOrders({
         total: res.data.total,
         data: res.data.orders
       });
     }else{
-      message.error("获取订单失败");
+      message.error("获取订单失败：");
     }
-  
   }
+
   useEffect(() => {
-    fetchData(1);
+    fetchData(1, null);
   }, []);
   
   let handleChangePage = (page)=>{
-    fetchData(page);
+    pageIndex = page;
+    fetchData(page, null);
   }
- 
+
+  let handleChangeFilter = value=>{
+    console.log(value);
+    fetchData(pageIndex, value);
+  }
+
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
        <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>订单列表</Breadcrumb.Item>
       </Breadcrumb>
+
+      <OrderFilter onChangeFilter={handleChangeFilter}></OrderFilter>
+
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={orders.data}
          />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={total} />
+      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orders.total} />
 
     </div>
   );

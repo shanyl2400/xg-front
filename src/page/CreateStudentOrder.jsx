@@ -23,10 +23,12 @@ function CreateStudentOrder(props) {
                 message.warn("查不到学生信息");
                 history.goBack();
             }
-
-            const orgRes = await listSubOrgsAPI();
+            console.log(res.student);
+            const orgRes = await listSubOrgsAPI({
+                address: res.student.address,
+                subjects: res.student.intent_subject,
+            });
             if (orgRes.err_msg == "success") {
-                console.log(orgRes.data.orgs)
                 setOrgs(orgRes.data.orgs);
             } else {
                 message.warn("查不到机构信息");

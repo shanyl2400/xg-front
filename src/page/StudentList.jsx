@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Breadcrumb, Tag, Space, Table, Pagination } from 'antd';
-import { listStudentAPI } from '../api/api';
+import { Breadcrumb, Tag, Space, Table, Pagination, Select, Row, Col, message, Input } from 'antd';
+import { listStudentAPI, listOrgsAPI } from '../api/api';
 import {useHistory } from "react-router-dom";
+import StudentFilter from "../component/StudentFilter";
 
 const pageSize = 10;
-
-async function fetchStudent(page, pageSize) {
-  const rawRes = await listStudentAPI(page, pageSize);;
+const { Option } = Select;
+async function fetchStudent(page, pageSize, status) {
+  const rawRes = await listStudentAPI(page, pageSize, status);
   const rawStudents = rawRes.result.students;
   let students = {
     total: rawRes.result.total,
@@ -15,7 +16,7 @@ async function fetchStudent(page, pageSize) {
   for (let i = 0; i < rawStudents.length; i++) {
     students.data.push({
       id: rawStudents[i].id,
-      author: rawStudents[i].author,
+      author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
       address: rawStudents[i].address,
       telephone: rawStudents[i].telephone,
@@ -41,6 +42,7 @@ function getStatusName(status) {
   }
 }
 
+let pageIndex = 1;
 function StudentList(props) {
   const columns = [
     {
@@ -96,17 +98,24 @@ function StudentList(props) {
   ];
 
   const [students, setStudents] = useState([]);
+
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(1, pageSize)
+      let res = await fetchStudent(pageIndex, pageSize, 0)
       setStudents(res);
     }
     fetchData();
   }, []);
 
   let handleChangePage = async e => {
-    let res = await fetchStudent(e, pageSize)
+    pageIndex = e
+    let res = await fetchStudent(pageIndex, pageSize, 0)
+    setStudents(res);
+  }
+
+  let handleStudentFilter = async e => {
+    let res = await fetchStudent(pageIndex, pageSize, e)
     setStudents(res);
   }
 
@@ -116,6 +125,7 @@ function StudentList(props) {
         <Breadcrumb.Item>学员管理</Breadcrumb.Item>
         <Breadcrumb.Item>学员名单</Breadcrumb.Item>
       </Breadcrumb>
+       <StudentFilter onFilterChange={handleStudentFilter}/>
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

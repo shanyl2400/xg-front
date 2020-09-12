@@ -6,6 +6,7 @@ import {listUsersAPI, resetUserPasswordAPI} from '../api/api';
 const { confirm } = Modal;
 const total = 10;
 const pageSize = 10;
+let pageIndex = 1;
 function UserList(props) {
   const columns = [
     {
@@ -39,10 +40,11 @@ function UserList(props) {
     },
   ];
 
-  let [users, setUsers] = useState([]);
+  let [users, setUsers] = useState({total:0, data:[]});
 
   let handleChangePage = (page)=>{
-    console.log(page);
+    pageIndex = page;
+    fetchData(pageIndex);
   }
   let handleOnResetPassword = (userId) => {
     confirm({
@@ -67,17 +69,19 @@ function UserList(props) {
   }
 
   const fetchData = async e => {
-    let res = await listUsersAPI();
+    let res = await listUsersAPI(e, pageSize);
     if(res.err_msg == "success"){
-      console.log(res);
-      setUsers(res.users);
+      setUsers({
+        data: res.users,
+        total: res.total,
+      });
     }else{
       message.error("获取用户列表失败，", res.err_msg);
       return
     }
   }
   useEffect(() => {
-    fetchData();
+    fetchData(pageIndex);
   }, []);
 
   return (
@@ -92,14 +96,14 @@ function UserList(props) {
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
-        dataSource={users}
+        dataSource={users.data}
          />
         </Col>
       </Row>
       
       <Row>
         <Col span={12}>
-        <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={total} />
+        <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={users.total} />
       </Col>
       </Row>
     </div>

@@ -3,8 +3,9 @@ import { useHistory } from "react-router-dom";
 import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
 import { listAuthOrdersAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
-const total = 10;
+import OrderFilter from "../component/OrderFilter";
 const pageSize = 10;
+let pageIndex = 1;
 function AuthorOrderList(props) {
   const columns = [
     {
@@ -59,8 +60,8 @@ function AuthorOrderList(props) {
   ];
   let history = useHistory();
   let [orders, setOrders] = useState({total:0})
-  const fetchData = async (index) => {
-    let res = await listAuthOrdersAPI(index, pageSize);
+  const fetchData = async (index, value) => {
+    let res = await listAuthOrdersAPI(index, pageSize, value);
     if(res.err_msg == "success"){
       setOrders({
         total: res.data.total,
@@ -72,11 +73,15 @@ function AuthorOrderList(props) {
   
   }
   useEffect(() => {
-    fetchData(1);
+    fetchData(1, null);
   }, []);
   
   let handleChangePage = (page)=>{
-    fetchData(page);
+    fetchData(page, null);
+  }
+  let handleChangeFilter = value=>{
+    console.log(value);
+    fetchData(pageIndex, value);
   }
  
   return (
@@ -85,13 +90,14 @@ function AuthorOrderList(props) {
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>我的订单</Breadcrumb.Item>
       </Breadcrumb>
+      <OrderFilter onChangeFilter={handleChangeFilter}></OrderFilter>
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={orders.data}
          />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={total} />
+      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orders.total} />
 
     </div>
   );

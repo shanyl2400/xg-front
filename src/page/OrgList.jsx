@@ -6,6 +6,8 @@ import {listOrgsAPI, getOrgAPI} from '../api/api';
 import {getOrgStatus} from '../utils/status';
 import { checkAuthorities } from '../utils/auth';
 
+const pageSize = 10;
+let pageIndex = 1;
 function OrgList(props) {
   const columns = [
     {
@@ -50,8 +52,8 @@ function OrgList(props) {
   let history = useHistory();
   let [revokeOrgModelVisible, setRevokeOrgModelVisible] = useState(false);
   let [orgData, setOrgData] = useState({});
-
   let [orgList, setOrgList] = useState([]);
+  let [orgCount, setOrgCount] = useState(0);
 
   const handleRevoke = async (id) => {
     let res = await getOrgAPI(id);
@@ -65,8 +67,8 @@ function OrgList(props) {
     }
   }
 
-  const fetchData = async () => {
-    let res = await listOrgsAPI();
+  const fetchData = async (page) => {
+    let res = await listOrgsAPI(page, pageSize);
     if(res.err_msg == "success") {
       let tempOrgs = [];
       for(let i = 0; i < res.data.orgs.length; i ++){
@@ -81,14 +83,21 @@ function OrgList(props) {
         });
       }
       setOrgList(tempOrgs);
+      setOrgCount(res.data.total);
+
     }else {
       message.warning("获取机构列表失败：" + res.err_msg);
       return;
     }
   }
   useEffect(() => {
-    fetchData();
+    fetchData(pageIndex);
   }, []);
+
+  let handleChangePage = page => {
+      pageIndex = page;
+      fetchData(pageIndex);
+  }
 
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
@@ -102,8 +111,8 @@ function OrgList(props) {
         columns={columns}
         dataSource={orgList}
          />
-      {/* <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={total} /> */}
-      <RevokeOrgModel refreshData={()=>fetchData()} orgData={orgData} visible={revokeOrgModelVisible} closeModel={()=>{setRevokeOrgModelVisible(false)}}/>
+       <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
+      <RevokeOrgModel refreshData={()=>fetchData(pageIndex)} orgData={orgData} visible={revokeOrgModelVisible} closeModel={()=>{setRevokeOrgModelVisible(false)}}/>
     </div>
   );
 }

@@ -4,26 +4,7 @@ import { Breadcrumb, Tag, Space, Table, Pagination, message } from 'antd';
 import ReviewOrderModel from '../component/ReviewOrderModel';
 import { getPendingPaymentAPI } from '../api/api';
 import { getPaymentStatus } from '../utils/status';
-const data = [
-  {
-    "id":1,
-    "author":"张三",
-    "student_name":"王五",
-    "to_org":"测试机构",
-    "telephone":"13800001222",
-    "intent_subject":"英语",
-    "status":"已报名"
-  },
-  {
-    "id":2,
-    "author":"张三",
-    "student_name":"王五",
-    "to_org":"测试机构",
-    "telephone":"13800001222",
-    "intent_subject":"英语",
-    "status":"已报名"
-  }
-];
+
 function OrderReview(props) {
   const columns = [
     {
@@ -33,8 +14,8 @@ function OrderReview(props) {
     },
     {
       title: '代理人',
-      dataIndex: 'author',
-      key: 'author',
+      dataIndex: 'publisher_name',
+      key: 'publisher_name',
     },
     {
       title: '学生姓名',

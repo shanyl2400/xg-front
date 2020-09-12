@@ -16,7 +16,6 @@ function Main() {
         history.push("/");
     }
 
-
     return (
         <Router>
             <Layout
@@ -24,7 +23,7 @@ function Main() {
                 <Sider>
                     <SideMenu></SideMenu>
                 </Sider>
-                <Content style={{ padding: '10px 80px', textAlign: "left", backgroundColor: "#fff" }}>
+                <Content style={{ padding: '10px 80px', textAlign: "left", backgroundColor: "#ffffff" }}>
                     <XgRouter />
                 </Content>
             </Layout>

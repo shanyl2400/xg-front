@@ -18,10 +18,14 @@ export function loginAPI(name, password){
 }
 
 export async function updatePasswordAPI(password) {
-    let res = await axios.put(baseURL + "/user/password", {
-        new_password: password
-    })
-    return res.data;
+    try {
+        let res = await axios.put(baseURL + "/user/password", {
+            new_password: password
+        })
+        return res.data;
+    } catch (e) {
+        return {err_msg: e}
+    }
 }
 
 export async function listSubjects(){
@@ -51,32 +55,66 @@ export async function createRole(data){
 }
 
 export async function createStudentAPI(values){
-    let res = await axios.post(baseURL + "/student/", values);
-    return res.data;
+    try {
+        let res = await axios.post(baseURL + "/student/", values);
+        return res.data;
+    } catch (e) {
+        return {err_msg: e}
+    }
 }
 
-export async function listStudentAPI(page, pageSize){
-    let res = await axios.get(baseURL + "/students/private?page=" + page + "&page_size=" + pageSize);
-    return res.data;
+export async function listStudentAPI(page, pageSize, status){
+    try {
+        let res = await axios.get(baseURL + `/students/private?page=${page}&page_size=${pageSize}&status=${status}`);
+        return res.data;
+    } catch (e) {
+        return {err_msg: e}
+    }
 }
 
-export async function listAllStudentAPI(page, pageSize){
-    let res = await axios.get(baseURL + "/students/?page=" + page + "&page_size=" + pageSize);
-    return res.data;
+export async function listAllStudentAPI(page, pageSize, status){
+    try {
+        let res = await axios.get(baseURL + `/students/private?page=${page}&page_size=${pageSize}&status=${status}`);
+        return res.data;
+    } catch (e) {
+        return {err_msg: e}
+    }
 }
 export async function getStudentByIdAPI(id) {
-    let res = await axios.get(baseURL + "/student/" + id);
-    return res.data;
+    try {
+        let res = await axios.get(baseURL + "/student/" + id);
+        return res.data;
+    } catch (e) {
+        return {err_msg: e}
+    }
 }
 
-export async function listOrgsAPI() {
-    let res = await axios.get(baseURL + "/orgs/");
-    return res.data;
+export async function listOrgsAPI(page, pageSize) {
+    try {
+        if(page == undefined || pageSize == undefined){
+            page = 0;
+            pageSize = 0;
+        }
+        let res = await axios.get(baseURL + `/orgs/?page=${page}&page_size=${pageSize}`);
+        return res.data;
+    } catch (e) {
+        return {err_msg: e}
+    }
 }
 
-export async function listSubOrgsAPI() {
-    let res = await axios.get(baseURL + "/orgs/campus");
-    return res.data;
+export async function listSubOrgsAPI(condition) {
+    try {
+        let address = condition.address;
+        let rawSubjects = condition.subjects;
+        let subjects = "";
+        if(rawSubjects != null && rawSubjects != undefined) {
+            subjects = rawSubjects.join(",");
+        }
+        let res = await axios.get(baseURL + `/orgs/campus?address=${address}&subjects=${subjects}`);
+        return res.data;
+    } catch (e) {
+        return {err_msg: e}
+    }
 }
 
 export async function listOrderSourcesAPI() {
@@ -195,18 +233,34 @@ export async function revokeOrgReview(id) {
     } 
 }
 
-export async function listOrdersAPI(page, pageSize) {
+export async function listOrdersAPI(page, pageSize, data) {
     try {
-        let res = await axios.get(baseURL + "/orders/?page=" + page + "&page_size=" + pageSize)
+        let api = `/orders/?page=${page}&page_size=${pageSize}`;
+        if(data != null && data.status != undefined && data.status != 0) {
+            api = api + `&status=${data.status}`;
+        }
+        if(data != null && data.orgId != undefined && data.orgId != 0) {
+            api = api + `&to_org_ids=${data.orgId}`;
+        }
+        let res = await axios.get(baseURL + api)
+
         return res.data;
     } catch (e) {
         return {err_msg: e}
     } 
 }
 
-export async function listAuthOrdersAPI(page, pageSize) {
+export async function listAuthOrdersAPI(page, pageSize, data) {
     try {
-        let res = await axios.get(baseURL + "/orders/author?page=" + page + "&page_size=" + pageSize)
+        let api = `/orders/author?page=${page}&page_size=${pageSize}`;
+        if(data != null && data.status != undefined && data.status != 0) {
+            api = api + `&status=${data.status}`;
+        }
+        if(data != null && data.orgId != undefined && data.orgId != 0) {
+            api = api + `&to_org_ids=${data.orgId}`;
+        }
+        let res = await axios.get(baseURL + api)
+        // let res = await axios.get(baseURL + "/orders/author?page=" + page + "&page_size=" + pageSize)
         return res.data;
     } catch (e) {
         return {err_msg: e}
@@ -294,9 +348,9 @@ export async function createUserAPI(values){
     } 
 }
 
-export async function listUsersAPI(){
+export async function listUsersAPI(page, pageSize){
     try {
-        let res = await axios.get(baseURL + "/users/");
+        let res = await axios.get(baseURL + `/users/?page=${page}&page_size=${pageSize}`);
         return res.data;
     } catch (e) {
         return {err_msg: e}

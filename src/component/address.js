@@ -4,20 +4,120 @@ const options = [
       value: '上海市',
       label: '上海市',
       children: [
-        {
-          value: '徐汇区',
-          label: '徐汇区',
-        },
+		  {
+			  value: '徐汇区',
+			  label: '徐汇区',
+		  },
+		  {
+			  value: '闵行区',
+			  label: '闵行区',
+		  },
+		  {
+			  value: '黄浦区',
+			  label: '黄浦区',
+		  },
+		  {
+			  value: '长宁区',
+			  label: '长宁区',
+		  },
+		  {
+			  value: '静安区',
+			  label: '静安区',
+		  },
+		  {
+			  value: '普陀区',
+			  label: '普陀区',
+		  },
+		  {
+			  value: '虹口区',
+			  label: '虹口区',
+		  },
+		  {
+			  value: '杨浦区',
+			  label: '杨浦区',
+		  },
+		  {
+			  value: '宝山区',
+			  label: '宝山区',
+		  },
+		  {
+			  value: '嘉定区',
+			  label: '嘉定区',
+		  },
+		  {
+			  value: '金山区',
+			  label: '金山区',
+		  },
+		  {
+			  value: '松江区',
+			  label: '松江区',
+		  },
+		  {
+			  value: '青浦区',
+			  label: '青浦区',
+		  },
+		  {
+			  value: '奉贤区',
+			  label: '奉贤区',
+		  },
+		  {
+			  value: '崇明区',
+			  label: '崇明区',
+		  },
+		  {
+			  value: '崇明区',
+			  label: '浦东新区',
+		  },
       ],
     },
     {
-      value: '江苏省',
-      label: '江苏省',
+      value: '南京市',
+      label: '南京市',
       children: [
-        {
-          value: '南京市',
-          label: '南京市',
-        },
+		  {
+			  value: '鼓楼区',
+			  label: '鼓楼区',
+		  },
+		  {
+			  value: '玄武区',
+			  label: '玄武区',
+		  },
+		  {
+			  value: '建邺区',
+			  label: '建邺区',
+		  },
+		  {
+			  value: '秦淮区',
+			  label: '秦淮区',
+		  },
+		  {
+			  value: '栖霞区',
+			  label: '栖霞区',
+		  },
+		  {
+			  value: '雨花台区',
+			  label: '雨花台区',
+		  },
+		  {
+			  value: '浦口区',
+			  label: '浦口区',
+		  },
+		  {
+			  value: '六合区',
+			  label: '六合区',
+		  },
+		  {
+			  value: '江宁区',
+			  label: '江宁区',
+		  },
+		  {
+			  value: '溧水区',
+			  label: '溧水区',
+		  },
+		  {
+			  value: '高淳区',
+			  label: '高淳区',
+		  },
       ],
     },
   ];
