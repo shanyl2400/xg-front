@@ -74,7 +74,7 @@ export async function listStudentAPI(page, pageSize, status){
 
 export async function listAllStudentAPI(page, pageSize, status){
     try {
-        let res = await axios.get(baseURL + `/students/private?page=${page}&page_size=${pageSize}&status=${status}`);
+        let res = await axios.get(baseURL + `/students/?page=${page}&page_size=${pageSize}&status=${status}`);
         return res.data;
     } catch (e) {
         return {err_msg: e}

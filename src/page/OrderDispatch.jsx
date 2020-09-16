@@ -9,6 +9,7 @@ const pageSize = 10;
 
 async function fetchStudent(page, pageSize, data) {
   const rawRes = await listAllStudentAPI(page, pageSize, data);
+  console.log(rawRes)
   const rawStudents = rawRes.result.students;
   let students = {
     total: rawRes.result.total,
