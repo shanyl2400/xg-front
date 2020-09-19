@@ -1,28 +1,31 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
-import CreateStudent from './CreateStudent';
-import CreateStudentOrder from './CreateStudentOrder';
-import StudentList from './StudentList';
-import UserInfo from './UserInfo';
-import StudentDetails from './StudentDetails';
-import Dashboard from './Dashboard';
-import OrderDispatch from './OrderDispatch';
-import OrderList from './OrderList';
-import OrderReview from './OrderReview';
-import OrderResource from './OrderResource';
-import SubjectList from './SubjectList';
-import CreateOrg from './CreateOrg';
-import OrgReview from './OrgReview';
-import OrgList from './OrgList';
-import CreateUser from './CreateUser';
-import CreateRole from './CreateRole';
-import UserList from './UserList';
-import RoleList from './RoleList';
-import OrderDetails from './OrderDetails';
-import OrgDetails from './OrgDetails';
-import OrgOrderList from './OrgOrderList';
-import AuthorOrderList from './AuthorOrderList';
-import Login from './Login';
+import React  from 'react';
+import { Switch, Route } from "react-router-dom";
+
+import loadable from '../utils/loadingComponent'
+
+const StudentList = loadable(()=>import('./StudentList'));
+const CreateStudent = loadable(()=>import('./CreateStudent'));
+const OrderDispatch = loadable(()=>import('./OrderDispatch'));
+const OrderReview = loadable(()=>import('./OrderReview'));
+const OrgOrderList = loadable(()=>import('./OrgOrderList'));
+const AuthorOrderList = loadable(()=>import('./AuthorOrderList'));
+const OrderList = loadable(()=>import('./OrderList'));
+const OrderResource = loadable(()=>import('./OrderResource'));
+const SubjectList = loadable(()=>import('./SubjectList'));
+const CreateOrg = loadable(()=>import('./CreateOrg'));
+const OrgReview = loadable(()=>import('./OrgReview'));
+const OrgList = loadable(()=>import('./OrgList'));
+const CreateUser = loadable(()=>import('./CreateUser'));
+const UserList = loadable(()=>import('./UserList'));
+const CreateRole = loadable(()=>import('./CreateRole'));
+const RoleList = loadable(()=>import('./RoleList'));
+const UserInfo = loadable(()=>import('./UserInfo'));
+const StudentDetails = loadable(()=>import('./StudentDetails'));
+const CreateStudentOrder = loadable(()=>import('./CreateStudentOrder'));
+const OrderDetails = loadable(()=>import('./OrderDetails'));
+const OrgDetails = loadable(()=>import('./OrgDetails'));
+const Dashboard = loadable(()=>import('./Dashboard'));
+const Login = loadable(()=>import('./Login'));
 function XgRouter() {
     return (
         <Switch>
@@ -53,12 +56,6 @@ function XgRouter() {
             <Route path="/main/subject_list">
                 <SubjectList />
             </Route>
-            <Route path="/main/subject_list">
-                <SubjectList />
-            </Route>
-            <Route path="/main/subject_list">
-                <SubjectList />
-            </Route>
             <Route path="/main/create_org">
                 <CreateOrg />
             </Route>
@@ -79,9 +76,6 @@ function XgRouter() {
             </Route>
             <Route path="/main/role_list">
                 <RoleList />
-            </Route>
-            <Route path="/main/user_info">
-                <UserInfo />
             </Route>
             <Route path="/main/user_info">
                 <UserInfo />
