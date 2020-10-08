@@ -9,7 +9,11 @@ export function getOrderStatus(status){
         case 2:
             return "已报名";
         case 3:
-            return "已退费";
+            return "已退学";
+        case 4:
+            return "无效订单";
+        case 5:
+          return "交定金";
     }
     return "未知";
 }

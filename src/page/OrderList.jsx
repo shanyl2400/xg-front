@@ -8,6 +8,7 @@ const pageSize = 10;
 const { Option } = Select;
 
 let pageIndex = 1;
+let queryValue = {};
 function OrderList(props) {
   const columns = [
     {
@@ -81,11 +82,11 @@ function OrderList(props) {
   
   let handleChangePage = (page)=>{
     pageIndex = page;
-    fetchData(page, null);
+    fetchData(page, queryValue);
   }
 
   let handleChangeFilter = value=>{
-    console.log(value);
+    queryValue = value
     fetchData(pageIndex, value);
   }
 

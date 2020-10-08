@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, Radio, Cascader, message, Select } from 'antd';
-import IntentSubjectForm from '../component/IntentSubjectForm'
-import options from '../component/address'
+import IntentSubjectForm from '../component/IntentSubjectForm';
+import options from '../component/address';
+import AddressForm from '../component/AddressForm';
 import { useHistory } from "react-router-dom";
 import { listSubjects, createStudentAPI, listOrderSourcesAPI } from '../api/api';
 
@@ -62,11 +63,7 @@ async function getOrderSources(){
 function CreateStudent(props) {
   const [form] = Form.useForm();
   const onFinish = async values => {
-    let address = "";
-    let addresses = form.getFieldValue("address");
-    for (let i = 0; i < addresses.length; i++) {
-      address = address + addresses[i];
-    }
+    let address = form.getFieldValue("address");
     let intentSubject = []
     let intentSubjects = form.getFieldValue("intentSubject");
     for (let i = 0; i < intentSubjects.length; i++) {
@@ -81,7 +78,8 @@ function CreateStudent(props) {
       "gender": form.getFieldValue("gender"),
       "telephone": form.getFieldValue("telephone"),
       "email": form.getFieldValue("email"),
-      "address": address,
+      "address": address.region,
+      "address_ext": address.ext,
       "intent_subject": intentSubject,
       "note": form.getFieldValue("note"),
       "order_source_id": form.getFieldValue("order_source_id")
@@ -116,17 +114,13 @@ function CreateStudent(props) {
   };
   const onCreateStudent = async () => {
     form.submit();
-    
   }
   let history = useHistory();
 
   const onCreateOrder = values => {
     form.validateFields().then(async e=>{
-      let address = "";
-      let addresses = form.getFieldValue("address");
-      for (let i = 0; i < addresses.length; i++) {
-        address = address + addresses[i];
-      }
+      let address = form.getFieldValue("address");
+      
       let intentSubject = []
       let intentSubjects = form.getFieldValue("intentSubject");
       for (let i = 0; i < intentSubjects.length; i++) {
@@ -141,7 +135,8 @@ function CreateStudent(props) {
         "gender": form.getFieldValue("gender"),
         "telephone": form.getFieldValue("telephone"),
         "email": form.getFieldValue("email"),
-        "address": address,
+        "address": address.region,
+        "address_ext": address.ext,
         "intent_subject": intentSubject,
         "note": form.getFieldValue("note"),
         "order_source_id": form.getFieldValue("order_source_id")
@@ -233,7 +228,8 @@ function CreateStudent(props) {
         </Form.Item>
 
         <Form.Item name="address" label="居住地址" rules={[{ required: true }]} >
-          <Cascader options={options} placeholder="请选择" />
+          {/* <Cascader options={options} placeholder="请选择" /> */}
+          <AddressForm />
         </Form.Item>
 
         <Form.Item name="email" label="电子邮箱" >

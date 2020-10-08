@@ -6,6 +6,7 @@ import { getOrderStatus } from '../utils/status';
 import OrderFilter from "../component/OrderFilter";
 const pageSize = 10;
 let pageIndex = 1;
+let queryValue = {};
 function AuthorOrderList(props) {
   const columns = [
     {
@@ -77,10 +78,10 @@ function AuthorOrderList(props) {
   }, []);
   
   let handleChangePage = (page)=>{
-    fetchData(page, null);
+    fetchData(page, queryValue);
   }
   let handleChangeFilter = value=>{
-    console.log(value);
+    queryValue = value;
     fetchData(pageIndex, value);
   }
  

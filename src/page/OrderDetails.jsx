@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, Row, Col, Typography, message } from 'antd';
+import { Button, Card, Breadcrumb, Row, Col, Input, Typography, message } from 'antd';
 import { getOrderAPI } from '../api/api';
-import { getOrderStatus } from '../utils/status';
+import { getOrderStatus, getPaymentStatus } from '../utils/status';
+import AddMarkModel from '../component/AddMarkModel';
+const { TextArea } = Input;
 const { Title } = Typography;
 function OrderDetails(props) {
     let { id } = useParams();
+    let [markModelVisible, setMarkModelVisible] = useState(false);
+    let [mark, setMark] = useState("");
     let history = useHistory();
     let [orderInfo, setOrderInfo] = useState({
         student_summary: {
@@ -14,22 +18,30 @@ function OrderDetails(props) {
         },
         intent_subject: [],
         PaymentInfo: [],
+        RemarkInfo: [],
     })
-    useEffect(() => {
-        const fetchData = async () => {
-            let res = await getOrderAPI(id);
-            if (res.err_msg == "success") {
-                console.log(res.data)
-                setOrderInfo(res.data);
-            } else {
-                message.warning("获取机构信息失败：" + res.err_msg);
-                history.goBack();
-                return;
-            }
+    const fetchData = async () => {
+        let res = await getOrderAPI(id);
+        if (res.err_msg == "success") {
+            setOrderInfo(res.data);
+        } else {
+            message.warning("获取机构信息失败：" + res.err_msg);
+            history.goBack();
+            return;
         }
+    }
+    useEffect(() => {
+        
         fetchData();
     }, []);
-    console.log(orderInfo)
+
+    const openAddMarkModel = e => {
+        setMarkModelVisible(true);
+    }
+    const closeAddMarkModel = e => {
+        setMarkModelVisible(false);
+    }
+
     return (
         <div style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
@@ -63,19 +75,40 @@ function OrderDetails(props) {
                     <Col span={12}>状态：{getOrderStatus(orderInfo.status)}</Col>
                 </Row>
             </Card>
-
+            
+            {orderInfo.PaymentInfo.length > 0 && <Title level={5}>缴费情况</Title>}
             {orderInfo.PaymentInfo.map((v) =>
-                <Card key={v.id} style={{ width: "40%", margin: "20px 5px" }}>
+                <Card key={v.id} style={{ width: "30%", float:"left", margin: "20px 5px" }}>
                     <p>费用：{v.title}</p>
+                    <p>时间：{v.created_at.replaceAll("T", " ").replaceAll("Z", "")}</p>
                     <p>收支：{v.mode == 1 ? "收入" : "支出"}</p>
                     <p>金额：<span style={v.mode == 1 ? { "color": "#52c41a" } : { "color": "#f5222d" }}>
                         {v.mode == 1 ? "+" : "-"}{v.amount}
                     </span></p>
+                    <p>状态：{getPaymentStatus(v.status)}</p>
                 </Card>
             )}
-            <Row gutter={[16, 16]}>
-                <Col offset={22} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
+            <div style={{clear:"both"}}></div>
+
+            {orderInfo.RemarkInfo.length > 0 && <Title level={5}>回访记录</Title>}
+            {orderInfo.RemarkInfo.map((v) =>
+                <Card key={v.id} style={{ width: "100%", margin: "20px 5px" }}>
+                    <p>作者：{v.mode == 1? "学果网": "教育机构"}</p>
+                    <p>时间：{v.created_at.replaceAll("T", " ").replaceAll("Z", "")}</p>
+                    <p>内容：{v.content}</p>
+                </Card>
+            )}
+
+            <Row style={{marginTop:8}} gutter={[16, 16]} >
+            <Col offset={20} span={1}><Button onClick={() => openAddMarkModel()} type="primary">添加回访</Button></Col>
+            <Col offset={1} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
             </Row>
+
+            <AddMarkModel 
+                id={orderInfo.id} 
+                visible={markModelVisible} 
+                closeModel={closeAddMarkModel}
+                refreshData={fetchData}/>
         </div>
     );
 }

@@ -8,7 +8,7 @@ function SubOrgItem(props) {
     return (
 
         <Card title={props.name} extra={extra} style={{ width: 300, marginBottom:20}}>
-            <p>地址：{props.address}</p>
+            <p>地址：{props.address.region}{props.address.ext}</p>
             课程：<ul>
             {props.intentSubject.map((v) =>
             <li key={v.id}>

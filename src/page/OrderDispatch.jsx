@@ -30,7 +30,6 @@ async function fetchStudent(page, pageSize, data) {
   return students
 }
 
-
 function OrderDispatch(props) {
   const columns = [
     {

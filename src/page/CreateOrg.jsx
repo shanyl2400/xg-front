@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, Radio, Cascader, Select, message } from 'antd';
-import options from '../component/address';
 import SubOrgForm from '../component/SubOrgForm';
 import { createOrgAPI } from '../api/api';
+import AddressForm from '../component/AddressForm';
 const { TextArea } = Input;
 
 const layout = {
@@ -50,7 +50,6 @@ function CreateOrg(props) {
   const handleSubmit = () => {
     form.validateFields().then(async e =>{
       let formData = form.getFieldsValue();
-      let address = combineStr(formData.address);
       let subOrgInfos = [];
       for(let i = 0; i < subOrgs.length; i ++){
         let so = subOrgs[i];
@@ -58,6 +57,8 @@ function CreateOrg(props) {
           name: so.name,
           telephone: formData.telephone,
           address: combineStr(so.address),
+          address: so.address.region,
+          address_ext: so.address.ext,
           subjects: combineValue(so.intentSubject),
         })
       }
@@ -65,7 +66,8 @@ function CreateOrg(props) {
         org:{
           name:formData.name,
           telephone: formData.telephone,
-          address: address
+          address: formData.address.region,
+          address_ext: formData.address.ext,
         },
         sub_orgs: subOrgInfos
       })
@@ -101,7 +103,8 @@ function CreateOrg(props) {
         </Form.Item>
 
         <Form.Item name="address" label="机构地址" rules={[{ required: true }]} >
-          <Cascader options={options} placeholder="请选择" />
+          {/* <Cascader options={options} placeholder="请选择" /> */}
+          <AddressForm />
         </Form.Item>
 
         <Form.Item name="subOrgs" label="分校" rules={[{ required: false }]} >

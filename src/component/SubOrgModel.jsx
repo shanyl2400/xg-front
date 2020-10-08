@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Modal, Cascader } from 'antd';
 import IntentSubjectForm from './IntentSubjectForm';
-import options from './address';
+import AddressForm from './AddressForm';
 import { listSubjects } from '../api/api';
 const { TextArea } = Input;
 
@@ -106,7 +106,7 @@ function SubOrgModel(props) {
           </Form.Item>
 
           <Form.Item name="address" label="地址" rules={[{ required: true }]} >
-            <Cascader options={options} placeholder="请选择" />
+            <AddressForm />
           </Form.Item>
 
           <Form.Item name="intentSubject" label="支持课程" rules={[{ required: true }]}>

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
-import { listOrgOrdersAPI } from '../api/api';
+import { Breadcrumb, message, Space, Table, Pagination, Dropdown, Menu, Modal } from 'antd';
+import { DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { listOrgOrdersAPI, invalidOrderAPI, revokeOrderAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
 import OrderPayModel from '../component/OrderPayModel'
+import OrderDepositModel from '../component/OrderDepositModel'
 import OrderSignupModel from '../component/OrderSignupModel'
 
 const total = 10;
 const pageSize = 10;
 let currentPage = 1;
+const { confirm } = Modal;
 function OrgOrderList(props) {
   const columns = [
     {
@@ -57,15 +60,32 @@ function OrgOrderList(props) {
       render: (text, record) => (
         <Space size="middle">
           <a onClick={() => history.push("/main/order_details/" + record.id)}>详情</a>
-          {record.status == 1 ?  <a onClick={() => handleOpenSignupOrderModel(record.id)}>报名</a>:<span></span>}
-          <a onClick={()=>handleOpenPayOrderModel(record.id)}>缴费</a>
+          <Dropdown overlay={getMenu(record)} trigger={['click']}>
+            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+              操作<DownOutlined />
+            </a>
+          </Dropdown>
         </Space>
       ),
     },
   ];
+
+  const getMenu = record => {
+    return (
+      <Menu >
+      {record.status == 1 && <Menu.Item key="1"> <a onClick={()=>handleInvalidOrder(record.id)}>无效</a></Menu.Item>}
+      {record.status == 1 &&  <Menu.Item key="2"><a onClick={() => handleOpenDepositOrderModel(record.id)}>交定金</a></Menu.Item>}
+      {(record.status == 1 || record.status == 5) &&  <Menu.Item key="3"><a onClick={() => handleOpenSignupOrderModel(record.id)}>报名</a></Menu.Item>}
+      {(record.status == 2 || record.status == 5) &&  <Menu.Item key="4"> <a onClick={()=>handleOpenPayOrderModel(record.id)}>缴费</a></Menu.Item>}
+      {(record.status == 2 || record.status == 5) && <Menu.Item key="5"> <a onClick={()=>handleRevokeOrder(record.id)}>退学</a></Menu.Item>}
+    </Menu>
+    )
+  }
+
   let history = useHistory();
   let [orders, setOrders] = useState({total:0})
   let [signupOrderModelVisible, setSignupOrderModelVisible] = useState(false);
+  let [depositOrderModelVisible, setDepositOrderModelVisible] = useState(false);
   let [payOrderModelVisible, setPayOrderModelVisible] = useState(false);
   let [orderId, setOrderId] = useState(0);
   const fetchData = async (index) => {
@@ -91,9 +111,17 @@ function OrgOrderList(props) {
   let handleCloseSignupOrderModel = () =>{
     setSignupOrderModelVisible(false);
   }
+  let handleCloseDepositOrderModel = () =>{
+    setDepositOrderModelVisible(false);
+  }
   let handleOpenSignupOrderModel = (id) => {
     setOrderId(id);
     setSignupOrderModelVisible(true);
+  }
+
+  let handleOpenDepositOrderModel = (id) => {
+    setOrderId(id);
+    setDepositOrderModelVisible(true);
   }
 
   let handleClosePayOrderModel = () =>{
@@ -102,6 +130,50 @@ function OrgOrderList(props) {
   let handleOpenPayOrderModel = (id) => {
     setOrderId(id);
     setPayOrderModelVisible(true);
+  }
+
+  let handleInvalidOrder = (id)=>{
+    setOrderId(id);
+    confirm({
+      title: '无效订单',
+      icon: <ExclamationCircleOutlined />,
+      content: '是否确认设置该订单为无效订单',
+      okText: "是",
+      cancelText: "否",
+      async onOk() {
+        let res = await invalidOrderAPI(id);
+        if(res.err_msg == "success"){
+          message.success("设置成功");
+          fetchData(currentPage);
+        }else{
+            message.error("设置失败，" + res.err_msg);
+        }
+      },
+      onCancel() {
+      },
+    });
+  }
+
+  let handleRevokeOrder = (id)=>{
+    setOrderId(id);
+    confirm({
+      title: '退学',
+      icon: <ExclamationCircleOutlined />,
+      content: '是否确认该学员退学？',
+      okText: "是",
+      cancelText: "否",
+      async onOk() {
+        let res = await revokeOrderAPI(id);
+        if(res.err_msg == "success"){
+          message.success("设置成功");
+          fetchData(currentPage);
+        }else{
+            message.error("设置失败，" + res.err_msg);
+        }
+      },
+      onCancel() {
+      },
+    });
   }
  
   return (
@@ -119,6 +191,7 @@ function OrgOrderList(props) {
       <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={total} />
      
       <OrderSignupModel refreshData={()=>fetchData(currentPage)} id={orderId} visible={signupOrderModelVisible} closeModel={handleCloseSignupOrderModel}/>
+      <OrderDepositModel refreshData={()=>fetchData(currentPage)} id={orderId} visible={depositOrderModelVisible} closeModel={handleCloseDepositOrderModel}/>
       <OrderPayModel refreshData={()=>fetchData(currentPage)} id={orderId} visible={payOrderModelVisible} closeModel={handleClosePayOrderModel}/>
     </div>
   );

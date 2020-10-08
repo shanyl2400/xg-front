@@ -19,6 +19,7 @@ async function fetchStudent(page, pageSize, status) {
       author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
       address: rawStudents[i].address,
+      address_ext: rawStudents[i].address_ext,
       telephone: rawStudents[i].telephone,
       intent_subject: rawStudents[i].intent_subject,
       status: rawStudents[i].status,
@@ -62,8 +63,12 @@ function StudentList(props) {
     },
     {
       title: '居住地址',
-      dataIndex: 'address',
       key: 'address',
+      render: (id, record) => (
+        <span style={{textOverflow:"ellipsis"}}>
+          {record.address}{record.address_ext}
+        </span>
+      ),
     },
     {
       title: '联系电话',

@@ -45,7 +45,7 @@ function StudentDetails(props) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>手机号：{student.telephone}</Col>
-                    <Col span={12}>居住地址：{student.address}</Col>
+                    <Col span={12}>居住地址：{student.address}{student.address_ext}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>邮箱：{student.email}</Col>

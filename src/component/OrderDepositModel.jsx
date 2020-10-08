@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Card, Row, Col, Button, message, InputNumber , Form, Select } from 'antd';
 import { getOrderStatus } from '../utils/status';
-import { getOrderAPI, signupOrderAPI} from '../api/api';
+import { getOrderAPI, depositOrderAPI} from '../api/api';
 
 const layout = {
     labelCol: { offset: 2, span: 4 },
     wrapperCol: { span: 10 },
 };
-function OrderSignupModel(props) {
+const { Option } = Select;
+function OrderDepositModel(props) {
     let onCancel = () => {
         props.closeModel();
     }
@@ -21,18 +22,19 @@ function OrderSignupModel(props) {
     })
     const [form] = Form.useForm();
     let onSubmit = async () => {
+       
         form.validateFields().then(async e=>{
             let amount = Number(form.getFieldValue("amount"));
-            let res = await signupOrderAPI(props.id, {
-                title: "学费",
+            let res = await depositOrderAPI(props.id, {
+                title: "定金",
                 amount: amount
             });
             if(res.err_msg == "success"){
-                message.success("名单已报名");
+                message.success("已提交");
                 props.closeModel();
                 props.refreshData();
             }else{
-                message.error("报名失败" + res.err_msg);
+                message.error("交定金失败" + res.err_msg);
             }
             form.resetFields();
           });
@@ -111,4 +113,4 @@ function OrderSignupModel(props) {
     );
 }
 
-export default OrderSignupModel;
+export default OrderDepositModel;

@@ -49,6 +49,9 @@ function OrderPayModel(props) {
     }
     useEffect(() => {
         const fetchData = async () => {
+            if(props.id == 0){
+                return;
+            }
             let res = await getOrderAPI(props.id);
             console.log(res)
             if (res.err_msg == "success") {
