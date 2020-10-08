@@ -38,7 +38,9 @@ function buildOptions(props){
           label: props.subjects[i].children[j].name,
         })
     }
-    options.push(option);
+    if(option.children.length > 0){
+      options.push(option);
+    }
   }
   return options;
 }
@@ -64,7 +66,7 @@ function IntentSubjectFormItem(props) {
   let cascaderValues = [values[0], values[1]];
   return (
     <div style={{ width: 420 }}>
-      <Cascader onChange={e => handleUpdate(e, 1)} value={cascaderValues} options={options} placeholder="请选择报名意向" style={{ width: 200, margin: "8px 8px" }} />
+      <Cascader allowClear={false} onChange={e => handleUpdate(e, 1)} value={cascaderValues} options={options} placeholder="请选择报名意向" style={{ width: 200, margin: "8px 8px" }} />
       <Input onChange={e => handleUpdate(e.target.value, 2)} value={values[2]} style={{ width: "100px" }} />
       <a onClick={() => handleDelete()} style={{ marginLeft: "8px" }} href="#">删除</a>
     </div>

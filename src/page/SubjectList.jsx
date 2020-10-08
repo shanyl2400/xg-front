@@ -92,7 +92,7 @@ function SubjectList(props) {
     setSubjectClassify(e)
   }
   const handleAddSubject = async ()=>{
-    if(subjectName == "") {
+    if(subjectName.trim() == "") {
       message.warn("课程名不能为空");
       return;
     }
@@ -123,7 +123,7 @@ function SubjectList(props) {
       </Breadcrumb>
 
       <Row>
-      <Col className="gutter-row" span={6}>
+      <Col className="gutter-row" span={10}>
         <Table
           pagination={false}
           style={{ marginTop: "30px" }}
