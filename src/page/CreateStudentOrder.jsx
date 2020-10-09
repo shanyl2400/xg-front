@@ -54,7 +54,7 @@ function CreateStudentOrder(props) {
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <a onClick={()=>openCreateOrderModal(record)}>派单</a>
+                    <a onClick={() => openCreateOrderModal(record)}>派单</a>
                 </span>
             ),
         },
@@ -65,6 +65,7 @@ function CreateStudentOrder(props) {
         total: 0,
     });
     const [orgQueryParams, setOrgQueryParams] = useState({
+        student_id: id,
         address: "",
         subjects: ""
     })
@@ -84,10 +85,12 @@ function CreateStudentOrder(props) {
                 history.goBack();
             }
             setOrgQueryParams({
+                student_id: id,
                 address: "",
                 subjects: buildIntentSubjects(res.student.intent_subject),
             })
             const orgRes = await listSubOrgsAPI({
+                student_id: id,
                 address: "",
                 subjects: buildIntentSubjects(res.student.intent_subject),
             }, 1, pageSize);
@@ -127,9 +130,9 @@ function CreateStudentOrder(props) {
 
     const buildIntentSubjects = values => {
         let res = [];
-        for(let i = 0; i < values.length; i ++){
+        for (let i = 0; i < values.length; i++) {
             let parts = values[i].split("-");
-            if(parts.length < 2) {
+            if (parts.length < 2) {
                 console.error("invalid subject");
                 continue;
             }
@@ -193,8 +196,9 @@ function CreateStudentOrder(props) {
         searchOrgs();
     }
     const handleFilter = async e => {
-       
+
         const orgRes = await listSubOrgsAPI({
+            student_id: id,
             address: e,
             subjects: orgQueryParams.subjects,
         }, curPage, pageSize);
@@ -204,6 +208,7 @@ function CreateStudentOrder(props) {
                 total: orgRes.data.total
             });
             setOrgQueryParams({
+                student_id: id,
                 address: e,
                 subjects: orgQueryParams.subjects,
             })
@@ -280,19 +285,19 @@ function CreateStudentOrder(props) {
                     </Col>
                 </Row>
             </Card> */}
-            <SubOrgFilter onFilterChange={handleFilter}/>
+            <SubOrgFilter onFilterChange={handleFilter} />
             <Table
                 pagination={false}
                 style={{ marginTop: "30px" }}
                 columns={columns}
                 dataSource={orgs.data}
             />
-           
+
             <Row gutter={[16, 16]} style={{ marginTop: "30px" }}>
                 {/* <Col offset={18} span={2}><Button type="primary" onClick={() => handleCreateOrder()}>派单</Button></Col> */}
                 <Col offset={22} span={2}><Button onClick={() => history.goBack()}>返回</Button></Col>
             </Row>
-            <CreateOrderModal studentId={id} visible={createOrderModalVisible} org={selectedOrg} closeModel={closeCreateOrderModal}/>
+            <CreateOrderModal studentId={id} visible={createOrderModalVisible} org={selectedOrg} closeModel={closeCreateOrderModal} />
         </div>
     );
 }
