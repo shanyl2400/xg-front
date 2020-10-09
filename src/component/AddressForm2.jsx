@@ -5,11 +5,7 @@ import options from '../component/address';
 let curRegion = "";
 let curExt = "";
 function AddressForm(props) {
-    const [region, setRegion] = useState(0);
-    const [ext, setExt] = useState("");
-
     const changeAddressRegion = e => {
-        setRegion(e);
         let address = "";
         for (let i = 0; i < e.length; i++) {
             address = address + e[i];
@@ -21,7 +17,6 @@ function AddressForm(props) {
         });
     }
     const changeAddressExt = e => {
-        setExt(e.target.value);
         curExt = e.target.value;
         props.onChange({
             region: curRegion,
@@ -31,10 +26,10 @@ function AddressForm(props) {
     return (
         <Row>
             <Col span={10}>
-                <Cascader options={options} placeholder="请选择" value={region} onChange={changeAddressRegion} />
+                <Cascader options={options} placeholder="请选择" value={props.value.region} onChange={changeAddressRegion} />
             </Col>
             <Col offset={1} span={12}>
-                <Input placeholder="请输入详细地址" value={ext} onChange={changeAddressExt} />
+                <Input placeholder="请输入详细地址" value={props.value.ext} onChange={changeAddressExt} />
             </Col>
         </Row>
     )

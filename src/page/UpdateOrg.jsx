@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, message } from 'antd';
-import SubOrgForm from '../component/SubOrgForm';
+import { useParams, useHistory } from "react-router-dom";
+import SubOrgForm from '../component/SubOrgForm2';
 import { createOrgAPI } from '../api/api';
-import AddressForm from '../component/AddressForm';
+import AddressForm from '../component/AddressForm2';
 const { TextArea } = Input;
 
 const layout = {
@@ -12,15 +13,40 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 12, span: 16 },
 };
-let currentId = 1;
+let baseId = 100000000;
 function UpdateOrg(props) {
     const [form] = Form.useForm();
     let [subOrgs, setSubOrgs] = useState([]);
+
+    let [orgData, setOrgData] = useState({});
+    let { id } = useParams();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let res = await getOrgAPI(id);
+            if (res.err_msg == "success") {
+                let org = res.org;
+                setOrgData(org);
+            } else {
+                message.warning("获取机构信息失败：" + res.err_msg);
+                history.goBack();
+                return;
+            }
+        }
+        fetchData();
+    }, []);
 
     const handleAddSubOrg = (data) => {
         data.id = currentId;
         setSubOrgs(subOrgs.concat(data));
         currentId++;
+    }
+    const handleUpdateSubOrg = (id, data) => {
+        for (let i = 0; i < subOrgs.length; i++) {
+            if (id == subOrgs[i].id) {
+                subOrgs[i] = data;
+            }
+        }
     }
     const handleRemoveSubOrg = (id) => {
         let tmpOrgs = [];
@@ -54,6 +80,7 @@ function UpdateOrg(props) {
             for (let i = 0; i < subOrgs.length; i++) {
                 let so = subOrgs[i];
                 subOrgInfos = subOrgInfos.concat({
+                    id: so.id >= baseId ? 0 : so.id,
                     name: so.name,
                     telephone: formData.telephone,
                     address: combineStr(so.address),
@@ -62,7 +89,7 @@ function UpdateOrg(props) {
                     subjects: combineValue(so.intentSubject),
                 })
             }
-            let res = await createOrgAPI({
+            let res = await updateOrgAPI(id, {
                 org: {
                     name: formData.name,
                     telephone: formData.telephone,
@@ -86,7 +113,7 @@ function UpdateOrg(props) {
         <div style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
                 <Breadcrumb.Item>机构管理</Breadcrumb.Item>
-                <Breadcrumb.Item>添加机构</Breadcrumb.Item>
+                <Breadcrumb.Item>修改机构</Breadcrumb.Item>
             </Breadcrumb>
             <Form {...layout}
                 name="control-ref"
@@ -95,20 +122,19 @@ function UpdateOrg(props) {
                 form={form}
             >
                 <Form.Item name="name" label="机构名称" rules={[{ required: true }]} >
-                    <Input />
+                    <Input value={orgData.name} />
                 </Form.Item>
 
                 <Form.Item name="telephone" label="联系方式" rules={[{ required: true }]} >
-                    <Input />
+                    <Input value={orgData.telephone} />
                 </Form.Item>
 
                 <Form.Item name="address" label="机构地址" rules={[{ required: true }]} >
-                    {/* <Cascader options={options} placeholder="请选择" /> */}
-                    <AddressForm />
+                    <AddressForm value={{ region: orgData.address, ext: orgData.address_ext }} />
                 </Form.Item>
 
                 <Form.Item name="subOrgs" label="分校" rules={[{ required: false }]} >
-                    <SubOrgForm subOrgs={subOrgs} addSubOrg={handleAddSubOrg} removeSubOrg={handleRemoveSubOrg} />
+                    <SubOrgForm value={subOrgs} addSubOrg={handleAddSubOrg} removeSubOrg={handleRemoveSubOrg} updateSubOrg={handleUpdateSubOrg} />
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>

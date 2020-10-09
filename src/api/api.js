@@ -219,6 +219,15 @@ export async function createOrgAPI(data) {
     }
 }
 
+export async function updateOrgAPI(id, data) {
+    try {
+        let res = await axios.put(baseURL + `/org/${id}/admin`, data);
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
 export async function rejectOrgReview(id) {
     try {
         let res = await axios.put(baseURL + "/org/" + id + "/review/reject");
