@@ -69,10 +69,10 @@ function SubOrgModel(props) {
   }
 
   const onSubmit = e => {
-    form.validateFields().then(async e=>{
+    form.validateFields().then(async e => {
       let subjects = form.getFieldValue("intentSubject");
-      for(let i = 0; i < subjects.length; i ++){
-        if(subjects[i].value.indexOf("请选择") != -1){
+      for (let i = 0; i < subjects.length; i++) {
+        if (subjects[i].value.indexOf("请选择") != -1) {
           return;
         }
       }

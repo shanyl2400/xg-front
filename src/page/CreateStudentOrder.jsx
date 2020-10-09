@@ -3,7 +3,7 @@ import { Button, Card, Breadcrumb, message, Row, Col, Select, Typography, Table,
 import { useParams, useHistory } from "react-router-dom";
 import SubOrgFilter from '../component/SubOrgFilter';
 import CreateOrderModal from '../component/CreateOrderModal';
-import { getStudentByIdAPI, listSubOrgsAPI, createOrderAPI, getOrgSubjectsAPI } from '../api/api';
+import { getStudentByIdAPI, listSubOrgsAPI } from '../api/api';
 
 const { Title } = Typography;
 const { Option } = Select;

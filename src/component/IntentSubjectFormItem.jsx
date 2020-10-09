@@ -1,44 +1,21 @@
 import React, { useState } from 'react';
 import { Cascader, Input } from 'antd';
 
-// const options = [
-//   {
-//     value: '设计',
-//     label: '设计',
-//     children: [
-//       {
-//         value: 'Photoshop',
-//         label: 'Photoshop',
-//       },
-//     ],
-//   },
-//   {
-//     value: '语言',
-//     label: '语言',
-//     children: [
-//       {
-//         value: '英语',
-//         label: '英语',
-//       },
-//     ],
-//   },
-// ];
-
-function buildOptions(props){
+function buildOptions(props) {
   let options = []
-  for(let i = 0; i < props.subjects.length; i ++){
+  for (let i = 0; i < props.subjects.length; i++) {
     let option = {
       value: props.subjects[i].name,
       label: props.subjects[i].name,
       children: [],
     }
-    for(let j = 0; j < props.subjects[i].children.length; j ++) {
-        option.children.push({
-          value: props.subjects[i].children[j].name,
-          label: props.subjects[i].children[j].name,
-        })
+    for (let j = 0; j < props.subjects[i].children.length; j++) {
+      option.children.push({
+        value: props.subjects[i].children[j].name,
+        label: props.subjects[i].children[j].name,
+      })
     }
-    if(option.children.length > 0){
+    if (option.children.length > 0) {
       options.push(option);
     }
   }
