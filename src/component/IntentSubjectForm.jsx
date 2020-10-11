@@ -49,7 +49,7 @@ function IntentSubjectForm(props) {
     return (
         <div>
             <div className="intent-subject-body" style={{border:"1px solid #ccc", height:"100px",overflowY:"auto"}}>
-                {props.value.map((v) =>
+                {props.value!= null && props.value.map((v) =>
                     <li key={v.id}>
                         <IntentSubjectFormItem 
                             subjects={props.subjects}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, message } from 'antd';
 import { useParams, useHistory } from "react-router-dom";
 import SubOrgForm from '../component/SubOrgForm2';
-import { getOrgAPI, updateOrgAPI } from '../api/api';
+import { getOrgAPI, updateOrgSelfAPI } from '../api/api';
 import AddressForm from '../component/AddressForm2';
 const { TextArea } = Input;
 
@@ -14,11 +14,12 @@ const tailLayout = {
     wrapperCol: { offset: 12, span: 16 },
 };
 let baseId = 100000000;
-function UpdateOrg(props) {
+function UpdateOrgSelf(props) {
     const [form] = Form.useForm();
     let history = useHistory();
+    let [orgInfo, setOrgInfo] = useState({});
 
-    let { id } = useParams();
+    let id = sessionStorage.getItem("org_id");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,7 +31,7 @@ function UpdateOrg(props) {
                     org.sub_orgs[i].name = nameParts[nameParts.length - 1];
                     org.sub_orgs[i].intentSubject = getIntentSubjects(org.sub_orgs[i].subjects);
                 }
-
+                setOrgInfo(res.org);
                 form.setFieldsValue({
                     name: org.name,
                     telephone: org.telephone,
@@ -86,7 +87,7 @@ function UpdateOrg(props) {
                     subjects: combineValue(so.intentSubject),
                 })
             }
-            let res = await updateOrgAPI(id, {
+            let res = await updateOrgSelfAPI({
                 org: {
                     name: formData.name,
                     telephone: formData.telephone,
@@ -122,7 +123,7 @@ function UpdateOrg(props) {
                 form={form}
             >
                 <Form.Item name="name" label="机构名称" rules={[{ required: true }]} >
-                    <Input />
+                    {orgInfo.name}
                 </Form.Item>
 
                 <Form.Item name="telephone" label="联系方式" rules={[{ required: true }]} >
@@ -150,4 +151,4 @@ function UpdateOrg(props) {
     );
 }
 
-export default UpdateOrg;
+export default UpdateOrgSelf;

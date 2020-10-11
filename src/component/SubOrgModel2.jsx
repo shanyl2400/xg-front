@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Modal, Cascader } from 'antd';
+import { Form, Input, Button, Modal, message } from 'antd';
 import IntentSubjectForm from './IntentSubjectForm';
 import AddressForm from './AddressForm';
 import { listSubjects } from '../api/api';
@@ -30,10 +30,14 @@ function SubOrgModel(props) {
             let subjects = form.getFieldValue("intentSubject");
             for (let i = 0; i < subjects.length; i++) {
                 if (subjects[i].value.indexOf("请选择") != -1) {
+                    message.warn("请选择支持课程");
                     return;
                 }
             }
-            props.submitForm(form.getFieldsValue());
+            let data = form.getFieldsValue();
+            data.address = data.addressData.region;
+            data.address_ext = data.addressData.ext;
+            props.submitForm(data);
             form.resetFields();
         });
     }
@@ -61,7 +65,7 @@ function SubOrgModel(props) {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="address" label="地址" rules={[{ required: true }]} >
+                    <Form.Item name="addressData" label="地址" rules={[{ required: true }]} >
                         <AddressForm />
                     </Form.Item>
 

@@ -40,9 +40,12 @@ function OrgList(props) {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a onClick={()=>{history.push("/main/org_details/"+record.id)}}>详情</a>
-          {
-            checkAuthorities(["机构审核"])?<a onClick={()=>{handleRevoke(record.id)}}>吊销</a>:<span></span>
+        <a onClick={()=>{history.push("/main/org_details/"+record.id)}}>详情</a>
+        {
+            checkAuthorities(["机构审核"]) && record.id > 1?<a onClick={()=>{handleRevoke(record.id)}}>吊销</a>:<span></span>
+          }
+           {
+            checkAuthorities(["机构管理"]) && record.id > 1?<a onClick={()=>{history.push("/main/org_update/"+record.id)}}>修改</a>:<span></span>
           }
           
         </Space>

@@ -24,8 +24,12 @@ const StudentDetails = loadable(()=>import('./StudentDetails'));
 const CreateStudentOrder = loadable(()=>import('./CreateStudentOrder'));
 const OrderDetails = loadable(()=>import('./OrderDetails'));
 const OrgDetails = loadable(()=>import('./OrgDetails'));
-const Dashboard = loadable(()=>import('./Dashboard'));
+const Dashboard = loadable(()=>import('./NewDashboard'));
 const Login = loadable(()=>import('./Login'));
+
+const UpdateOrg = loadable(()=>import('./UpdateOrg'));
+const OrgInfo = loadable(()=>import('./OrgInfo'));
+const UpdateOrgSelf = loadable(()=>import('./UpdateOrgSelf'));
 function XgRouter() {
     return (
         <Switch>
@@ -91,6 +95,15 @@ function XgRouter() {
             </Route>
             <Route path="/main/org_details/:id">
                 <OrgDetails />
+            </Route>
+            <Route path="/main/org_update/:id">
+                <UpdateOrg />
+            </Route>
+            <Route path="/main/org_update_self">
+                <UpdateOrgSelf />
+            </Route>
+            <Route path="/main/org_info">
+                <OrgInfo />
             </Route>
             <Route path="/main">
                 <Dashboard />

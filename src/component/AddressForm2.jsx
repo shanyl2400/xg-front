@@ -2,31 +2,37 @@ import React, { useState } from 'react';
 import { Cascader, Input, Row, Col } from 'antd';
 import options from '../component/address';
 
-let curRegion = "";
-let curExt = "";
 function AddressForm(props) {
     const changeAddressRegion = e => {
         let address = "";
         for (let i = 0; i < e.length; i++) {
             address = address + e[i];
         }
-        curRegion = address;
         props.onChange({
             region: address,
-            ext: curExt
+            ext: props.value.ext
         });
     }
     const changeAddressExt = e => {
-        curExt = e.target.value;
+        let curExt = e.target.value;
         props.onChange({
-            region: curRegion,
+            region: props.value.region,
             ext: curExt
         });
     }
+
+    const getRegion = () =>{
+        let region = [];
+        if(props.value.region != null){
+            region = props.value.region.split("市");
+        }
+        return region
+    }
+
     return (
         <Row>
             <Col span={10}>
-                <Cascader options={options} placeholder="请选择" value={props.value.region} onChange={changeAddressRegion} />
+                <Cascader options={options} value={getRegion()} placeholder="请选择" onChange={changeAddressRegion} />
             </Col>
             <Col offset={1} span={12}>
                 <Input placeholder="请输入详细地址" value={props.value.ext} onChange={changeAddressExt} />

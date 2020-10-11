@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Modal, Cascader } from 'antd';
 import IntentSubjectForm from './IntentSubjectForm';
-import AddressForm from './AddressForm';
+import AddressForm from './AddressForm2';
 
 const layout = {
     labelCol: { span: 5 },
@@ -31,10 +31,12 @@ function UpdateSubOrgModel(props) {
                     return;
                 }
             }
-            props.submitForm(form.getFieldsValue());
-            form.resetFields();
+            props.submitForm(props.value.id, form.getFieldsValue());
+            // form.resetFields();
         });
     }
+
+    form.setFieldsValue(props.value);
     return (
         <Modal
             title="修改分校"
@@ -47,13 +49,12 @@ function UpdateSubOrgModel(props) {
                     style={{ marginTop: "0px", marginLeft: "-40px" }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
-                    form={form}
-                    initialValues={props.value}>
+                    form={form}>
                     <Form.Item name="name" label="分校名称" rules={[{ required: true }]} >
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="address" label="地址" rules={[{ required: true }]} >
+                    <Form.Item name="addressData" label="地址" rules={[{ required: true }]} >
                         <AddressForm />
                     </Form.Item>
 

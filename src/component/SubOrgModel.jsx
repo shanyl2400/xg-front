@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Modal, Cascader } from 'antd';
+import { Form, Input, Button, Modal, message } from 'antd';
 import IntentSubjectForm from './IntentSubjectForm';
 import AddressForm from './AddressForm';
 import { listSubjects } from '../api/api';
@@ -73,6 +73,7 @@ function SubOrgModel(props) {
       let subjects = form.getFieldValue("intentSubject");
       for (let i = 0; i < subjects.length; i++) {
         if (subjects[i].value.indexOf("请选择") != -1) {
+          message.warn("请选择支持课程");
           return;
         }
       }

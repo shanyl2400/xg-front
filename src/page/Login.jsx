@@ -11,7 +11,7 @@ const { Header, Footer, Content } = Layout;
 function saveSideInfo(name, res) {
     sessionStorage.setItem("user_name", name);
     sessionStorage.setItem("role_id", res.data.role_id);
-    // sessionStorage.setItem("org_id", res.data.org_id);
+    sessionStorage.setItem("org_id", res.data.org_id);
     console.log(res.data.auths)
     sessionStorage.setItem("role_name", res.data.role_name);
     sessionStorage.setItem("org_name", res.data.org_name);

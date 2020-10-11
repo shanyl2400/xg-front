@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-// const baseURL = "http://localhost:8088/api"
-const baseURL = "http://101.133.139.38:8088/api"
+const baseURL = "http://localhost:8088/api"
+// const baseURL = "http://101.133.139.38:8088/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
 
@@ -148,7 +148,17 @@ export async function createOrderAPI(data) {
 
 export async function getStatisticsSummaryAPI() {
     try {
-        let res = await axios.get(baseURL + "/statistics/summary");
+        // org_id, author, publisher_id, order_source
+        let api = `/statistics/summary`;
+        let res = await axios.get(baseURL + api);
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+export async function getStatisticsTableAPI(data) {
+    try {
+        let res = await axios.get(baseURL + `/statistics/table?org_id=${data.org_id}&author=${data.author}&publisher_id=${data.publisher_id}&order_source=${data.order_source}`);
         return res.data;
     } catch (e) {
         return { err_msg: e }
@@ -221,7 +231,19 @@ export async function createOrgAPI(data) {
 
 export async function updateOrgAPI(id, data) {
     try {
-        let res = await axios.put(baseURL + `/org/${id}/admin`, data);
+        console.log("Update:", data);
+        let res = await axios.put(baseURL + `/org/${id}`, data);
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
+
+export async function updateOrgSelfAPI(data) {
+    try {
+        console.log("Update:", data);
+        let res = await axios.put(baseURL + `/org/`, data);
         return res.data;
     } catch (e) {
         return { err_msg: e }
@@ -408,6 +430,16 @@ export async function createUserAPI(values) {
 export async function listUsersAPI(page, pageSize) {
     try {
         let res = await axios.get(baseURL + `/users/?page=${page}&page_size=${pageSize}`);
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
+
+export async function listUsersWithOrgIdAPI(orgId, page, pageSize) {
+    try {
+        let res = await axios.get(baseURL + `/users/?page=${page}&page_size=${pageSize}&org_id=${orgId}`);
         return res.data;
     } catch (e) {
         return { err_msg: e }

@@ -1,7 +1,7 @@
 import { Menu } from 'antd';
 import React from 'react';
 import { useHistory, useLocation } from "react-router-dom";
-import { TeamOutlined, BankOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
+import { TeamOutlined, BankOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined,HighlightOutlined,UnorderedListOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
 import { checkAuthorities } from '../utils/auth';
 import logo from '../logo.png';
 import './SideMenu.css';
@@ -75,8 +75,6 @@ function SideMenu(props) {
         <Menu.Item key={"/main/subject_list"} icon={<ApartmentOutlined />}>课程分类</Menu.Item>
       </SubMenu>)}
       
-      
-
       {checkAuthForMenu(["机构管理", "机构审核"], 
       <SubMenu
         key="sub4"
@@ -89,6 +87,19 @@ function SideMenu(props) {
         {checkAuthForMenu(["机构管理"], <Menu.Item key={"/main/create_org"} icon={<PlusCircleOutlined />}>添加机构</Menu.Item>)}
         {checkAuthForMenu(["机构审核"], <Menu.Item key={"/main/review_org"} icon={<CheckCircleOutlined />}>审核机构</Menu.Item>)}
         {checkAuthForMenu(["机构管理","机构审核"],  <Menu.Item key={"/main/org_list"} icon={<GroupOutlined />}>机构列表</Menu.Item>)}
+      </SubMenu>)}
+
+      {checkAuthForMenu(["管理本机构信息", "机构订单权限"], 
+      <SubMenu
+        key="sub4"
+        title={
+          <span>
+            <BankOutlined />
+            <span>校区管理</span>
+          </span>
+        }>
+        {checkAuthForMenu(["机构订单权限"], <Menu.Item key={"/main/org_info"} icon={<UnorderedListOutlined />}>校区信息</Menu.Item>)}
+        {checkAuthForMenu(["管理本机构信息"], <Menu.Item key={"/main/org_update_self"} icon={<HighlightOutlined />}>修改校区</Menu.Item>)}
       </SubMenu>)}
 
       {checkAuthForMenu(["用户管理", "角色管理"], 
