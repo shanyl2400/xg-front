@@ -10,6 +10,9 @@ const { Option } = Select;
 const pageSize = 5;
 const curPage = 1;
 function CreateStudentOrder(props) {
+    // const [subject, setSubject] = useState("")
+    let { id } = useParams();
+    let history = useHistory();
     const columns = [
         {
             title: '#',
@@ -72,9 +75,6 @@ function CreateStudentOrder(props) {
     const [createOrderModalVisible, setCreateOrderModalVisible] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState(null);
 
-    // const [subject, setSubject] = useState("")
-    let { id } = useParams();
-    let history = useHistory();
     useEffect(() => {
         const fetchData = async () => {
             const res = await getStudentByIdAPI(id);
