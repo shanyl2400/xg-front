@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import SummaryData from '../component/SummaryData';
 import ReactEcharts from "echarts-for-react";
 import { getStatisticsSummaryAPI, listUsersWithOrgIdAPI, getStatisticsTableAPI, listOrderSourcesAPI, listOrgsAPI } from '../api/api';
-import { message, Typography, Table, Select } from 'antd';
+import { message, Typography, Table, Select,Row, Col } from 'antd';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -18,11 +18,25 @@ function NewDashboard(props) {
   let [selectPublisherId, setSelectPublisherId] = useState(0);
   let [selectOrderSource, setSelectOrderSource] = useState(0);
   let studentOption = {
-    // title: {
-    //   text: ''
-    // },
+    title: {
+      text: '录单量',
+      textStyle:{
+        //文字颜色
+        color:'#333',
+        //字体风格,'normal','italic','oblique'
+        fontStyle:'normal',
+        //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+        fontWeight:'normal',
+        //字体系列
+        fontFamily:'sans-serif',
+        //字体大小
+　　　　 fontSize:16
+    }
+    },
     tooltip: {},
     legend: {
+      x:'center',
+      bottom:0,
       data: ['名单量']
     },
     xAxis: {
@@ -37,11 +51,25 @@ function NewDashboard(props) {
   };
 
   let performanceOption = {
-    // title: {
-    //   text: ''
-    // },
+    title: {
+      text: '业绩',
+      textStyle:{
+        //文字颜色
+        color:'#333',
+        //字体风格,'normal','italic','oblique'
+        fontStyle:'normal',
+        //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+        fontWeight:'normal',
+        //字体系列
+        fontFamily:'sans-serif',
+        //字体大小
+　　　　 fontSize:16
+    }
+    },
     tooltip: {},
     legend: {
+      x:'center',
+      bottom:0,
       data: ['业绩']
     },
     xAxis: {
@@ -255,14 +283,14 @@ function NewDashboard(props) {
   }
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
-      <SummaryData title="总业绩" data={"￥" + summaryData.performance_total} />
-      <SummaryData title="总名单量" data={summaryData.students_total} />
-      <SummaryData title="机构数量" data={summaryData.orgs_total} />
-      <SummaryData title="成功率" data={summaryData.success_rate / 100 + "%"} />
+      <SummaryData color="#c23531" title="总业绩" data={"￥" + summaryData.performance_total} />
+      <SummaryData color="#cd6d4b" title="总名单量" data={summaryData.students_total} />
+      <SummaryData color="#61a0a8" title="机构数量" data={summaryData.orgs_total} />
+      <SummaryData color="#2f4554" title="成功率" data={summaryData.success_rate / 100 + "%"} />
 
     <Title level={4}>统计信息</Title>
     
-    <div style={{ marginBottom:20 }}>
+    <div style={{ marginBottom:20, marginTop:20 }}>
       <Select 
         defaultValue={0} 
         value={selectOrgId} 
@@ -315,21 +343,22 @@ function NewDashboard(props) {
           bordered
         />
       </div>
-      <div style={{ marginTop: 20 }}>
+      <Row style={{marginTop:30}}>
+        <Col span={12}>
         <ReactEcharts
           option={studentOption}
           notMerge={true}
           lazyUpdate={true}
           theme={"theme_name"} />
-      </div>
-
-      <div style={{ marginTop: 20 }}>
+        </Col>
+        <Col span={12}>
         <ReactEcharts
           option={performanceOption}
           notMerge={true}
           lazyUpdate={true}
           theme={"theme_name"} />
-      </div>
+        </Col>
+      </Row>
 
     </div>
   );
