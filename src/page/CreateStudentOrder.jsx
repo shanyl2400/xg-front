@@ -3,7 +3,7 @@ import { Button, Card, Breadcrumb, message, Row, Col, Select, Typography, Table,
 import { useParams, useHistory } from "react-router-dom";
 import SubOrgFilter from '../component/SubOrgFilter';
 import CreateOrderModal from '../component/CreateOrderModal';
-import { getStudentByIdAPI, listSubOrgsAPI } from '../api/api';
+import { getStudentByIdAPI, listSubOrgsAPI, listOrgsAPI } from '../api/api';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -70,6 +70,7 @@ function CreateStudentOrder(props) {
     const [orgQueryParams, setOrgQueryParams] = useState({
         student_id: id,
         address: "",
+        parent_id: 0,
         subjects: ""
     })
     const [createOrderModalVisible, setCreateOrderModalVisible] = useState(false);
@@ -87,11 +88,13 @@ function CreateStudentOrder(props) {
             setOrgQueryParams({
                 student_id: id,
                 address: "",
+                parent_id: 0,
                 subjects: buildIntentSubjects(res.student.intent_subject),
             })
             const orgRes = await listSubOrgsAPI({
                 student_id: id,
                 address: "",
+                parent_id: 0,
                 subjects: buildIntentSubjects(res.student.intent_subject),
             }, 1, pageSize);
             if (orgRes.err_msg == "success") {
@@ -103,6 +106,7 @@ function CreateStudentOrder(props) {
                 message.warn("查不到机构信息");
                 history.goBack();
             }
+
         }
 
         fetchData();
@@ -141,44 +145,6 @@ function CreateStudentOrder(props) {
         return res;
     }
 
-    // let handleChangeOrg = async index => {
-    //     let res = await getOrgSubjectsAPI(orgs[index].id);
-    //     if (res.err_msg == "success") {
-    //         setCurOrg(orgs[index]);
-    //         setCurSubjects(res.subjects);
-    //         setSubject("");
-    //     } else {
-    //         message.error("获取机构信息失败,", res.err_msg);
-    //     }
-
-    // }
-    // let handleChangeSubject = data => {
-    //     setSubject(data);
-    // }
-
-    // let handleCreateOrder = async () => {
-    //     if (curOrg == null) {
-    //         message.warn("请选择机构")
-    //         return;
-    //     }
-    //     if (subject == "") {
-    //         message.warn("请选择推荐科目");
-    //         return;
-    //     }
-
-    //     let res = await createOrderAPI({
-    //         student_id: parseInt(id),
-    //         to_org_id: curOrg.id,
-    //         intent_subjects: [subject],
-    //     })
-    //     console.log(res)
-    //     if (res.err_msg == "success") {
-    //         message.success("派单成功");
-    //         history.goBack();
-    //     } else {
-    //         message.error("派单失败");
-    //     }
-    // }
     let getStatusName = (id) => {
         switch (id) {
             case 1:
@@ -196,11 +162,11 @@ function CreateStudentOrder(props) {
         searchOrgs();
     }
     const handleFilter = async e => {
-
         const orgRes = await listSubOrgsAPI({
             student_id: id,
-            address: e,
+            address: e.address,
             subjects: orgQueryParams.subjects,
+            parent_id: e.parent_id,
         }, curPage, pageSize);
         if (orgRes.err_msg == "success") {
             setOrgs({
@@ -209,7 +175,8 @@ function CreateStudentOrder(props) {
             });
             setOrgQueryParams({
                 student_id: id,
-                address: e,
+                address: e.address,
+                parent_id: e.parent_id,
                 subjects: orgQueryParams.subjects,
             })
         } else {
@@ -266,25 +233,6 @@ function CreateStudentOrder(props) {
                 </Card>
             ))}
 
-            {/* <Card style={{ width: "100%", margin: "20px 5px" }}>
-                <Row gutter={[16, 16]}>
-                    <Col span={2}>派单给：</Col>
-                    <Col span={12}>
-                    <Select defaultValue="请选择" style={{  width: 180 }} onChange={handleChangeOrg}>
-                        {orgs.length > 0 && orgs.map((org, index)=>(
-                            <Option value={index}>{org.name}</Option>
-                        ))}
-                    </Select>
-
-                    <Select value={subject} defaultValue="请选择" style={{ marginLeft:15,width: 160 }} onChange={handleChangeSubject}>
-                    {curSubjects != null && curSubjects.map((name)=>(
-                            <Option value={name}>{name}</Option>
-                        ))}
-                    </Select>
-
-                    </Col>
-                </Row>
-            </Card> */}
             <SubOrgFilter onFilterChange={handleFilter} />
             <Table
                 pagination={false}
