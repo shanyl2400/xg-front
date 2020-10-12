@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Breadcrumb, Tag, Space, Table, Pagination, Select, Row, Col, message, Input } from 'antd';
 import { listStudentAPI, listOrgsAPI } from '../api/api';
-import {useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 
 const pageSize = 10;
 const { Option } = Select;
-async function fetchStudent(page, pageSize, status) {
-  const rawRes = await listStudentAPI(page, pageSize, status);
+async function fetchStudent(page, pageSize, data) {
+  const rawRes = await listStudentAPI(page, pageSize, data);
   const rawStudents = rawRes.result.students;
   let students = {
     total: rawRes.result.total,
@@ -65,7 +65,7 @@ function StudentList(props) {
       title: '居住地址',
       key: 'address',
       render: (id, record) => (
-        <span style={{textOverflow:"ellipsis"}}>
+        <span style={{ textOverflow: "ellipsis" }}>
           {record.address}{record.address_ext}
         </span>
       ),
@@ -107,7 +107,7 @@ function StudentList(props) {
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(pageIndex, pageSize, 0)
+      let res = await fetchStudent(pageIndex, pageSize, { status: 0, noDispatch: false })
       setStudents(res);
     }
     fetchData();
@@ -115,7 +115,7 @@ function StudentList(props) {
 
   let handleChangePage = async e => {
     pageIndex = e
-    let res = await fetchStudent(pageIndex, pageSize, 0)
+    let res = await fetchStudent(pageIndex, pageSize, { status: 0, noDispatch: false })
     setStudents(res);
   }
 
@@ -130,7 +130,7 @@ function StudentList(props) {
         <Breadcrumb.Item>学员管理</Breadcrumb.Item>
         <Breadcrumb.Item>学员名单</Breadcrumb.Item>
       </Breadcrumb>
-       <StudentFilter onFilterChange={handleStudentFilter}/>
+      <StudentFilter onFilterChange={handleStudentFilter} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

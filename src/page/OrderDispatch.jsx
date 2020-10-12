@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb, Tag, Space, Table, Pagination } from 'antd';
 import { listAllStudentAPI } from '../api/api';
 import { getStudentStatus } from '../utils/status';
-import {useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 
 const pageSize = 10;
@@ -88,14 +88,14 @@ function OrderDispatch(props) {
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(1, pageSize, 0);
+      let res = await fetchStudent(1, pageSize, { status: 0, noDispatch: false });
       setStudents(res);
     }
     fetchData();
   }, []);
 
   let handleChangePage = async e => {
-    let res = await fetchStudent(e, pageSize, 0);
+    let res = await fetchStudent(e, pageSize, { status: 0, noDispatch: false });
     setStudents(res);
   }
   let handleStudentFilter = async e => {
@@ -111,7 +111,7 @@ function OrderDispatch(props) {
         <Breadcrumb.Item>派单</Breadcrumb.Item>
       </Breadcrumb>
 
-      <StudentFilter onFilterChange={handleStudentFilter}/>
+      <StudentFilter onFilterChange={handleStudentFilter} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}
