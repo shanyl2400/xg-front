@@ -71,6 +71,76 @@ const options = [
 		],
 	},
 	{
+		value: '北京市',
+		label: '北京市',
+		children: [
+			{
+				value: '东城区',
+				label: '东城区',
+			},
+			{
+				value: '西城区',
+				label: '西城区',
+			},
+			{
+				value: '朝阳区',
+				label: '朝阳区',
+			},
+			{
+				value: '丰台区',
+				label: '丰台区',
+			},
+			{
+				value: '石景山区',
+				label: '石景山区',
+			},
+			{
+				value: '海淀区',
+				label: '海淀区',
+			},
+			{
+				value: '顺义区',
+				label: '顺义区',
+			},
+			{
+				value: '通州区',
+				label: '通州区',
+			},
+			{
+				value: '大兴区',
+				label: '大兴区',
+			},
+			{
+				value: '房山区',
+				label: '房山区',
+			},
+			{
+				value: '门头沟区',
+				label: '门头沟区',
+			},
+			{
+				value: '昌平区',
+				label: '昌平区',
+			},
+			{
+				value: '平谷区',
+				label: '平谷区',
+			},
+			{
+				value: '密云区',
+				label: '密云区',
+			},
+			{
+				value: '怀柔区',
+				label: '怀柔区',
+			},
+			{
+				value: '延庆区',
+				label: '延庆区',
+			},
+		],
+	},
+	{
 		value: '南京市',
 		label: '南京市',
 		children: [
@@ -120,6 +190,686 @@ const options = [
 			},
 		],
 	},
+	{
+		value: '苏州市',
+		label: '苏州市',
+		children: [
+			{
+				value: '姑苏区',
+				label: '姑苏区',
+			},
+			{
+				value: '虎丘区',
+				label: '虎丘区',
+			},
+			{
+				value: '吴中区',
+				label: '吴中区',
+			},
+			{
+				value: '相城区',
+				label: '相城区',
+			},
+			{
+				value: '吴江区',
+				label: '吴江区',
+			},
+			{
+				value: '常熟市',
+				label: '常熟市',
+			},
+			{
+				value: '张家港市',
+				label: '张家港市',
+			},
+			{
+				value: '昆山市',
+				label: '昆山市',
+			},
+			{
+				value: '太仓市',
+				label: '太仓市',
+			}
+		],
+	},
+	{
+		value: '杭州市',
+		label: '杭州市',
+		children: [
+			{
+				value: '上城区',
+				label: '上城区',
+			},
+			{
+				value: '下城区',
+				label: '下城区',
+			},
+			{
+				value: '江干区',
+				label: '江干区',
+			},
+			{
+				value: '拱墅区',
+				label: '拱墅区',
+			},
+			{
+				value: '西湖区',
+				label: '西湖区',
+			},
+			{
+				value: '滨江区',
+				label: '滨江区',
+			},
+			{
+				value: '萧山区',
+				label: '萧山区',
+			},
+			{
+				value: '余杭区',
+				label: '余杭区',
+			},
+			{
+				value: '富阳区',
+				label: '富阳区',
+			},
+			{
+				value: '临安区',
+				label: '临安区',
+			},
+			{
+				value: '桐庐县',
+				label: '桐庐县',
+			},
+			{
+				value: '淳安县',
+				label: '淳安县',
+			},
+			{
+				value: '建德市',
+				label: '建德市',
+			},
+		],
+	},
+	{
+		value: '杭州市',
+		label: '杭州市',
+		children: [
+			{
+				value: '越秀区',
+				label: '越秀区',
+			},
+			{
+				value: '荔湾区',
+				label: '荔湾区',
+			},
+			{
+				value: '海珠区',
+				label: '海珠区',
+			},
+			{
+				value: '天河区',
+				label: '天河区',
+			},
+			{
+				value: '白云区',
+				label: '白云区',
+			},
+			{
+				value: '黄埔区',
+				label: '黄埔区',
+			},
+			{
+				value: '番禺区',
+				label: '番禺区',
+			},
+			{
+				value: '花都区',
+				label: '花都区',
+			},
+			{
+				value: '南沙区',
+				label: '南沙区',
+			},
+			{
+				value: '增城区',
+				label: '增城区',
+			},
+			{
+				value: '从化区',
+				label: '从化区',
+			},
+
+		],
+	},
+	{
+		"value": "深圳市",
+		"label": "深圳市",
+		"children": [
+			{
+				"value": "市辖区",
+				"label": "市辖区"
+			},
+			{
+				"value": "罗湖区",
+				"label": "罗湖区"
+			},
+			{
+				"value": "福田区",
+				"label": "福田区"
+			},
+			{
+				"value": "南山区",
+				"label": "南山区"
+			},
+			{
+				"value": "宝安区",
+				"label": "宝安区"
+			},
+			{
+				"value": "龙岗区",
+				"label": "龙岗区"
+			},
+			{
+				"value": "盐田区",
+				"label": "盐田区"
+			}
+		]
+	},
+	{
+		"value": "成都市",
+		"label": "成都市",
+		"children": [
+			{
+				"value": "市辖区",
+				"label": "市辖区"
+			},
+			{
+				"value": "锦江区",
+				"label": "锦江区"
+			},
+			{
+				"value": "青羊区",
+				"label": "青羊区"
+			},
+			{
+				"value": "金牛区",
+				"label": "金牛区"
+			},
+			{
+				"value": "武侯区",
+				"label": "武侯区"
+			},
+			{
+				"value": "成华区",
+				"label": "成华区"
+			},
+			{
+				"value": "龙泉驿区",
+				"label": "龙泉驿区"
+			},
+			{
+				"value": "青白江区",
+				"label": "青白江区"
+			},
+			{
+				"value": "新都区",
+				"label": "新都区"
+			},
+			{
+				"value": "温江区",
+				"label": "温江区"
+			},
+			{
+				"value": "双流区",
+				"label": "双流区"
+			},
+			{
+				"value": "金堂县",
+				"label": "金堂县"
+			},
+			{
+				"value": "郫县",
+				"label": "郫县"
+			},
+			{
+				"value": "大邑县",
+				"label": "大邑县"
+			},
+			{
+				"value": "蒲江县",
+				"label": "蒲江县"
+			},
+			{
+				"value": "新津县",
+				"label": "新津县"
+			},
+			{
+				"value": "都江堰市",
+				"label": "都江堰市"
+			},
+			{
+				"value": "彭州市",
+				"label": "彭州市"
+			},
+			{
+				"value": "邛崃市",
+				"label": "邛崃市"
+			},
+			{
+				"value": "崇州市",
+				"label": "崇州市"
+			},
+			{
+				"value": "简阳市",
+				"label": "简阳市"
+			}
+		]
+	},
+	{
+		"value": "大连市",
+		"label": "大连市",
+		"children": [
+			{
+				"value": "市辖区",
+				"label": "市辖区"
+			},
+			{
+				"value": "中山区",
+				"label": "中山区"
+			},
+			{
+				"value": "西岗区",
+				"label": "西岗区"
+			},
+			{
+				"value": "沙河口区",
+				"label": "沙河口区"
+			},
+			{
+				"value": "甘井子区",
+				"label": "甘井子区"
+			},
+			{
+				"value": "旅顺口区",
+				"label": "旅顺口区"
+			},
+			{
+				"value": "金州区",
+				"label": "金州区"
+			},
+			{
+				"value": "普兰店区",
+				"label": "普兰店区"
+			},
+			{
+				"value": "长海县",
+				"label": "长海县"
+			},
+			{
+				"value": "瓦房店市",
+				"label": "瓦房店市"
+			},
+			{
+				"value": "庄河市",
+				"label": "庄河市"
+			}
+		]
+	},
+	{
+		"value": "沈阳市",
+		"label": "沈阳市",
+		"children": [
+			{
+				"value": "市辖区",
+				"label": "市辖区"
+			},
+			{
+				"value": "和平区",
+				"label": "和平区"
+			},
+			{
+				"value": "沈河区",
+				"label": "沈河区"
+			},
+			{
+				"value": "大东区",
+				"label": "大东区"
+			},
+			{
+				"value": "皇姑区",
+				"label": "皇姑区"
+			},
+			{
+				"value": "铁西区",
+				"label": "铁西区"
+			},
+			{
+				"value": "苏家屯区",
+				"label": "苏家屯区"
+			},
+			{
+				"value": "浑南区",
+				"label": "浑南区"
+			},
+			{
+				"value": "沈北新区",
+				"label": "沈北新区"
+			},
+			{
+				"value": "于洪区",
+				"label": "于洪区"
+			},
+			{
+				"value": "辽中区",
+				"label": "辽中区"
+			},
+			{
+				"value": "康平县",
+				"label": "康平县"
+			},
+			{
+				"value": "法库县",
+				"label": "法库县"
+			},
+			{
+				"value": "新民市",
+				"label": "新民市"
+			}
+		]
+	},
+	{
+		"value": "济南市",
+		"label": "济南市",
+		"children": [
+			{
+				"value": "市辖区",
+				"label": "市辖区"
+			},
+			{
+				"value": "历下区",
+				"label": "历下区"
+			},
+			{
+				"value": "市中区",
+				"label": "市中区"
+			},
+			{
+				"value": "槐荫区",
+				"label": "槐荫区"
+			},
+			{
+				"value": "天桥区",
+				"label": "天桥区"
+			},
+			{
+				"value": "历城区",
+				"label": "历城区"
+			},
+			{
+				"value": "长清区",
+				"label": "长清区"
+			},
+			{
+				"value": "平阴县",
+				"label": "平阴县"
+			},
+			{
+				"value": "济阳县",
+				"label": "济阳县"
+			},
+			{
+				"value": "商河县",
+				"label": "商河县"
+			},
+			{
+				"value": "章丘市",
+				"label": "章丘市"
+			}
+		]
+	},
+	{
+		"value": "无锡市",
+		"label": "无锡市",
+		"children": [
+			{
+				"value": "市辖区",
+				"label": "市辖区"
+			},
+			{
+				"value": "锡山区",
+				"label": "锡山区"
+			},
+			{
+				"value": "惠山区",
+				"label": "惠山区"
+			},
+			{
+				"value": "滨湖区",
+				"label": "滨湖区"
+			},
+			{
+				"value": "梁溪区",
+				"label": "梁溪区"
+			},
+			{
+				"value": "新吴区",
+				"label": "新吴区"
+			},
+			{
+				"value": "江阴市",
+				"label": "江阴市"
+			},
+			{
+				"value": "宜兴市",
+				"label": "宜兴市"
+			}
+		]
+	},
+	{
+		"value": "合肥市",
+		"label": "合肥市",
+		"children": [
+			{
+				"value": "市辖区",
+				"label": "市辖区"
+			},
+			{
+				"value": "瑶海区",
+				"label": "瑶海区"
+			},
+			{
+				"value": "庐阳区",
+				"label": "庐阳区"
+			},
+			{
+				"value": "蜀山区",
+				"label": "蜀山区"
+			},
+			{
+				"value": "包河区",
+				"label": "包河区"
+			},
+			{
+				"value": "长丰县",
+				"label": "长丰县"
+			},
+			{
+				"value": "肥东县",
+				"label": "肥东县"
+			},
+			{
+				"value": "肥西县",
+				"label": "肥西县"
+			},
+			{
+				"value": "庐江县",
+				"label": "庐江县"
+			},
+			{
+				"value": "巢湖市",
+				"label": "巢湖市"
+			}
+		]
+	},
+	{
+		"value": "重庆市",
+		"label": "重庆市",
+		"children": [
+			{
+				"value": "万州区",
+				"label": "万州区"
+			},
+			{
+				"value": "涪陵区",
+				"label": "涪陵区"
+			},
+			{
+				"value": "渝中区",
+				"label": "渝中区"
+			},
+			{
+				"value": "大渡口区",
+				"label": "大渡口区"
+			},
+			{
+				"value": "江北区",
+				"label": "江北区"
+			},
+			{
+				"value": "沙坪坝区",
+				"label": "沙坪坝区"
+			},
+			{
+				"value": "九龙坡区",
+				"label": "九龙坡区"
+			},
+			{
+				"value": "南岸区",
+				"label": "南岸区"
+			},
+			{
+				"value": "北碚区",
+				"label": "北碚区"
+			},
+			{
+				"value": "綦江区",
+				"label": "綦江区"
+			},
+			{
+				"value": "大足区",
+				"label": "大足区"
+			},
+			{
+				"value": "渝北区",
+				"label": "渝北区"
+			},
+			{
+				"value": "巴南区",
+				"label": "巴南区"
+			},
+			{
+				"value": "黔江区",
+				"label": "黔江区"
+			},
+			{
+				"value": "长寿区",
+				"label": "长寿区"
+			},
+			{
+				"value": "江津区",
+				"label": "江津区"
+			},
+			{
+				"value": "合川区",
+				"label": "合川区"
+			},
+			{
+				"value": "永川区",
+				"label": "永川区"
+			},
+			{
+				"value": "南川区",
+				"label": "南川区"
+			},
+			{
+				"value": "璧山区",
+				"label": "璧山区"
+			},
+			{
+				"value": "铜梁区",
+				"label": "铜梁区"
+			},
+			{
+				"value": "潼南区",
+				"label": "潼南区"
+			},
+			{
+				"value": "荣昌区",
+				"label": "荣昌区"
+			},
+			{
+				"value": "开州区",
+				"label": "开州区"
+			},
+			{
+				"value": "梁平县",
+				"label": "梁平县"
+			},
+			{
+				"value": "城口县",
+				"label": "城口县"
+			},
+			{
+				"value": "丰都县",
+				"label": "丰都县"
+			},
+			{
+				"value": "垫江县",
+				"label": "垫江县"
+			},
+			{
+				"value": "武隆县",
+				"label": "武隆县"
+			},
+			{
+				"value": "忠县",
+				"label": "忠县"
+			},
+			{
+				"value": "云阳县",
+				"label": "云阳县"
+			},
+			{
+				"value": "奉节县",
+				"label": "奉节县"
+			},
+			{
+				"value": "巫山县",
+				"label": "巫山县"
+			},
+			{
+				"value": "巫溪县",
+				"label": "巫溪县"
+			},
+			{
+				"value": "石柱土家族自治县",
+				"label": "石柱土家族自治县"
+			},
+			{
+				"value": "秀山土家族苗族自治县",
+				"label": "秀山土家族苗族自治县"
+			},
+			{
+				"value": "酉阳土家族苗族自治县",
+				"label": "酉阳土家族苗族自治县"
+			},
+			{
+				"value": "彭水苗族土家族自治县",
+				"label": "彭水苗族土家族自治县"
+			}
+
+		]
+	}
 ];
 
 const options2 = [{
