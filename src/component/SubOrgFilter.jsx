@@ -7,6 +7,7 @@ const { Option } = Select;
 function SubOrgFilter(props) {
     const [address, setAddress] = useState([]);
     const [org, setOrg] = useState("");
+    const [isFilter, setIsFilter] = useState(true);
     const [parentOrgs, setParentOrgs] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
@@ -15,8 +16,8 @@ function SubOrgFilter(props) {
             if (parentOrgsRes.err_msg == "success") {
                 // setParentOrgs();
                 let tmpOrgs = [];
-                for(let i = 0; i < parentOrgsRes.data.orgs.length; i ++){
-                    if(parentOrgsRes.data.orgs[i].id != 1){
+                for (let i = 0; i < parentOrgsRes.data.orgs.length; i++) {
+                    if (parentOrgsRes.data.orgs[i].id != 1) {
                         tmpOrgs.push(parentOrgsRes.data.orgs[i])
                     }
                 }
@@ -37,18 +38,33 @@ function SubOrgFilter(props) {
         props.onFilterChange({
             address: e[0] + e[1],
             parent_id: org,
+            isFilter: isFilter,
         });
     }
 
     let changeOrg = async e => {
         setOrg(e);
         let addr = "";
-        if(address.length > 1){
+        if (address.length > 1) {
             addr = address[0] + address[1];
         }
         props.onFilterChange({
             address: addr,
             parent_id: e,
+            isFilter: isFilter,
+        });
+    }
+
+    let changeFilter = async e => {
+        setIsFilter(e);
+        let addr = "";
+        if (address.length > 1) {
+            addr = address[0] + address[1];
+        }
+        props.onFilterChange({
+            address: addr,
+            parent_id: org,
+            isFilter: e,
         });
     }
 
@@ -71,7 +87,15 @@ function SubOrgFilter(props) {
                     )}
                 </Select>
             </Col>
-
+            <Col offset={1}>
+                过滤专业：
+            </Col>
+            <Col>
+                <Select defaultValue={true} style={{ width: 60 }} value={isFilter} onChange={changeFilter}>
+                    <Option value={true} key={true}>是</Option>
+                    <Option value={false} key={false}>否</Option>
+                </Select>
+            </Col>
 
         </Row>
     )

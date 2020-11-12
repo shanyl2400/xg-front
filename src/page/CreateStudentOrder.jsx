@@ -8,9 +8,10 @@ import { getStudentByIdAPI, listSubOrgsAPI, listOrgsAPI } from '../api/api';
 const { Title } = Typography;
 const { Option } = Select;
 const pageSize = 5;
-const curPage = 1;
+// let curPage = 1;
 function CreateStudentOrder(props) {
-    // const [subject, setSubject] = useState("")
+    const [curPage, SetCurPage] = useState(1);
+    const [allSucjects, setAllSubjects] = useState([]);
     let { id } = useParams();
     let history = useHistory();
     const columns = [
@@ -85,19 +86,23 @@ function CreateStudentOrder(props) {
                 message.warn("查不到学生信息");
                 history.goBack();
             }
+            let s = buildIntentSubjects(res.student.intent_subject)
+
+            setAllSubjects(s);
             setOrgQueryParams({
                 student_id: id,
                 address: "",
                 parent_id: 0,
-                subjects: buildIntentSubjects(res.student.intent_subject),
+                subjects: s,
             })
             const orgRes = await listSubOrgsAPI({
                 student_id: id,
                 address: "",
                 parent_id: 0,
-                subjects: buildIntentSubjects(res.student.intent_subject),
+                subjects: s,
             }, 1, pageSize);
             if (orgRes.err_msg == "success") {
+                console.log("total:", orgRes.data.total);
                 setOrgs({
                     data: orgRes.data.orgs,
                     total: orgRes.data.total
@@ -112,7 +117,8 @@ function CreateStudentOrder(props) {
         fetchData();
     }, [id])
 
-    const searchOrgs = async () => {
+    const searchOrgs = async (orgQueryParams, curPage) => {
+        console.log("search:", curPage)
         const orgRes = await listSubOrgsAPI(orgQueryParams, curPage, pageSize);
         if (orgRes.err_msg == "success") {
             setOrgs({
@@ -158,31 +164,42 @@ function CreateStudentOrder(props) {
         }
     }
     const handleChangePage = e => {
-        curPage = e;
-        searchOrgs();
+        SetCurPage(e);
+        searchOrgs(orgQueryParams, e);
     }
     const handleFilter = async e => {
-        const orgRes = await listSubOrgsAPI({
+        let subjects = allSucjects;
+        if (!e.isFilter) {
+            subjects = [];
+        }
+        setOrgQueryParams({
             student_id: id,
             address: e.address,
-            subjects: orgQueryParams.subjects,
             parent_id: e.parent_id,
-        }, curPage, pageSize);
-        if (orgRes.err_msg == "success") {
-            setOrgs({
-                data: orgRes.data.orgs,
-                total: orgRes.data.total
-            });
-            setOrgQueryParams({
-                student_id: id,
-                address: e.address,
-                parent_id: e.parent_id,
-                subjects: orgQueryParams.subjects,
-            })
-        } else {
-            message.warn("查不到机构信息");
-            history.goBack();
-        }
+            subjects: subjects,
+        })
+        searchOrgs({
+            student_id: id,
+            address: e.address,
+            parent_id: e.parent_id,
+            subjects: subjects,
+        }, curPage);
+        // const orgRes = await listSubOrgsAPI({
+        //     student_id: id,
+        //     address: e.address,
+        //     subjects: subjects,
+        //     parent_id: e.parent_id,
+        // }, curPage, pageSize);
+        // if (orgRes.err_msg == "success") {
+        //     setOrgs({
+        //         data: orgRes.data.orgs,
+        //         total: orgRes.data.total
+        //     });
+
+        // } else {
+        //     message.warn("查不到机构信息");
+        //     history.goBack();
+        // }
     }
     return (
         <div style={{ padding: 40, height: "100%", width: "100%" }}>
@@ -220,14 +237,14 @@ function CreateStudentOrder(props) {
 
             {student.orders != undefined && student.orders.length > 0 ? <Title level={4}>已推荐机构</Title> : ""}
             {student.orders != undefined && student.orders.map((order) => (
-                <Card style={{ width: "100%", margin: "20px 5px" }}>
-                    <Row gutter={[16, 16]} key={order.id}>
+                <Card style={{ width: "100%", margin: "20px 5px" }} key={"card-" + order.id}>
+                    <Row gutter={[16, 16]} key={"key-" + order.id}>
                         <Col span={12}>推荐机构：{order.org_name}</Col>
                     </Row>
-                    <Row gutter={[16, 16]} key={order.id}>
+                    <Row gutter={[16, 16]} key={"sub-" + order.id}>
                         <Col span={12}>推荐学科：{order.intent_subject}</Col>
                     </Row>
-                    <Row gutter={[16, 16]} key={order.id}>
+                    <Row gutter={[16, 16]} key={"status-" + order.id}>
                         <Col span={12}>状态：{getStatusName(order.status)}</Col>
                     </Row>
                 </Card>
@@ -240,6 +257,7 @@ function CreateStudentOrder(props) {
                 columns={columns}
                 dataSource={orgs.data}
             />
+            <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgs.total} />
 
             <Row gutter={[16, 16]} style={{ marginTop: "30px" }}>
                 {/* <Col offset={18} span={2}><Button type="primary" onClick={() => handleCreateOrder()}>派单</Button></Col> */}
