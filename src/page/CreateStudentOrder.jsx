@@ -118,7 +118,6 @@ function CreateStudentOrder(props) {
     }, [id])
 
     const searchOrgs = async (orgQueryParams, curPage) => {
-        console.log("search:", curPage)
         const orgRes = await listSubOrgsAPI(orgQueryParams, curPage, pageSize);
         if (orgRes.err_msg == "success") {
             setOrgs({
