@@ -12,6 +12,9 @@ function AddressForm(props) {
         setRegion(e);
         let address = "";
         for (let i = 0; i < e.length; i++) {
+            if (address != "") {
+                address = address + "-";
+            }
             address = address + e[i];
         }
         curRegion = address;

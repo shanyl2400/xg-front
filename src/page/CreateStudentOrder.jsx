@@ -4,6 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import SubOrgFilter from '../component/SubOrgFilter';
 import CreateOrderModal from '../component/CreateOrderModal';
 import { getStudentByIdAPI, listSubOrgsAPI, listOrgsAPI } from '../api/api';
+import { parseAddress } from '../utils/address';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -30,7 +31,7 @@ function CreateStudentOrder(props) {
             key: 'address',
             render: (text, record) => (
                 <span>
-                    {record.address}{record.address_ext}
+                    {parseAddress(record.address)}{record.address_ext}
                 </span>
             ),
         },
@@ -213,7 +214,7 @@ function CreateStudentOrder(props) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>手机号：{student.telephone}</Col>
-                    <Col span={12}>居住地址：{student.address}</Col>
+                    <Col span={12}>居住地址：{parseAddress(student.address)}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>邮箱：{student.email}</Col>

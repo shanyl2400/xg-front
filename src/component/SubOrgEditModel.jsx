@@ -1,42 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Modal, Cascader } from 'antd';
+import { Form, Button, Modal, Input } from 'antd';
 import NewIntentSubjects from './NewIntentSubjects';
-import AddressForm from './AddressForm2';
+import SubOrgEditModelAddress from './SubOrgEditModelAddress';
+import { listSubjectsAllAPI, listSubjectsTreeAPI } from '../api/api';
 
 const layout = {
     labelCol: { span: 5 },
     wrapperCol: { span: 18 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 17, span: 16 },
+    wrapperCol: { offset: 16, span: 16 },
 };
-function UpdateSubOrgModel(props) {
+function SubOrgEditModel(props) {
+    const [orgInfo, setOrgInfo] = useState({})
     const [form] = Form.useForm();
+
+    const [subjects, setSubjects] = useState([]);
+    const [subjectsTree, setSubjectsTree] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+
+            if (props.data == null || props.data == undefined) {
+                return;
+            }
+            for (let i = 0; i < props.data.length; i++) {
+                if (props.data[i].id == props.id) {
+                    setOrgInfo(props.data[i])
+                    form.setFieldsValue(props.data[i]);
+                }
+            }
+            if (subjects.length < 1) {
+                let subs = await listSubjectsAllAPI();
+                let subsTree = await listSubjectsTreeAPI();
+                setSubjects(subs);
+                setSubjectsTree(subsTree);
+            }
+        }
+
+        fetchData();
+    }, [props.id, props.data]);
+
 
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
     const onFinish = async values => {
-        props.submitForm(props.value.id, values);
+        props.submitForm(props.id, values);
     }
+
     const onClose = e => {
         props.closeModel();
     }
-
     const onSubmit = e => {
         form.validateFields().then(async e => {
             let subjects = form.getFieldValue("intentSubject");
-            for (let i = 0; i < subjects.length; i++) {
-                if (subjects[i].value.indexOf("请选择") != -1) {
-                    return;
-                }
-            }
-            props.submitForm(props.value.id, form.getFieldsValue());
-            // form.resetFields();
+            // for (let i = 0; i < subjects.length; i++) {
+            //     if (subjects[i].value.indexOf("请选择") != -1) {
+            //         return;
+            //     }
+            // }
+            console.log("subjects:", subjects);
+            props.submitForm(props.id, form.getFieldsValue());
         });
     }
 
-    form.setFieldsValue(props.value);
     return (
         <Modal
             title="修改分校"
@@ -54,12 +81,12 @@ function UpdateSubOrgModel(props) {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="addressData" label="地址" rules={[{ required: true }]} >
-                        <AddressForm />
+                    <Form.Item name="address" label="地址" rules={[{ required: true }]} >
+                        <SubOrgEditModelAddress />
                     </Form.Item>
 
                     <Form.Item name="intentSubject" label="支持课程" rules={[{ required: true }]}>
-                        <NewIntentSubjects subjects={props.subjects} />
+                        <NewIntentSubjects subjects={subjectsTree} subjectsAll={subjects} />
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
@@ -77,4 +104,4 @@ function UpdateSubOrgModel(props) {
     );
 }
 
-export default UpdateSubOrgModel;
+export default SubOrgEditModel;

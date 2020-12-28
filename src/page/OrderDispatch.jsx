@@ -16,10 +16,14 @@ async function fetchStudent(page, pageSize, data) {
     data: []
   };
   for (let i = 0; i < rawStudents.length; i++) {
+    let createdAt = new Date(Date.parse(rawStudents[i].created_at));
+    let updatedAt = new Date(Date.parse(rawStudents[i].updated_at));
     students.data.push({
       id: rawStudents[i].id,
       author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
+      created_at: createdAt.toLocaleDateString(),
+      updated_at: updatedAt.toLocaleDateString(),
       address: rawStudents[i].address,
       telephone: rawStudents[i].telephone,
       intent_subject: rawStudents[i].intent_subject,
@@ -33,14 +37,14 @@ async function fetchStudent(page, pageSize, data) {
 function OrderDispatch(props) {
   const columns = [
     {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: '代理人',
       dataIndex: 'author',
       key: 'author',
+    },
+    {
+      title: '录单时间',
+      dataIndex: 'created_at',
+      key: 'created_at',
     },
     {
       title: '学生姓名',
@@ -57,11 +61,11 @@ function OrderDispatch(props) {
       dataIndex: 'telephone',
       key: 'telephone',
     },
-    {
-      title: '报名意向',
-      dataIndex: 'intent_subject',
-      key: 'intent_subject',
-    },
+    // {
+    //   title: '报名意向',
+    //   dataIndex: 'intent_subject',
+    //   key: 'intent_subject',
+    // },
     {
       title: '状态',
       key: 'status',

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, message, Row, Col,Typography } from 'antd';
+import { Button, Card, Breadcrumb, message, Row, Col, Typography } from 'antd';
 import { getStudentByIdAPI } from '../api/api';
+import { parseAddress } from '../utils/address';
 const { Title } = Typography;
 function StudentDetails(props) {
     const [student, setStudent] = useState({});
@@ -21,7 +22,7 @@ function StudentDetails(props) {
     }, []);
 
     let getStatusName = (id) => {
-        switch(id){
+        switch (id) {
             case 1:
                 return "已创建";
             case 2:
@@ -45,7 +46,7 @@ function StudentDetails(props) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>手机号：{student.telephone}</Col>
-                    <Col span={12}>居住地址：{student.address}{student.address_ext}</Col>
+                    <Col span={12}>居住地址：{parseAddress(student.address)}{student.address_ext}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>邮箱：{student.email}</Col>
@@ -53,37 +54,37 @@ function StudentDetails(props) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={24}>报名意向：
-                        <ul style={{margin:"10px 10px"}}>
-                        {student.intent_subject != undefined && student.intent_subject.map(item => (
-                            <li key={item}>{item}</li>
-                        ))}
+                        <ul style={{ margin: "10px 10px" }}>
+                            {student.intent_subject != undefined && student.intent_subject.map(item => (
+                                <li key={item}>{item}</li>
+                            ))}
                         </ul>
-                        
+
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={24}>备注：{student.note}</Col>
                 </Row>
             </Card>
-            {student.orders != undefined && student.orders.length > 0? <Title level={4}>已推荐机构</Title>: ""}
-            {student.orders != undefined && student.orders.map((order)=>(
-            <Card style={{ width: "100%", margin: "20px 5px" }}>
-                <Row gutter={[16, 16]} key={order.id}>
+            {student.orders != undefined && student.orders.length > 0 ? <Title level={4}>已推荐机构</Title> : ""}
+            {student.orders != undefined && student.orders.map((order) => (
+                <Card style={{ width: "100%", margin: "20px 5px" }}>
+                    <Row gutter={[16, 16]} key={order.id}>
                         <Col span={12}>推荐机构：{order.org_name}</Col>
-                </Row>
-                <Row gutter={[16, 16]} key={order.id}>
+                    </Row>
+                    <Row gutter={[16, 16]} key={order.id}>
                         <Col span={12}>推荐学科：{order.intent_subject}</Col>
-                </Row>
-                <Row gutter={[16, 16]} key={order.id}>
+                    </Row>
+                    <Row gutter={[16, 16]} key={order.id}>
                         <Col span={12}>状态：{getStatusName(order.status)}</Col>
-                </Row>
-            </Card>
+                    </Row>
+                </Card>
             ))}
-           
+
             <Row gutter={[16, 16]}>
-                    <Col offset={22} span={1}><Button onClick={()=>history.goBack()}>返回</Button></Col>
+                <Col offset={22} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
             </Row>
-            
+
         </div>
     );
 }

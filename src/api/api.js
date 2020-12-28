@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-// const baseURL = "http://localhost:8088/api"
-const baseURL = "http://101.133.139.38:8088/api"
+const baseURL = "http://localhost:8088/api"
+// const baseURL = "http://101.133.139.38:8088/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
 
@@ -29,14 +29,43 @@ export async function updatePasswordAPI(password) {
     }
 }
 
-export async function listSubjects() {
+export async function listSubjectsAPI() {
     try {
-        let res = await axios.get(baseURL + "/subjects/0")
+        let res = await axios.get(baseURL + "/subjects/details/0")
         return res.data.subjects;
     } catch (e) {
         return { err_msg: e }
     }
 }
+
+export async function listSubjectsTreeAPI() {
+    try {
+        let res = await axios.get(baseURL + "/subjects/tree")
+        return res.data.subjects;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
+export async function listSubjectsTreeAPIWithData() {
+    try {
+        let res = await axios.get(baseURL + "/subjects/tree")
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
+
+export async function listSubjectsAllAPI() {
+    try {
+        let res = await axios.get(baseURL + "/subjects/all")
+        return res.data.subjects;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
 export async function listAuths() {
     try {
         let res = await axios.get(baseURL + "/auths/")
@@ -192,18 +221,20 @@ export async function getOrgAPI(id) {
     }
 }
 
-export async function listSubjectsAPI() {
+
+
+export async function createSubjectAPI(data) {
     try {
-        let res = await axios.get(baseURL + "/subjects/0");
+        let res = await axios.post(baseURL + "/subject/", data);
         return res.data;
     } catch (e) {
         return { err_msg: e }
     }
 }
 
-export async function createSubjectAPI(data) {
+export async function batchCreateSubjectAPI(data) {
     try {
-        let res = await axios.post(baseURL + "/subject/", data);
+        let res = await axios.post(baseURL + "/subjects/", data);
         return res.data;
     } catch (e) {
         return { err_msg: e }

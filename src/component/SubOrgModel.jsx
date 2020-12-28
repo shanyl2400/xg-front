@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Modal, message } from 'antd';
-import IntentSubjectForm from './IntentSubjectForm';
+import NewIntentSubjects from './NewIntentSubjects';
 import AddressForm from './AddressForm';
-import { listSubjects } from '../api/api';
+import { listSubjectsTree } from '../api/api';
 const { TextArea } = Input;
 
 const layout = {
@@ -18,36 +18,7 @@ function SubOrgModel(props) {
   const [subjects, setSubjects] = useState([])
 
   async function getSubjects() {
-    let subjects = [];
-    if (subjects.length < 1) {
-      let rawSubjects = await listSubjects();
-      for (let i = 0; i < rawSubjects.length; i++) {
-        if (rawSubjects[i].level == 1) {
-          subjects = subjects.concat({
-            id: rawSubjects[i].id,
-            parent_id: rawSubjects[i].parent_id,
-            level: rawSubjects[i].level,
-            name: rawSubjects[i].name,
-            children: []
-          })
-        }
-      }
-
-      for (let i = 0; i < rawSubjects.length; i++) {
-        if (rawSubjects[i].level == 2) {
-          for (let j = 0; j < subjects.length; j++) {
-            if (rawSubjects[i].parent_id == subjects[j].id) {
-              subjects[j].children = subjects[j].children.concat({
-                id: rawSubjects[i].id,
-                parent_id: rawSubjects[i].parent_id,
-                level: rawSubjects[i].level,
-                name: rawSubjects[i].name,
-              })
-            }
-          }
-        }
-      }
-    }
+    let subjects = await listSubjectsTree();
     return subjects
   }
 
@@ -71,11 +42,9 @@ function SubOrgModel(props) {
   const onSubmit = e => {
     form.validateFields().then(async e => {
       let subjects = form.getFieldValue("intentSubject");
-      for (let i = 0; i < subjects.length; i++) {
-        if (subjects[i].value.indexOf("请选择") != -1) {
-          message.warn("请选择支持课程");
-          return;
-        }
+      if (subjects.length < 1) {
+        message.warn("请选择支持课程");
+        return;
       }
       props.submitForm(form.getFieldsValue());
       form.resetFields();
@@ -97,10 +66,7 @@ function SubOrgModel(props) {
           form={form}
           initialValues={{
             gender: true,
-            intentSubject: [{
-              id: index,
-              value: "请选择-请选择-普通课"
-            }],
+            intentSubject: [],
           }}>
           <Form.Item name="name" label="分校名称" rules={[{ required: true }]} >
             <Input />
@@ -111,7 +77,8 @@ function SubOrgModel(props) {
           </Form.Item>
 
           <Form.Item name="intentSubject" label="支持课程" rules={[{ required: true }]}>
-            <IntentSubjectForm subjects={subjects} />
+            {/* <IntentSubjectForm subjects={subjects} /> */}
+            <NewIntentSubjects subjects={subjects} />
           </Form.Item>
 
           <Form.Item {...tailLayout}>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Cascader, Input, Row, Col } from 'antd';
 import options from '../component/address';
 
-function AddressForm(props) {
+function SubOrgEditModelAddress(props) {
     const changeAddressRegion = e => {
         let address = "";
         for (let i = 0; i < e.length; i++) {
@@ -24,23 +24,20 @@ function AddressForm(props) {
         });
     }
 
-    const getRegion = () => {
-        let region = [];
-        if (props.value.region != null) {
-            region = props.value.region.split("市");
-        }
-        return region
+    let regions = [];
+    if (props.value != null) {
+        regions = props.value.region.split("-");
     }
 
     return (
         <Row>
             <Col span={10}>
-                <Cascader options={options} value={getRegion()} placeholder="请选择" onChange={changeAddressRegion} />
+                <Cascader options={options} value={regions} placeholder="请选择" onChange={changeAddressRegion} />
             </Col>
             <Col offset={1} span={12}>
-                <Input placeholder="请输入详细地址" value={props.value.ext} onChange={changeAddressExt} />
+                <Input placeholder="请输入详细地址" value={props.value != null ? props.value.ext : ""} onChange={changeAddressExt} />
             </Col>
         </Row>
     )
 }
-export default AddressForm;
+export default SubOrgEditModelAddress;

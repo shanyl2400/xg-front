@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, message } from 'antd';
 import { useParams, useHistory } from "react-router-dom";
-import SubOrgInfo from '../component/SubOrgInfo';
+import SubOrgInfoTable from '../component/SubOrgInfoTable';
 import { getOrgAPI } from '../api/api';
 const { TextArea } = Input;
 
@@ -24,7 +24,7 @@ function OrgInfo(props) {
             let res = await getOrgAPI(id);
             if (res.err_msg == "success") {
                 let org = res.org;
-                for(let i = 0; i < org.sub_orgs.length; i ++){
+                for (let i = 0; i < org.sub_orgs.length; i++) {
                     let nameParts = org.sub_orgs[i].name.split("-");
                     org.sub_orgs[i].name = nameParts[nameParts.length - 1];
                     org.sub_orgs[i].intentSubject = getIntentSubjects(org.sub_orgs[i].subjects);
@@ -41,8 +41,8 @@ function OrgInfo(props) {
 
     const getIntentSubjects = (subjects) => {
         let ret = [];
-        for(let i = 0; i < subjects.length; i ++){
-                ret.push({id: i + 1, name: subjects[i], value: subjects[i]});
+        for (let i = 0; i < subjects.length; i++) {
+            ret.push({ id: i + 1, name: subjects[i], value: subjects[i] });
         }
         return ret;
     }
@@ -71,11 +71,11 @@ function OrgInfo(props) {
                 </Form.Item>
 
                 <Form.Item name="subOrgs" label="分校" rules={[{ required: false }]} >
-                    <SubOrgInfo orgs={orgInfo.sub_orgs}/>
+                    <SubOrgInfoTable orgs={orgInfo.sub_orgs} />
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Button onClick={()=>{history.goBack()}} htmlType="button">
+                    <Button onClick={() => { history.goBack() }} htmlType="button">
                         返回
                     </Button>
                 </Form.Item>

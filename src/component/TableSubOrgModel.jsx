@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Modal, Cascader } from 'antd';
+import { Form, Input, Button, Modal, message } from 'antd';
 import NewIntentSubjects from './NewIntentSubjects';
-import AddressForm from './AddressForm2';
+import AddressForm from './AddressForm';
+import { listSubjectsTreeAPI } from '../api/api';
+const { TextArea } = Input;
 
 const layout = {
     labelCol: { span: 5 },
@@ -10,14 +12,28 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 17, span: 16 },
 };
-function UpdateSubOrgModel(props) {
+let index = 0;
+function TableSubOrgModel(props) {
     const [form] = Form.useForm();
+    const [subjects, setSubjects] = useState([])
 
+    async function getSubjects() {
+        let subjects = await listSubjectsTreeAPI();
+        return subjects
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const sub = await getSubjects();
+            setSubjects(sub);
+        }
+        fetchData();
+    }, [])
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
     const onFinish = async values => {
-        props.submitForm(props.value.id, values);
+        props.submitForm(values);
     }
     const onClose = e => {
         props.closeModel();
@@ -26,20 +42,18 @@ function UpdateSubOrgModel(props) {
     const onSubmit = e => {
         form.validateFields().then(async e => {
             let subjects = form.getFieldValue("intentSubject");
-            for (let i = 0; i < subjects.length; i++) {
-                if (subjects[i].value.indexOf("请选择") != -1) {
-                    return;
-                }
+            if (subjects.length < 1) {
+                message.warn("请选择支持课程");
+                return;
             }
-            props.submitForm(props.value.id, form.getFieldsValue());
-            // form.resetFields();
+            console.log(">>>>>>>>>:", form.getFieldsValue());
+            props.submitForm(form.getFieldsValue());
+            form.resetFields();
         });
     }
-
-    form.setFieldsValue(props.value);
     return (
         <Modal
-            title="修改分校"
+            title="添加分校"
             visible={props.visible}
             footer={null}
             onCancel={onClose}
@@ -47,19 +61,25 @@ function UpdateSubOrgModel(props) {
                 <Form {...layout}
                     name="control-ref"
                     style={{ marginTop: "0px", marginLeft: "-40px" }}
+                    initialValues={{ remember: true }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
-                    form={form}>
+                    form={form}
+                    initialValues={{
+                        gender: true,
+                        intentSubject: [],
+                    }}>
                     <Form.Item name="name" label="分校名称" rules={[{ required: true }]} >
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="addressData" label="地址" rules={[{ required: true }]} >
+                    <Form.Item name="address" label="地址" rules={[{ required: true }]} >
                         <AddressForm />
                     </Form.Item>
 
                     <Form.Item name="intentSubject" label="支持课程" rules={[{ required: true }]}>
-                        <NewIntentSubjects subjects={props.subjects} />
+                        {/* <IntentSubjectForm subjects={subjects} /> */}
+                        <NewIntentSubjects subjects={subjects} />
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
@@ -67,7 +87,7 @@ function UpdateSubOrgModel(props) {
                             返回
             </Button>
                         <Button onClick={onSubmit} type="primary" htmlType="button" style={{ marginLeft: 10 }}>
-                            修改
+                            添加
             </Button>
                     </Form.Item>
                 </Form>
@@ -77,4 +97,4 @@ function UpdateSubOrgModel(props) {
     );
 }
 
-export default UpdateSubOrgModel;
+export default TableSubOrgModel;

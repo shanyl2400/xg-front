@@ -8,14 +8,17 @@ import { getPaymentStatus } from '../utils/status';
 function OrderReview(props) {
   const columns = [
     {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: '代理人',
       dataIndex: 'publisher_name',
       key: 'publisher_name',
+    },
+    {
+      title: '申请时间',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: createdAt => (
+        <span>{new Date(Date.parse(createdAt)).toLocaleDateString()}</span>
+      ),
     },
     {
       title: '学生姓名',
@@ -32,18 +35,18 @@ function OrderReview(props) {
       dataIndex: 'title',
       key: 'title',
     },
-    {
-      title: '推荐科目',
-      dataIndex: 'intent_subject',
-      key: 'intent_subject',
-    },
+    // {
+    //   title: '推荐科目',
+    //   dataIndex: 'intent_subject',
+    //   key: 'intent_subject',
+    // },
     {
       title: '金额',
       dataIndex: 'amount',
       key: 'amount',
       render: (amount, record) => (
-        <span style={record.mode == 1? {"color":"#52c41a"}:{"color":"#f5222d"}}>
-          {record.mode == 1?"+":"-"}{amount}
+        <span style={record.mode == 1 ? { "color": "#52c41a" } : { "color": "#f5222d" }}>
+          {record.mode == 1 ? "+" : "-"}{amount}
         </span>
       ),
     },
@@ -63,7 +66,7 @@ function OrderReview(props) {
       render: (text, record) => (
         <Space size="middle">
           <a onClick={() => history.push("/main/order_details/" + record.id)}>详情</a>
-          <a onClick={() => {setPaymentData(record);handleReviewOrderModel(true);}}>审批</a>
+          <a onClick={() => { setPaymentData(record); handleReviewOrderModel(true); }}>审批</a>
         </Space>
       ),
     },
@@ -71,7 +74,7 @@ function OrderReview(props) {
 
   let history = useHistory();
   let [openReviewOrderModel, setOpenReviewOrderModel] = useState(false);
-  let [paymentData, setPaymentData] = useState({intent_subject:[]});
+  let [paymentData, setPaymentData] = useState({ intent_subject: [] });
   let [paymentInfo, setPaymentInfo] = useState([]);
 
   let handleReviewOrderModel = (flag) => {
@@ -79,10 +82,10 @@ function OrderReview(props) {
   }
   const fetchData = async () => {
     let res = await getPendingPaymentAPI();
-    if(res.err_msg == "success"){
+    if (res.err_msg == "success") {
       setPaymentInfo(res.data.records);
       console.log(res.data)
-    }else{
+    } else {
       message.error("获取审核订单失败,", res.err_msg);
     }
   }
@@ -92,7 +95,7 @@ function OrderReview(props) {
 
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
-       <Breadcrumb>
+      <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>订单审核</Breadcrumb.Item>
       </Breadcrumb>
@@ -101,9 +104,9 @@ function OrderReview(props) {
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={paymentInfo}
-         />
+      />
 
-      <ReviewOrderModel refreshData={fetchData} paymentData={paymentData} visible={openReviewOrderModel} closeModel={()=>handleReviewOrderModel(false)}/>
+      <ReviewOrderModel refreshData={fetchData} paymentData={paymentData} visible={openReviewOrderModel} closeModel={() => handleReviewOrderModel(false)} />
     </div>
   );
 }

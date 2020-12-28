@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import {Breadcrumb, message, Space, Table, Pagination, Row, Col, Select} from 'antd';
+import { Breadcrumb, message, Space, Table, Pagination, Row, Col, Select } from 'antd';
 import { listOrdersAPI, listOrgsAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
 import OrderFilter from "../component/OrderFilter";
@@ -11,15 +11,23 @@ let pageIndex = 1;
 let queryValue = {};
 function OrderList(props) {
   const columns = [
-    {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
+    // {
+    //   title: '#',
+    //   dataIndex: 'id',
+    //   key: 'id',
+    // },
     {
       title: '代理人',
       dataIndex: 'publisher_name',
       key: 'publisher_name',
+    },
+    {
+      title: '派单时间',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: createdAt => (
+        <span>{new Date(Date.parse(createdAt)).toLocaleDateString()}</span>
+      ),
     },
     {
       title: '学生姓名',
@@ -62,16 +70,16 @@ function OrderList(props) {
     },
   ];
   let history = useHistory();
-  let [orders, setOrders] = useState({total:0});
+  let [orders, setOrders] = useState({ total: 0 });
 
   const fetchData = async (index, data) => {
     let res = await listOrdersAPI(index, pageSize, data);
-    if(res.err_msg == "success"){
+    if (res.err_msg == "success") {
       setOrders({
         total: res.data.total,
         data: res.data.orders
       });
-    }else{
+    } else {
       message.error("获取订单失败：");
     }
   }
@@ -79,20 +87,20 @@ function OrderList(props) {
   useEffect(() => {
     fetchData(1, null);
   }, []);
-  
-  let handleChangePage = (page)=>{
+
+  let handleChangePage = (page) => {
     pageIndex = page;
     fetchData(page, queryValue);
   }
 
-  let handleChangeFilter = value=>{
+  let handleChangeFilter = value => {
     queryValue = value
     fetchData(pageIndex, value);
   }
 
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
-       <Breadcrumb>
+      <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>订单列表</Breadcrumb.Item>
       </Breadcrumb>
@@ -104,7 +112,7 @@ function OrderList(props) {
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={orders.data}
-         />
+      />
       <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orders.total} />
 
     </div>

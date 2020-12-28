@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import SubOrgModel from './SubOrgModel';
-import SubOrgItem from './SubOrgItem';
+import SubOrgInfoTable from './SubOrgInfoTable';
 function SubOrgForm(props) {
     let [modelVisible, setModelVisible] = useState(false);
     const handleAddSubOrgModel = (e) => {
@@ -13,6 +13,7 @@ function SubOrgForm(props) {
 
     const handleAddSubOrg = (data) => {
         props.addSubOrg(data);
+        console.log(data);
         setModelVisible(false);
     }
 
@@ -21,22 +22,12 @@ function SubOrgForm(props) {
     }
     return (
         <div>
-            <div style={{padding: 0, marginLeft:5, marginBottom:10,listStyle:"none"}}>
-            {props.subOrgs.map((v) =>
-                    <div key={v.id}>
-                    <SubOrgItem 
-                        name={v.name} 
-                        address={v.address} 
-                        intentSubject={v.intentSubject}
-                        delete={()=>handleRemoveSubOrg(v.id)}
-                        hasDelete={true}
-                    />
-                    </div>
-                    )}
+            <div style={{ padding: 0, marginLeft: 5, marginBottom: 10, listStyle: "none" }}>
+                <SubOrgInfoTable data={props.subOrgs} />
             </div>
             <Button onClick={handleAddSubOrgModel}>添加分校</Button>
-            <SubOrgModel visible={modelVisible} closeModel={handleCloseModel} submitForm={handleAddSubOrg}/>
+            <SubOrgModel visible={modelVisible} closeModel={handleCloseModel} submitForm={handleAddSubOrg} />
         </div>
     );
-}    
+}
 export default SubOrgForm;

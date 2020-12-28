@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, message } from 'antd';
 import { useParams, useHistory } from "react-router-dom";
-import SubOrgForm from '../component/SubOrgForm2';
+import SubOrgInfoTable from '../component/SubOrgInfoTable';
 import { getOrgAPI, updateOrgAPI } from '../api/api';
-import AddressForm from '../component/AddressForm2';
+import SubOrgEditModelAddress from '../component/SubOrgEditModelAddress';
 const { TextArea } = Input;
 
 const layout = {
@@ -25,7 +25,7 @@ function UpdateOrg(props) {
             let res = await getOrgAPI(id);
             if (res.err_msg == "success") {
                 let org = res.org;
-                for(let i = 0; i < org.sub_orgs.length; i ++){
+                for (let i = 0; i < org.sub_orgs.length; i++) {
                     let nameParts = org.sub_orgs[i].name.split("-");
                     org.sub_orgs[i].name = nameParts[nameParts.length - 1];
                     org.sub_orgs[i].intentSubject = getIntentSubjects(org.sub_orgs[i].subjects);
@@ -49,26 +49,17 @@ function UpdateOrg(props) {
 
     const getIntentSubjects = (subjects) => {
         let ret = [];
-        for(let i = 0; i < subjects.length; i ++){
-                ret.push({id: i + 1, name: subjects[i], value: subjects[i]});
+        if (subjects == null) {
+            return [];
+        }
+        for (let i = 0; i < subjects.length; i++) {
+            ret.push(subjects[i]);
         }
         return ret;
     }
 
-    const combineStr = (strList) => {
-        let ret = ""
-        for (let i = 0; i < strList.length; i++) {
-            ret = ret + strList[i];
-        }
-        return ret
-    }
-    const combineValue = (obj) => {
-        let ret = []
-        for (let i = 0; i < obj.length; i++) {
-            ret = ret.concat(obj[i].value);
-        }
-        return ret
-    }
+
+
     const handleSubmit = () => {
         form.validateFields().then(async e => {
             let formData = form.getFieldsValue();
@@ -83,7 +74,7 @@ function UpdateOrg(props) {
                     // address: combineStr(so.address),
                     address: so.address,
                     address_ext: so.address_ext,
-                    subjects: combineValue(so.intentSubject),
+                    subjects: so.subjects,
                 })
             }
             let res = await updateOrgAPI(id, {
@@ -126,22 +117,22 @@ function UpdateOrg(props) {
                 </Form.Item>
 
                 <Form.Item name="telephone" label="联系方式" rules={[{ required: true }]} >
-                    <Input/>
+                    <Input />
                 </Form.Item>
 
                 <Form.Item name="addressData" label="机构地址" rules={[{ required: true }]} >
-                    <AddressForm />
+                    <SubOrgEditModelAddress />
                 </Form.Item>
 
                 <Form.Item name="subOrgs" label="分校" rules={[{ required: false }]} >
-                    <SubOrgForm />
+                    <SubOrgInfoTable mode="form" editable={true} />
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Button onClick={()=>{history.goBack()}} htmlType="button">
+                    <Button onClick={() => { history.goBack() }} htmlType="button">
                         返回
                     </Button>
-                    <Button style={{marginLeft:10}} type="primary" onClick={handleSubmit} htmlType="button">
+                    <Button style={{ marginLeft: 10 }} type="primary" onClick={handleSubmit} htmlType="button">
                         保存
                     </Button>
                 </Form.Item>

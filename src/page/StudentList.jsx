@@ -3,6 +3,7 @@ import { Breadcrumb, Tag, Space, Table, Pagination, Select, Row, Col, message, I
 import { listStudentAPI, listOrgsAPI } from '../api/api';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
+import { parseAddress } from "../utils/address";
 
 const pageSize = 10;
 const { Option } = Select;
@@ -14,11 +15,16 @@ async function fetchStudent(page, pageSize, data) {
     data: []
   };
   for (let i = 0; i < rawStudents.length; i++) {
+    let createdAt = new Date(Date.parse(rawStudents[i].created_at));
+    let updatedAt = new Date(Date.parse(rawStudents[i].updated_at));
+
     students.data.push({
       id: rawStudents[i].id,
       author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
       address: rawStudents[i].address,
+      created_at: createdAt.toLocaleDateString(),
+      updated_at: updatedAt.toLocaleDateString(),
       address_ext: rawStudents[i].address_ext,
       telephone: rawStudents[i].telephone,
       intent_subject: rawStudents[i].intent_subject,
@@ -47,14 +53,14 @@ let pageIndex = 1;
 function StudentList(props) {
   const columns = [
     {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: '代理人',
       dataIndex: 'author',
       key: 'author',
+    },
+    {
+      title: '录单时间',
+      dataIndex: 'created_at',
+      key: 'created_at',
     },
     {
       title: '学生姓名',
@@ -66,7 +72,7 @@ function StudentList(props) {
       key: 'address',
       render: (id, record) => (
         <span style={{ textOverflow: "ellipsis" }}>
-          {record.address}{record.address_ext}
+          {parseAddress(record.address)}{record.address_ext}
         </span>
       ),
     },
@@ -75,11 +81,11 @@ function StudentList(props) {
       dataIndex: 'telephone',
       key: 'telephone',
     },
-    {
-      title: '报名意向',
-      dataIndex: 'intent_subject',
-      key: 'intent_subject',
-    },
+    // {
+    //   title: '报名意向',
+    //   dataIndex: 'intent_subject',
+    //   key: 'intent_subject',
+    // },
     {
       title: '状态',
       key: 'status',

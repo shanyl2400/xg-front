@@ -4,6 +4,7 @@ import { Button, Card, Breadcrumb, Row, Col, Input, Typography, message } from '
 import { getOrderAPI } from '../api/api';
 import { getOrderStatus, getPaymentStatus } from '../utils/status';
 import AddMarkModel from '../component/AddMarkModel';
+import { parseAddress } from '../utils/address';
 const { TextArea } = Input;
 const { Title } = Typography;
 function OrderDetails(props) {
@@ -31,7 +32,7 @@ function OrderDetails(props) {
         }
     }
     useEffect(() => {
-        
+
         fetchData();
     }, []);
 
@@ -55,7 +56,7 @@ function OrderDetails(props) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>手机号：{orderInfo.student_summary.telephone}</Col>
-                    <Col span={12}>居住地址：{orderInfo.student_summary.address}</Col>
+                    <Col span={12}>居住地址：{parseAddress(orderInfo.student_summary.address)}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>推荐机构：{orderInfo.org_name}</Col>
@@ -75,10 +76,10 @@ function OrderDetails(props) {
                     <Col span={12}>状态：{getOrderStatus(orderInfo.status)}</Col>
                 </Row>
             </Card>
-            
+
             {orderInfo.PaymentInfo.length > 0 && <Title level={5}>缴费情况</Title>}
             {orderInfo.PaymentInfo.map((v) =>
-                <Card key={v.id} style={{ width: "30%", float:"left", margin: "20px 5px" }}>
+                <Card key={v.id} style={{ width: "30%", float: "left", margin: "20px 5px" }}>
                     <p>费用：{v.title}</p>
                     <p>时间：{v.created_at.replaceAll("T", " ").replaceAll("Z", "")}</p>
                     <p>收支：{v.mode == 1 ? "收入" : "支出"}</p>
@@ -88,27 +89,27 @@ function OrderDetails(props) {
                     <p>状态：{getPaymentStatus(v.status)}</p>
                 </Card>
             )}
-            <div style={{clear:"both"}}></div>
+            <div style={{ clear: "both" }}></div>
 
             {orderInfo.RemarkInfo.length > 0 && <Title level={5}>回访记录</Title>}
             {orderInfo.RemarkInfo.map((v) =>
                 <Card key={v.id} style={{ width: "100%", margin: "20px 5px" }}>
-                    <p>作者：{v.mode == 1? "学果网": "教育机构"}</p>
+                    <p>作者：{v.mode == 1 ? "学果网" : "教育机构"}</p>
                     <p>时间：{v.created_at.replaceAll("T", " ").replaceAll("Z", "")}</p>
                     <p>内容：{v.content}</p>
                 </Card>
             )}
 
-            <Row style={{marginTop:8}} gutter={[16, 16]} >
-            <Col offset={20} span={1}><Button onClick={() => openAddMarkModel()} type="primary">添加回访</Button></Col>
-            <Col offset={1} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
+            <Row style={{ marginTop: 8 }} gutter={[16, 16]} >
+                <Col offset={20} span={1}><Button onClick={() => openAddMarkModel()} type="primary">添加回访</Button></Col>
+                <Col offset={1} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
             </Row>
 
-            <AddMarkModel 
-                id={orderInfo.id} 
-                visible={markModelVisible} 
+            <AddMarkModel
+                id={orderInfo.id}
+                visible={markModelVisible}
                 closeModel={closeAddMarkModel}
-                refreshData={fetchData}/>
+                refreshData={fetchData} />
         </div>
     );
 }

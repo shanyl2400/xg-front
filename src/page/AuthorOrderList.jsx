@@ -10,14 +10,17 @@ let queryValue = {};
 function AuthorOrderList(props) {
   const columns = [
     {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: '代理人',
       dataIndex: 'publisher_name',
       key: 'publisher_name',
+    },
+    {
+      title: '派单时间',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: createdAt => (
+        <span>{new Date(Date.parse(createdAt)).toLocaleDateString()}</span>
+      ),
     },
     {
       title: '学生姓名',
@@ -60,34 +63,34 @@ function AuthorOrderList(props) {
     },
   ];
   let history = useHistory();
-  let [orders, setOrders] = useState({total:0})
+  let [orders, setOrders] = useState({ total: 0 })
   const fetchData = async (index, value) => {
     let res = await listAuthOrdersAPI(index, pageSize, value);
-    if(res.err_msg == "success"){
+    if (res.err_msg == "success") {
       setOrders({
         total: res.data.total,
         data: res.data.orders
       });
-    }else{
+    } else {
       message.error("获取订单失败");
     }
-  
+
   }
   useEffect(() => {
     fetchData(1, null);
   }, []);
-  
-  let handleChangePage = (page)=>{
+
+  let handleChangePage = (page) => {
     fetchData(page, queryValue);
   }
-  let handleChangeFilter = value=>{
+  let handleChangeFilter = value => {
     queryValue = value;
     fetchData(pageIndex, value);
   }
- 
+
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
-       <Breadcrumb>
+      <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>我的订单</Breadcrumb.Item>
       </Breadcrumb>
@@ -97,7 +100,7 @@ function AuthorOrderList(props) {
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={orders.data}
-         />
+      />
       <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orders.total} />
 
     </div>

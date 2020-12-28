@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, Radio, Cascader, message, Select } from 'antd';
 import IntentSubjectForm from '../component/IntentSubjectForm';
+import NewIntentSubjects from '../component/NewIntentSubjects';
 import options from '../component/address';
 import AddressForm from '../component/AddressForm';
 import { useHistory } from "react-router-dom";
-import { listSubjects, createStudentAPI, listOrderSourcesAPI } from '../api/api';
+import { listSubjectsAPI, createStudentAPI, listOrderSourcesAPI, listSubjectsTreeAPI } from '../api/api';
 
 const { Option } = Select;
 const layout = {
@@ -20,7 +21,7 @@ const { TextArea } = Input;
 async function getSubjects() {
   let subjects = [];
   if (subjects.length < 1) {
-    let rawSubjects = await listSubjects();
+    let rawSubjects = await listSubjectsAPI();
     for (let i = 0; i < rawSubjects.length; i++) {
       if (rawSubjects[i].level == 1) {
         subjects = subjects.concat({
@@ -51,9 +52,9 @@ async function getSubjects() {
   return subjects
 }
 
-async function getOrderSources(){
+async function getOrderSources() {
   let rawSources = await listOrderSourcesAPI();
-  if(rawSources.err_msg != "success"){
+  if (rawSources.err_msg != "success") {
     message.error("无法获取订单来源信息：", rawSources.err_msg);
     return [];
   }
@@ -64,14 +65,18 @@ function CreateStudent(props) {
   const [form] = Form.useForm();
   const onFinish = async values => {
     let address = form.getFieldValue("address");
-    let intentSubject = []
+    // let intentSubject = []
     let intentSubjects = form.getFieldValue("intentSubject");
-    for (let i = 0; i < intentSubjects.length; i++) {
-      if(intentSubjects[i].value.indexOf("请选择") >= 0){
-        message.error('请选择报名意向');
-        return;
-      }
-      intentSubject.push(intentSubjects[i].value);
+    // for (let i = 0; i < intentSubjects.length; i++) {
+    //   if (intentSubjects[i].value.indexOf("请选择") >= 0) {
+    //     message.error('请选择报名意向');
+    //     return;
+    //   }
+    //   intentSubject.push(intentSubjects[i].value);
+    // }
+    if (intentSubjects.length < 1) {
+      message.error('请选择报名意向');
+      return;
     }
     let res = await createStudentAPI({
       "name": form.getFieldValue("name"),
@@ -80,7 +85,7 @@ function CreateStudent(props) {
       "email": form.getFieldValue("email"),
       "address": address.region,
       "address_ext": address.ext,
-      "intent_subject": intentSubject,
+      "intent_subject": intentSubjects,
       "note": form.getFieldValue("note"),
       "order_source_id": form.getFieldValue("order_source_id")
     })
@@ -118,17 +123,20 @@ function CreateStudent(props) {
   let history = useHistory();
 
   const onCreateOrder = values => {
-    form.validateFields().then(async e=>{
+    form.validateFields().then(async e => {
       let address = form.getFieldValue("address");
-      
-      let intentSubject = []
+      // let intentSubject = []
       let intentSubjects = form.getFieldValue("intentSubject");
-      for (let i = 0; i < intentSubjects.length; i++) {
-        if(intentSubjects[i].value.indexOf("请选择") >= 0){
-          message.error('请选择报名意向');
-          return;
-        }
-        intentSubject.push(intentSubjects[i].value);
+      // for (let i = 0; i < intentSubjects.length; i++) {
+      //   if (intentSubjects[i].value.indexOf("请选择") >= 0) {
+      //     message.error('请选择报名意向');
+      //     return;
+      //   }
+      //   intentSubject.push(intentSubjects[i].value);
+      // }
+      if (intentSubjects.length < 1) {
+        message.error('请选择报名意向');
+        return;
       }
       let res = await createStudentAPI({
         "name": form.getFieldValue("name"),
@@ -137,7 +145,7 @@ function CreateStudent(props) {
         "email": form.getFieldValue("email"),
         "address": address.region,
         "address_ext": address.ext,
-        "intent_subject": intentSubject,
+        "intent_subject": intentSubjects,
         "note": form.getFieldValue("note"),
         "order_source_id": form.getFieldValue("order_source_id")
       })
@@ -158,36 +166,39 @@ function CreateStudent(props) {
           default:
             message.error('创建失败，未知状态，无法派单');
         }
-  
+
       } else {
         console.log(res);
         //创建失败
         message.error('创建失败，无法派单:' + res.err_msg);
       }
       form.resetFields();
-      if(res.result.status == 1 || res.result.status == 3){
-        console.log("ID:",res.result.id);
+      if (res.result.status == 1 || res.result.status == 3) {
+        console.log("ID:", res.result.id);
         // props.onCreateStudentOrder(res.result.id);
         history.push("/main/student_order/" + res.result.id);
       }
-      
-    }).catch(err=>{
+
+    }).catch(err => {
       console.log(err);
     });
-    
+
   }
 
   const [formDatas, setSormDatas] = useState({
-    subjects: [],
+    // subjects: [],
+    subjectsTree: [],
     orderSources: []
   })
   useEffect(() => {
     const fetchData = async () => {
-      const sub = await getSubjects();
+      // const sub = await getSubjects();
       const orderSources = await getOrderSources();
+      const subjectsTree = await listSubjectsTreeAPI();
       setSormDatas({
-        subjects: sub,
-        orderSources: orderSources
+        // subjects: sub,
+        orderSources: orderSources,
+        subjectsTree: subjectsTree,
       });
     }
     fetchData();
@@ -208,10 +219,7 @@ function CreateStudent(props) {
         form={form}
         initialValues={{
           gender: true,
-          intentSubject: [{
-            id: index,
-            value: "请选择-请选择-普通课"
-          }],
+          intentSubject: [],
         }}>
         <Form.Item name="name" label="姓名" rules={[{ required: true }]} >
           <Input />
@@ -237,15 +245,16 @@ function CreateStudent(props) {
         </Form.Item>
 
         <Form.Item name="order_source_id" label="订单来源" rules={[{ required: true }]} >
-        <Select placeholder="请选择" style={{ width: 120 }} >
-          {formDatas.orderSources.map((os)=>(
-            <Option key={os.is} value={os.id}>{os.name}</Option>
-          ))}
-        </Select>
+          <Select placeholder="请选择" style={{ width: 120 }} >
+            {formDatas.orderSources.map((os) => (
+              <Option key={os.is} value={os.id}>{os.name}</Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item name="intentSubject" label="报名意向" rules={[{ required: true }]}>
-          <IntentSubjectForm subjects={formDatas.subjects} />
+          {/* <IntentSubjectForm subjects={formDatas.subjects} /> */}
+          <NewIntentSubjects subjects={formDatas.subjectsTree} />
         </Form.Item>
 
         <Form.Item name="note" label="备注" >

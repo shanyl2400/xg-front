@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Card, Row, Col, Button, message } from 'antd';
 import { rejectOrgReview, approveOrgReview } from '../api/api';
+import { parseAddress } from '../utils/address';
 
 const layout = {
     labelCol: { offset: 2, span: 4 },
@@ -12,21 +13,21 @@ function ReviewOrgModel(props) {
     }
     let onReject = async () => {
         let res = await rejectOrgReview(props.orgData.id);
-        if(res.err_msg == "success"){
+        if (res.err_msg == "success") {
             message.warn("机构已拒绝");
             props.closeModel();
             props.refreshData();
-        }else{
+        } else {
             message.error("审批失败," + res.err_msg);
         }
     }
     let onApprove = async () => {
         let res = await approveOrgReview(props.orgData.id);
-        if(res.err_msg == "success"){
+        if (res.err_msg == "success") {
             message.success("机构已通过");
             props.closeModel();
             props.refreshData();
-        }else{
+        } else {
             message.error("审批失败," + res.err_msg);
         }
     }
@@ -45,15 +46,15 @@ function ReviewOrgModel(props) {
                     <Col span={12}>手机号：{props.orgData.telephone}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
-                    <Col span={12}>地址：{props.orgData.address}</Col>
+                    <Col span={12}>地址：{parseAddress(props.orgData.address)}</Col>
                 </Row>
                 {/* <Row gutter={[16, 16]} key={1}>
                         <Col span={12}>状态：已认证</Col>
                 </Row> */}
-               
+
             </Card>
 
-            <Row style={{marginTop:30}}>
+            <Row style={{ marginTop: 30 }}>
                 <Col offset={12} span={4}>
                     <Button onClick={onCancel}>取消</Button>
                 </Col>
