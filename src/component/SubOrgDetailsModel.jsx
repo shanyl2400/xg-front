@@ -34,7 +34,7 @@ function SubOrgDetailsModel(props) {
 
     let address = "";
     if (orgInfo.address != null) {
-        address = orgInfo.address.region.replaceAll("-", "");
+        address = orgInfo.address.region.replace(/-/g, "");
         address = address + orgInfo.address.ext;
     }
 

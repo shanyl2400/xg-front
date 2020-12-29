@@ -14,7 +14,7 @@ function OrderDetails(props) {
             dataIndex: 'created_at',
             key: 'created_at',
             render: createdAt => (
-                <span>{createdAt.replaceAll("T", " ").replaceAll("Z", "")}</span>
+                <span>{createdAt.replace(/T/g, " ").replace(/Z/g, "")}</span>
             ),
         },
         {
@@ -59,7 +59,7 @@ function OrderDetails(props) {
             dataIndex: 'created_at',
             key: 'created_at',
             render: createdAt => (
-                <span>{createdAt.replaceAll("T", " ").replaceAll("Z", "")}</span>
+                <span>{createdAt.replace(/T/g, " ").replace(/Z/g, "")}</span>
             ),
         },
         {
@@ -186,18 +186,6 @@ function OrderDetails(props) {
                 </Row>
             </Card>
 
-            {/* {orderInfo.PaymentInfo.length > 0 && <Title level={5}>缴费情况</Title>}
-            {orderInfo.PaymentInfo.map((v) =>
-                <Card key={v.id} style={{ width: "30%", float: "left", margin: "20px 5px" }}>
-                    <p>费用：{v.title}</p>
-                    <p>时间：{v.created_at.replaceAll("T", " ").replaceAll("Z", "")}</p>
-                    <p>收支：{v.mode == 1 ? "收入" : "支出"}</p>
-                    <p>金额：<span style={v.mode == 1 ? { "color": "#52c41a" } : { "color": "#f5222d" }}>
-                        {v.mode == 1 ? "+" : "-"}{v.amount}
-                    </span></p>
-                    <p>状态：{getPaymentStatus(v.status)}</p>
-                </Card>
-            )} */}
             <Title level={5}>缴费情况</Title>
             <Table
                 pagination={false}

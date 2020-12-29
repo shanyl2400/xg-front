@@ -12,7 +12,7 @@ function OrderRemarksList(props) {
       dataIndex: 'created_at',
       key: 'created_at',
       render: createdAt => (
-        <span>{createdAt.replaceAll("T", " ").replaceAll("Z", "")}</span>
+        <span>{createdAt.replace(/T/g, " ").replace(/Z/g, "")}</span>
       ),
     },
     // {
