@@ -177,12 +177,14 @@ function CreateStudentOrder(props) {
             address: e.address,
             parent_id: e.parent_id,
             subjects: subjects,
+            name: e.name,
         })
         searchOrgs({
             student_id: id,
             address: e.address,
             parent_id: e.parent_id,
             subjects: subjects,
+            name: e.name
         }, curPage);
         // const orgRes = await listSubOrgsAPI({
         //     student_id: id,

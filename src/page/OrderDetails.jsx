@@ -1,13 +1,103 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, Row, Col, Input, Typography, message } from 'antd';
-import { getOrderAPI } from '../api/api';
+import { Button, Card, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, message } from 'antd';
+import { getOrderAPI, marksOrderRemarksRead } from '../api/api';
 import { getOrderStatus, getPaymentStatus } from '../utils/status';
 import AddMarkModel from '../component/AddMarkModel';
 import { parseAddress } from '../utils/address';
 const { TextArea } = Input;
 const { Title } = Typography;
 function OrderDetails(props) {
+    const remarksColumns = [
+        {
+            title: '时间',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: createdAt => (
+                <span>{createdAt.replaceAll("T", " ").replaceAll("Z", "")}</span>
+            ),
+        },
+        {
+            title: '作者',
+            dataIndex: 'mode',
+            key: 'mode',
+            render: (mode) => (
+                <Space size="middle">
+                    {mode == 1 ? "学果网" : "机构用户"}
+                </Space>
+            ),
+        },
+        {
+            title: '内容',
+            dataIndex: 'content',
+            key: 'content',
+        },
+        {
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => (
+                <span>
+                    {status == 1 ? <Tag color="red">未读</Tag> : <Tag color="green">已读</Tag>}
+                </span>
+            )
+        },
+        {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <Space size="middle">
+                    {record.status == 1 && checkMarkAuth(record) ? <a onClick={() => { handleMarkRead(record.id) }}>标记已读</a> : ""}
+                </Space>
+            ),
+        },
+    ];
+
+    const paymentColumns = [
+        {
+            title: '时间',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: createdAt => (
+                <span>{createdAt.replaceAll("T", " ").replaceAll("Z", "")}</span>
+            ),
+        },
+        {
+            title: '费用',
+            dataIndex: 'title',
+            key: 'title'
+        },
+        {
+            title: '收支',
+            dataIndex: 'mode',
+            key: 'mode',
+            render: mode => (
+                <span>
+                    {mode == 1 ? <Tag color="green">收入</Tag> : <Tag color="red">支出</Tag>}
+                </span>
+            )
+        },
+        {
+            title: '金额',
+            dataIndex: 'amount',
+            key: 'amount',
+            render: (amount, record) => (
+                <span style={record.mode == 1 ? { "color": "#52c41a" } : { "color": "#f5222d" }}>
+                    {record.mode == 1 ? "+" : "-"}{amount}
+                </span>
+            )
+        },
+        {
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => (
+                <span>
+                    {getPaymentStatus(status)}
+                </span>
+            )
+        },
+    ];
     let { id } = useParams();
     let [markModelVisible, setMarkModelVisible] = useState(false);
     let [mark, setMark] = useState("");
@@ -21,6 +111,18 @@ function OrderDetails(props) {
         PaymentInfo: [],
         RemarkInfo: [],
     })
+    useEffect(() => {
+        fetchData();
+    }, []);
+    const checkMarkAuth = (record) => {
+        if (sessionStorage.getItem("org_id") == 1 && record.mode == 2) {
+            return true;
+        }
+        if (sessionStorage.getItem("org_id") != 1 && record.mode == 1) {
+            return true;
+        }
+        return false;
+    }
     const fetchData = async () => {
         let res = await getOrderAPI(id);
         if (res.err_msg == "success") {
@@ -31,10 +133,17 @@ function OrderDetails(props) {
             return;
         }
     }
-    useEffect(() => {
 
+    const handleMarkRead = async id => {
+        let res = await marksOrderRemarksRead(id);
+        if (res.err_msg == "success") {
+            message.success("标记已读");
+        } else {
+            message.error("标记失败：" + res.err_msg);
+        }
         fetchData();
-    }, []);
+    }
+
 
     const openAddMarkModel = e => {
         setMarkModelVisible(true);
@@ -77,7 +186,7 @@ function OrderDetails(props) {
                 </Row>
             </Card>
 
-            {orderInfo.PaymentInfo.length > 0 && <Title level={5}>缴费情况</Title>}
+            {/* {orderInfo.PaymentInfo.length > 0 && <Title level={5}>缴费情况</Title>}
             {orderInfo.PaymentInfo.map((v) =>
                 <Card key={v.id} style={{ width: "30%", float: "left", margin: "20px 5px" }}>
                     <p>费用：{v.title}</p>
@@ -88,17 +197,22 @@ function OrderDetails(props) {
                     </span></p>
                     <p>状态：{getPaymentStatus(v.status)}</p>
                 </Card>
-            )}
-            <div style={{ clear: "both" }}></div>
+            )} */}
+            <Title level={5}>缴费情况</Title>
+            <Table
+                pagination={false}
+                style={{ marginTop: "30px" }}
+                columns={paymentColumns}
+                dataSource={orderInfo.PaymentInfo}
+            />
 
-            {orderInfo.RemarkInfo.length > 0 && <Title level={5}>回访记录</Title>}
-            {orderInfo.RemarkInfo.map((v) =>
-                <Card key={v.id} style={{ width: "100%", margin: "20px 5px" }}>
-                    <p>作者：{v.mode == 1 ? "学果网" : "教育机构"}</p>
-                    <p>时间：{v.created_at.replaceAll("T", " ").replaceAll("Z", "")}</p>
-                    <p>内容：{v.content}</p>
-                </Card>
-            )}
+            <Title level={5}>回访记录</Title>
+            <Table
+                pagination={false}
+                style={{ marginTop: "30px" }}
+                columns={remarksColumns}
+                dataSource={orderInfo.RemarkInfo}
+            />
 
             <Row style={{ marginTop: 8 }} gutter={[16, 16]} >
                 <Col offset={20} span={1}><Button onClick={() => openAddMarkModel()} type="primary">添加回访</Button></Col>

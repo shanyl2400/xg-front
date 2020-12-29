@@ -18,8 +18,6 @@ function OrderFilter(props) {
         if (orgRes.err_msg != "success") {
             message.error("无法获取机构列表");
             return;
-        } else {
-
         }
 
         let orderSourceRes = await listOrderSourcesAPI();
@@ -83,15 +81,15 @@ function OrderFilter(props) {
             createdEndAt: createdEndAt,
         })
     }
-    let handleChangeTimeDiff = e =>{
+    let handleChangeTimeDiff = e => {
         setTimeDiff(e);
-        if(e > 0){
+        if (e > 0) {
             let now = new Date();
             var late = new Date();
-            late.setTime(late.getTime()-24*60*60*1000 * e);
-            createdStartAt = (parseInt(late.getTime()/1000)).toString();
-            createdEndAt = (parseInt(now.getTime()/1000)).toString();
-        }else{
+            late.setTime(late.getTime() - 24 * 60 * 60 * 1000 * e);
+            createdStartAt = (parseInt(late.getTime() / 1000)).toString();
+            createdEndAt = (parseInt(now.getTime() / 1000)).toString();
+        } else {
             createdStartAt = "";
             createdEndAt = "";
         }
@@ -156,8 +154,8 @@ function OrderFilter(props) {
                     </Select>
                 </Col>
                 <Col offset={1}>
-                    课程： <Search
-                        placeholder="请输入课程名称"
+                    搜索： <Search
+                        placeholder="请输入搜索内容"
                         onSearch={value => handleChangeSubject(value)}
                         style={{ width: 200 }}
                     />

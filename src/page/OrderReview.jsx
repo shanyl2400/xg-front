@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import { Breadcrumb, Tag, Space, Table, Pagination, message } from 'antd';
+import { Breadcrumb, Pagination, Space, Table, message } from 'antd';
 import ReviewOrderModel from '../component/ReviewOrderModel';
 import { getPendingPaymentAPI } from '../api/api';
 import { getPaymentStatus } from '../utils/status';
 
+let pageSize = 10;
+let currentPage = 1;
 function OrderReview(props) {
   const columns = [
     {
@@ -76,22 +78,29 @@ function OrderReview(props) {
   let [openReviewOrderModel, setOpenReviewOrderModel] = useState(false);
   let [paymentData, setPaymentData] = useState({ intent_subject: [] });
   let [paymentInfo, setPaymentInfo] = useState([]);
+  let [paymentTotal, setPaymentTotal] = useState(0);
 
   let handleReviewOrderModel = (flag) => {
     setOpenReviewOrderModel(flag);
   }
   const fetchData = async () => {
-    let res = await getPendingPaymentAPI();
+    let res = await getPendingPaymentAPI(currentPage, pageSize);
     if (res.err_msg == "success") {
       setPaymentInfo(res.data.records);
-      console.log(res.data)
+      setPaymentTotal(res.data.total);
     } else {
       message.error("获取审核订单失败,", res.err_msg);
     }
   }
+  const handleChangePage = e => {
+    currentPage = e;
+    fetchData();
+  }
   useEffect(() => {
     fetchData();
   }, []);
+
+
 
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
@@ -105,7 +114,7 @@ function OrderReview(props) {
         columns={columns}
         dataSource={paymentInfo}
       />
-
+      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={paymentTotal} />
       <ReviewOrderModel refreshData={fetchData} paymentData={paymentData} visible={openReviewOrderModel} closeModel={() => handleReviewOrderModel(false)} />
     </div>
   );

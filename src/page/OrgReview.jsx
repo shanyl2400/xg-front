@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Breadcrumb, message, Space, Table } from 'antd';
+import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
 import { useHistory } from "react-router-dom";
+import OrgFilter from '../component/OrgFilter';
 import ReviewOrgModel from '../component/ReviewOrgModel';
 import { listPendingOrgsAPI, getOrgAPI } from '../api/api';
 import { getOrgStatus } from '../utils/status';
 
+const pageSize = 10;
+let pageIndex = 1;
+let keywords = "";
 function OrgReview(props) {
   const columns = [
-    {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
     {
       title: '机构名称',
       dataIndex: 'name',
@@ -42,8 +41,8 @@ function OrgReview(props) {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-        <a onClick={()=>{history.push("/main/org_details/"+record.id)}}>详情</a>
-          <a onClick={()=>{handleReview(record.id)}}>审批</a>
+          <a onClick={() => { history.push("/main/org_details/" + record.id) }}>详情</a>
+          <a onClick={() => { handleReview(record.id) }}>审批</a>
         </Space>
       ),
     },
@@ -51,59 +50,71 @@ function OrgReview(props) {
   let history = useHistory();
   let [reviewOrgModelVisible, setReviewOrgModelVisible] = useState(false);
   let [orgData, setOrgData] = useState({});
+  let [orgCount, setOrgCount] = useState(0);
   let [orgList, setOrgList] = useState([]);
 
   const handleReview = async (id) => {
     let res = await getOrgAPI(id);
-    if(res.err_msg == "success") {
-        let org = res.org;
-        setOrgData(org);
-        setReviewOrgModelVisible(true);
-    }else {
+    if (res.err_msg == "success") {
+      let org = res.org;
+      setOrgData(org);
+      setReviewOrgModelVisible(true);
+    } else {
       message.warning("获取机构信息失败：" + res.err_msg);
       return;
     }
   }
- 
+
   const fetchData = async () => {
-    let res = await listPendingOrgsAPI();
-    if(res.err_msg == "success") {
+    let res = await listPendingOrgsAPI(pageIndex, pageSize, { query: keywords });
+    if (res.err_msg == "success") {
       let tempOrgs = [];
-      for(let i = 0; i < res.data.orgs.length; i ++){
+      for (let i = 0; i < res.data.orgs.length; i++) {
         let tmp = res.data.orgs[i];
         tempOrgs.push({
-            id: tmp.id,
-            key: tmp.id,
-            name: tmp.name,
-            subjects: tmp.subjects,
-            status: tmp.status,
-            telephone: tmp.telephone,
+          id: tmp.id,
+          key: tmp.id,
+          name: tmp.name,
+          subjects: tmp.subjects,
+          status: tmp.status,
+          telephone: tmp.telephone,
         });
       }
+      setOrgCount(res.data.total);
       setOrgList(tempOrgs);
-    }else {
+    } else {
       message.warning("获取机构列表失败：" + res.err_msg);
       return;
     }
   }
-
+  let handleChangePage = page => {
+    pageIndex = page;
+    fetchData();
+  }
+  let handleChangeQuery = query => {
+    pageIndex = 1;
+    keywords = query;
+    fetchData();
+  }
   useEffect(() => {
     fetchData();
   }, []);
- 
+
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
-       <Breadcrumb>
+      <Breadcrumb>
         <Breadcrumb.Item>机构管理</Breadcrumb.Item>
         <Breadcrumb.Item>审核机构</Breadcrumb.Item>
       </Breadcrumb>
+      <OrgFilter onChangeFilter={handleChangeQuery} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={orgList}
-         />
-      <ReviewOrgModel refreshData={()=>fetchData()} orgData={orgData} visible={reviewOrgModelVisible} closeModel={()=>{setReviewOrgModelVisible(false)}}/>
+      />
+      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
+      <ReviewOrgModel refreshData={() => fetchData()} orgData={orgData} visible={reviewOrgModelVisible} closeModel={() => { setReviewOrgModelVisible(false) }} />
     </div>
   );
 }

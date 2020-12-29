@@ -50,6 +50,8 @@ function getStatusName(status) {
 }
 
 let pageIndex = 1;
+let status = 0;
+let noDispatch = true;
 function StudentList(props) {
   const columns = [
     {
@@ -113,7 +115,7 @@ function StudentList(props) {
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(pageIndex, pageSize, { status: 0, noDispatch: false })
+      let res = await fetchStudent(pageIndex, pageSize, { status: status, noDispatch: noDispatch })
       setStudents(res);
     }
     fetchData();
@@ -121,11 +123,13 @@ function StudentList(props) {
 
   let handleChangePage = async e => {
     pageIndex = e
-    let res = await fetchStudent(pageIndex, pageSize, { status: 0, noDispatch: false })
+    let res = await fetchStudent(pageIndex, pageSize, { status: status, noDispatch: noDispatch })
     setStudents(res);
   }
 
   let handleStudentFilter = async e => {
+    status = e.status;
+    noDispatch = e.noDispatch;
     let res = await fetchStudent(pageIndex, pageSize, e)
     setStudents(res);
   }

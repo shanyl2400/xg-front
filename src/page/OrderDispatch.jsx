@@ -9,7 +9,6 @@ const pageSize = 10;
 
 async function fetchStudent(page, pageSize, data) {
   const rawRes = await listAllStudentAPI(page, pageSize, data);
-  console.log(rawRes)
   const rawStudents = rawRes.result.students;
   let students = {
     total: rawRes.result.total,
@@ -34,6 +33,9 @@ async function fetchStudent(page, pageSize, data) {
   return students
 }
 
+let status = 0;
+let noDispatch = true;
+let pageIndex = 1;
 function OrderDispatch(props) {
   const columns = [
     {
@@ -92,19 +94,21 @@ function OrderDispatch(props) {
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(1, pageSize, { status: 0, noDispatch: false });
+      let res = await fetchStudent(pageIndex, pageSize, { status: status, noDispatch: noDispatch });
       setStudents(res);
     }
     fetchData();
   }, []);
 
   let handleChangePage = async e => {
-    let res = await fetchStudent(e, pageSize, { status: 0, noDispatch: false });
+    pageIndex = e;
+    let res = await fetchStudent(e, pageSize, { status: status, noDispatch: noDispatch });
     setStudents(res);
   }
   let handleStudentFilter = async e => {
-    console.log(e);
-    let res = await fetchStudent(1, pageSize, e);
+    status = e.status;
+    noDispatch = e.noDispatch;
+    let res = await fetchStudent(pageIndex, pageSize, e);
     setStudents(res);
   }
 

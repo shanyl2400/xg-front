@@ -1,17 +1,20 @@
-import { Col, Row, Select } from "antd";
+import { Col, Row, Select, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { listOrgsAPI } from "../api/api";
 
 const { Option } = Select;
+const { Search } = Input;
 function StudentFilter(props) {
     const [status, setStatus] = useState(0);
-    const [isDispatched, setIsDispatched] = useState(0);
+    const [isDispatched, setIsDispatched] = useState(1);
+    const [keywords, setKeyowrds] = useState("");
 
     let handleChangeStatus = async e => {
         setStatus(e);
         props.onFilterChange({
             status: e,
-            noDispatch: isDispatched
+            noDispatch: isDispatched,
+            keywords: keywords,
         });
     }
 
@@ -19,7 +22,15 @@ function StudentFilter(props) {
         setIsDispatched(e);
         props.onFilterChange({
             status: status,
-            noDispatch: e == 1
+            noDispatch: e == 1,
+            keywords: keywords,
+        });
+    }
+    const handleChangeSearch = e => {
+        props.onFilterChange({
+            status: status,
+            noDispatch: isDispatched,
+            keywords: e,
         });
     }
 
@@ -34,10 +45,20 @@ function StudentFilter(props) {
                 </Select>
             </Col>
             <Col offset={1}>
-                过滤已派单：<Select defaultValue={0} value={isDispatched} style={{ width: 120 }} onChange={handleChangeIsDispatch}>
-                    <Option value={0}>否</Option>
-                    <Option value={1}>是</Option>
+                类型：<Select defaultValue={1} value={isDispatched} style={{ width: 120 }} onChange={handleChangeIsDispatch}>
+                    <Option value={0}>所有名单</Option>
+                    <Option value={1}>未派名单</Option>
                 </Select>
+            </Col>
+
+            <Col offset={1}>
+                搜索： <Search
+                    placeholder="请输入搜索内容"
+                    onSearch={value => handleChangeSearch(value)}
+                    style={{ width: 200 }}
+                    value={keywords}
+                    onChange={e => setKeyowrds(e.target.value)}
+                />
             </Col>
         </Row>
     )

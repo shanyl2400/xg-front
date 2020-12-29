@@ -1,10 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, message, Row, Col, Typography } from 'antd';
+import { Button, Card, Breadcrumb, message, Row, Col, Typography, Tag, Table, Space } from 'antd';
 import { getStudentByIdAPI } from '../api/api';
 import { parseAddress } from '../utils/address';
 const { Title } = Typography;
 function StudentDetails(props) {
+    const columns = [
+
+        {
+            title: '机构',
+            dataIndex: 'org_name',
+            key: 'org_name'
+        },
+        {
+            title: '学科',
+            dataIndex: 'intent_subject',
+            key: 'intent_subject',
+        },
+        {
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => (
+                <span>
+                    {getStatusName(status)}
+                </span>
+            )
+        }
+    ];
     const [student, setStudent] = useState({});
     let { id } = useParams();
     let history = useHistory();
@@ -66,7 +89,7 @@ function StudentDetails(props) {
                     <Col span={24}>备注：{student.note}</Col>
                 </Row>
             </Card>
-            {student.orders != undefined && student.orders.length > 0 ? <Title level={4}>已推荐机构</Title> : ""}
+            {/* {student.orders != undefined && student.orders.length > 0 ? <Title level={4}>已推荐机构</Title> : ""}
             {student.orders != undefined && student.orders.map((order) => (
                 <Card style={{ width: "100%", margin: "20px 5px" }}>
                     <Row gutter={[16, 16]} key={order.id}>
@@ -79,7 +102,15 @@ function StudentDetails(props) {
                         <Col span={12}>状态：{getStatusName(order.status)}</Col>
                     </Row>
                 </Card>
-            ))}
+            ))} */}
+
+            <Title level={5}>已推荐机构</Title>
+            <Table
+                pagination={false}
+                style={{ marginTop: "30px" }}
+                columns={columns}
+                dataSource={student.orders}
+            />
 
             <Row gutter={[16, 16]}>
                 <Col offset={22} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>

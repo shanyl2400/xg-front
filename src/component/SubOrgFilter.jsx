@@ -1,14 +1,16 @@
-import { Col, Row, Select, Cascader, message } from "antd";
+import { Col, Row, Select, Cascader, message, Input, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import options from './address';
 import { listOrgsAPI } from '../api/api';
 
+const { Search } = Input;
 const { Option } = Select;
 function SubOrgFilter(props) {
     const [address, setAddress] = useState([]);
     const [org, setOrg] = useState("");
     const [isFilter, setIsFilter] = useState(true);
     const [parentOrgs, setParentOrgs] = useState([]);
+    const [query, setQuery] = useState("")
     useEffect(() => {
         const fetchData = async () => {
 
@@ -39,6 +41,7 @@ function SubOrgFilter(props) {
             address: e[0] + e[1],
             parent_id: org,
             isFilter: isFilter,
+            name: query,
         });
     }
 
@@ -52,6 +55,7 @@ function SubOrgFilter(props) {
             address: addr,
             parent_id: e,
             isFilter: isFilter,
+            name: query,
         });
     }
 
@@ -65,6 +69,19 @@ function SubOrgFilter(props) {
             address: addr,
             parent_id: org,
             isFilter: e,
+            name: query,
+        });
+    }
+    let changeOrgName = e => {
+        let addr = "";
+        if (address.length > 1) {
+            addr = address[0] + address[1];
+        }
+        props.onFilterChange({
+            address: addr,
+            parent_id: org,
+            isFilter: isFilter,
+            name: e,
         });
     }
 
@@ -72,14 +89,10 @@ function SubOrgFilter(props) {
         <Row style={{ marginTop: 20, marginBottom: -10 }}>
             <Col>
                 地址：
-            </Col>
-            <Col>
                 <Cascader options={options} placeholder="请选择" value={address} onChange={changeAddressRegion} />
             </Col>
             <Col offset={1}>
                 机构：
-                </Col>
-            <Col>
                 <Select defaultValue={0} style={{ width: 140 }} value={org} onChange={changeOrg}>
                     <Option value={0} key={0}>所有机构</Option>
                     {parentOrgs != null && parentOrgs.map((v) =>
@@ -89,12 +102,16 @@ function SubOrgFilter(props) {
             </Col>
             <Col offset={1}>
                 过滤专业：
-            </Col>
-            <Col>
                 <Select defaultValue={true} style={{ width: 60 }} value={isFilter} onChange={changeFilter}>
                     <Option value={true} key={true}>是</Option>
                     <Option value={false} key={false}>否</Option>
                 </Select>
+            </Col>
+            <Col offset={1}>
+                机构名：
+            </Col>
+            <Col>
+                <Search placeholder="请输入机构名" onSearch={changeOrgName} value={query} onChange={e => setQuery(e.target.value)} />
             </Col>
 
         </Row>
