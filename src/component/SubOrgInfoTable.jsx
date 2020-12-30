@@ -24,10 +24,10 @@ function SubOrgInfoTable(props) {
             dataIndex: 'id',
             key: 'id',
             render: (text, v) => <span>
-                <a onClick={() => clickDetails(v.id)} href="#">详情</a>
+                <a onClick={() => clickDetails(v.id)} >详情</a>
                 {isEditMode() && (<span>
-                    /<a onClick={() => clickUpdate(v.id)} href="#">修改</a>
-                /<a onClick={() => clickDelete(v.id)} href="#">删除</a>
+                    /<a onClick={() => clickUpdate(v.id)}>修改</a>
+                /<a onClick={() => clickDelete(v.id)}>删除</a>
                 </span>)}
 
             </span>,

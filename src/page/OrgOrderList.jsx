@@ -24,7 +24,7 @@ function OrgOrderList(props) {
       dataIndex: 'created_at',
       key: 'created_at',
       render: createdAt => (
-        <span>{new Date(Date.parse(createdAt)).toLocaleDateString()}</span>
+        <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
       ),
     },
     {

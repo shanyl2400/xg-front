@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import SummaryData from '../component/SummaryData';
 import ReactEcharts from "echarts-for-react";
 import { getStatisticsSummaryAPI, listUsersWithOrgIdAPI, getStatisticsTableAPI, listOrderSourcesAPI, listOrgsAPI } from '../api/api';
-import { message, Typography, Table, Select,Row, Col } from 'antd';
+import { message, Typography, Table, Select, Row, Col } from 'antd';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -20,23 +20,23 @@ function NewDashboard(props) {
   let studentOption = {
     title: {
       text: '录单量',
-      textStyle:{
+      textStyle: {
         //文字颜色
-        color:'#333',
+        color: '#333',
         //字体风格,'normal','italic','oblique'
-        fontStyle:'normal',
+        fontStyle: 'normal',
         //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-        fontWeight:'normal',
+        fontWeight: 'normal',
         //字体系列
-        fontFamily:'sans-serif',
+        fontFamily: 'sans-serif',
         //字体大小
-　　　　 fontSize:16
-    }
+        fontSize: 16
+      }
     },
     tooltip: {},
     legend: {
-      x:'center',
-      bottom:0,
+      x: 'center',
+      bottom: 0,
       data: ['名单量']
     },
     xAxis: {
@@ -53,23 +53,23 @@ function NewDashboard(props) {
   let performanceOption = {
     title: {
       text: '业绩',
-      textStyle:{
+      textStyle: {
         //文字颜色
-        color:'#333',
+        color: '#333',
         //字体风格,'normal','italic','oblique'
-        fontStyle:'normal',
+        fontStyle: 'normal',
         //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-        fontWeight:'normal',
+        fontWeight: 'normal',
         //字体系列
-        fontFamily:'sans-serif',
+        fontFamily: 'sans-serif',
         //字体大小
-　　　　 fontSize:16
-    }
+        fontSize: 16
+      }
     },
     tooltip: {},
     legend: {
-      x:'center',
-      bottom:0,
+      x: 'center',
+      bottom: 0,
       data: ['业绩']
     },
     xAxis: {
@@ -124,7 +124,7 @@ function NewDashboard(props) {
       ),
     },
   ];
- 
+
   useEffect(() => {
     const fetchData = async (filter) => {
       refreshStatistics(filter);
@@ -149,8 +149,8 @@ function NewDashboard(props) {
       if (orgRes.err_msg == "success") {
         console.log("orgs:", orgRes.data.orgs);
         let tmpOrg = [];
-        for(let i = 0; i < orgRes.data.orgs.length; i ++){
-          if(orgRes.data.orgs[i].id != 1){
+        for (let i = 0; i < orgRes.data.orgs.length; i++) {
+          if (orgRes.data.orgs[i].id != 1) {
             tmpOrg.push(orgRes.data.orgs[i]);
           }
         }
@@ -161,9 +161,9 @@ function NewDashboard(props) {
       }
     }
     fetchData({
-      org_id: selectOrgId, 
-      author: selectAuthor, 
-      publisher_id: selectPublisherId, 
+      org_id: selectOrgId,
+      author: selectAuthor,
+      publisher_id: selectPublisherId,
       order_source: selectOrderSource,
     });
   }, []);
@@ -178,36 +178,36 @@ function NewDashboard(props) {
     }
 
     let res1 = await getStatisticsTableAPI(filter);
-      if (res1.err_msg == "success") {
-        let studentXseries = [];
-        let studentYseries = [];
-        let performanceYseries = [];
-        let ordersYSeries = [];
-        let data = res1.data.data;
-        for (let i = 0; i < data.length; i++) {
-          studentXseries.push((i + 1) + "月");
-          studentYseries.push(data[i].students);
-          performanceYseries.push(data[i].performance);
-          ordersYSeries.push(data[i].orders);
-        }
-        
-        setData({
-          x: studentXseries,
-          studnetY: studentYseries,
-          performanceY: performanceYseries,
-          ordersY: ordersYSeries,
-          tableData: getTableData(res1.data)
-        });
-      } else {
-        message.warning("获取统计表信息失败：" + res1.err_msg);
-        return;
+    if (res1.err_msg == "success") {
+      let studentXseries = [];
+      let studentYseries = [];
+      let performanceYseries = [];
+      let ordersYSeries = [];
+      let data = res1.data.data;
+      for (let i = 0; i < data.length; i++) {
+        studentXseries.push((i + 1) + "月");
+        studentYseries.push(data[i].students);
+        performanceYseries.push(data[i].performance);
+        ordersYSeries.push(data[i].orders);
       }
+
+      setData({
+        x: studentXseries,
+        studnetY: studentYseries,
+        performanceY: performanceYseries,
+        ordersY: ordersYSeries,
+        tableData: getTableData(res1.data)
+      });
+    } else {
+      message.warning("获取统计表信息失败：" + res1.err_msg);
+      return;
+    }
   }
 
   const getTableData = (data) => {
     let tableData = [];
     tableData.push({
-      name:"今天",
+      name: "今天",
       invalid_orders: data.day_data.invalid_orders,
       orders: data.day_data.orders,
       performance: data.day_data.performance,
@@ -216,7 +216,7 @@ function NewDashboard(props) {
       succeed: data.day_data.succeed,
     });
     tableData.push({
-      name:"本周",
+      name: "本周",
       invalid_orders: data.week_day_data.invalid_orders,
       orders: data.week_day_data.orders,
       performance: data.week_day_data.performance,
@@ -225,7 +225,7 @@ function NewDashboard(props) {
       succeed: data.week_day_data.succeed,
     });
     tableData.push({
-      name:"本月",
+      name: "本月",
       invalid_orders: data.month_day_data.invalid_orders,
       orders: data.month_day_data.orders,
       performance: data.month_day_data.performance,
@@ -234,7 +234,7 @@ function NewDashboard(props) {
       succeed: data.month_day_data.succeed,
     });
     tableData.push({
-      name:"近三月",
+      name: "近三月",
       invalid_orders: data.three_month_day_data.invalid_orders,
       orders: data.three_month_day_data.orders,
       performance: data.three_month_day_data.performance,
@@ -248,36 +248,36 @@ function NewDashboard(props) {
   const handleUpdateOrg = e => {
     setSelectOrgId(e);
     refreshStatistics({
-      org_id: e, 
-      author: selectAuthor, 
-      publisher_id: selectPublisherId, 
+      org_id: e,
+      author: selectAuthor,
+      publisher_id: selectPublisherId,
       order_source: selectOrderSource,
     });
   }
   const handleUpdateAuthor = e => {
     setSelectAuthor(e);
     refreshStatistics({
-      org_id: selectOrgId, 
-      author: e, 
-      publisher_id: selectPublisherId, 
+      org_id: selectOrgId,
+      author: e,
+      publisher_id: selectPublisherId,
       order_source: selectOrderSource,
     });
   }
   const handleUpdatePublisherId = e => {
     setSelectPublisherId(e);
     refreshStatistics({
-      org_id: selectOrgId, 
-      author: selectAuthor, 
-      publisher_id: e, 
+      org_id: selectOrgId,
+      author: selectAuthor,
+      publisher_id: e,
       order_source: selectOrderSource,
     });
   }
   const handleUpdateOrderSource = e => {
     setSelectOrderSource(e);
     refreshStatistics({
-      org_id: selectOrgId, 
-      author: selectAuthor, 
-      publisher_id: selectPublisherId, 
+      org_id: selectOrgId,
+      author: selectAuthor,
+      publisher_id: selectPublisherId,
       order_source: e,
     });
   }
@@ -288,54 +288,54 @@ function NewDashboard(props) {
       <SummaryData color="#61a0a8" title="机构数量" data={summaryData.orgs_total} />
       <SummaryData color="#2f4554" title="成功率" data={summaryData.success_rate / 100 + "%"} />
 
-    <Title level={4}>统计信息</Title>
-    
-    <div style={{ marginBottom:20, marginTop:20 }}>
-      <Select 
-        defaultValue={0} 
-        value={selectOrgId} 
-        onChange={handleUpdateOrg}
-        style={{ width: 120, marginRight:20 }} >
-        <Option value={0}>所有机构</Option>
-        {orgs.map((v) =>
-          <Option value={v.id} key={v.id}>{v.name}</Option>
-        )}
-      </Select>
-      <Select 
-      defaultValue={0} 
-      value={selectAuthor} 
-      onChange={handleUpdateAuthor}
-      style={{ width: 120 , marginRight:20}}
-      >
-        <Option value={0}>所有录单员</Option>
-        {users.map((v) =>
-          <Option value={v.user_id} key={v.id}>{v.name}</Option>
-        )}
-      </Select>
-      <Select 
-      value={selectPublisherId} 
-      onChange={handleUpdatePublisherId}
-      defaultValue={0} 
-      style={{ width: 120 , marginRight:20}}
-      >
-        <Option value={0}>所有派单员</Option>
-        {users.map((v) =>
-          <Option value={v.user_id} key={v.id}>{v.name}</Option>
-        )}
-      </Select>
-      <Select 
-      value={selectOrderSource} 
-      onChange={handleUpdateOrderSource}
-      defaultValue={0} 
-      style={{ width: 120 }}
-      >
-        <Option value={0}>所有来源</Option>
-        {orderSources.map((v) =>
-          <Option value={v.id} key={v.id}>{v.name}</Option>
-        )}
-      </Select>
-    </div>
-      <div style={{ marginTop: 20, width:"80%", marginLeft:"auto", marginRight:"auto" }}>
+      <Title level={4}>统计信息</Title>
+
+      <div style={{ marginBottom: 20, marginTop: 20 }}>
+        <Select
+          defaultValue={0}
+          value={selectOrgId}
+          onChange={handleUpdateOrg}
+          style={{ width: 120, marginRight: 20 }} >
+          <Option value={0}>所有机构</Option>
+          {orgs.map((v) =>
+            <Option value={v.id} key={v.id}>{v.name}</Option>
+          )}
+        </Select>
+        <Select
+          defaultValue={0}
+          value={selectAuthor}
+          onChange={handleUpdateAuthor}
+          style={{ width: 120, marginRight: 20 }}
+        >
+          <Option value={0}>所有录单员</Option>
+          {users.map((v) =>
+            <Option value={v.user_id} key={v.id}>{v.name}</Option>
+          )}
+        </Select>
+        <Select
+          value={selectPublisherId}
+          onChange={handleUpdatePublisherId}
+          defaultValue={0}
+          style={{ width: 120, marginRight: 20 }}
+        >
+          <Option value={0}>所有派单员</Option>
+          {users.map((v) =>
+            <Option value={v.user_id} key={v.id}>{v.name}</Option>
+          )}
+        </Select>
+        <Select
+          value={selectOrderSource}
+          onChange={handleUpdateOrderSource}
+          defaultValue={0}
+          style={{ width: 120 }}
+        >
+          <Option value={0}>所有来源</Option>
+          {orderSources.map((v) =>
+            <Option value={v.id} key={v.id}>{v.name}</Option>
+          )}
+        </Select>
+      </div>
+      <div style={{ marginTop: 20, width: "80%", marginLeft: "auto", marginRight: "auto" }}>
         <Table
           pagination={false}
           columns={columns}
@@ -343,20 +343,20 @@ function NewDashboard(props) {
           bordered
         />
       </div>
-      <Row style={{marginTop:30}}>
+      <Row style={{ marginTop: 30 }}>
         <Col span={12}>
-        <ReactEcharts
-          option={studentOption}
-          notMerge={true}
-          lazyUpdate={true}
-          theme={"theme_name"} />
+          <ReactEcharts
+            option={studentOption}
+            notMerge={true}
+            lazyUpdate={true}
+            theme={"theme_name"} />
         </Col>
         <Col span={12}>
-        <ReactEcharts
-          option={performanceOption}
-          notMerge={true}
-          lazyUpdate={true}
-          theme={"theme_name"} />
+          <ReactEcharts
+            option={performanceOption}
+            notMerge={true}
+            lazyUpdate={true}
+            theme={"theme_name"} />
         </Col>
       </Row>
 

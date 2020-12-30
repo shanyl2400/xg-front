@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-// const baseURL = "http://localhost:8088/api"
-const baseURL = "http://101.133.139.38:8088/api"
+const baseURL = "http://localhost:8088/api"
+// const baseURL = "http://101.133.139.38:8088/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
 
@@ -104,6 +104,9 @@ export async function listStudentAPI(page, pageSize, data) {
 
 export async function listAllStudentAPI(page, pageSize, data) {
     try {
+        if (data.status == "0") {
+            data.status = "";
+        }
         let res = await axios.get(baseURL + `/students/?page=${page}&page_size=${pageSize}&status=${data.status}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}&order_by=created_at desc`);
         return res.data;
     } catch (e) {

@@ -6,7 +6,14 @@ import { parseAddress } from '../utils/address';
 const { Title } = Typography;
 function StudentDetails(props) {
     const columns = [
-
+        {
+            title: '派单时间',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: createdAt => (
+                <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+            ),
+        },
         {
             title: '机构',
             dataIndex: 'org_name',
@@ -26,6 +33,16 @@ function StudentDetails(props) {
                     {getStatusName(status)}
                 </span>
             )
+        },
+        {
+            title: '操作',
+            dataIndex: 'id',
+            key: 'id',
+            render: (id) => (
+                <span>
+                    <a onClick={() => details(id)}>详情</a>
+                </span>
+            )
         }
     ];
     const [student, setStudent] = useState({});
@@ -43,6 +60,10 @@ function StudentDetails(props) {
         }
         fetchData();
     }, []);
+
+    const details = (id) => {
+        history.push("/main/order_details/" + id);
+    }
 
     let getStatusName = (id) => {
         switch (id) {

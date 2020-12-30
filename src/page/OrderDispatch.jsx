@@ -21,8 +21,8 @@ async function fetchStudent(page, pageSize, data) {
       id: rawStudents[i].id,
       author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
-      created_at: createdAt.toLocaleDateString(),
-      updated_at: updatedAt.toLocaleDateString(),
+      created_at: createdAt.toLocaleString(),
+      updated_at: updatedAt.toLocaleString(),
       address: rawStudents[i].address,
       telephone: rawStudents[i].telephone,
       intent_subject: rawStudents[i].intent_subject,
@@ -119,7 +119,7 @@ function OrderDispatch(props) {
         <Breadcrumb.Item>派单</Breadcrumb.Item>
       </Breadcrumb>
 
-      <StudentFilter onFilterChange={handleStudentFilter} />
+      <StudentFilter status={[1, 2]} onFilterChange={handleStudentFilter} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

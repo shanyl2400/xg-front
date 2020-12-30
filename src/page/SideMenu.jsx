@@ -1,7 +1,7 @@
 import { Menu } from 'antd';
 import React from 'react';
 import { useHistory, useLocation } from "react-router-dom";
-import { TeamOutlined, BankOutlined, MessageOutlined, CustomerServiceOutlined, TableOutlined, DatabaseOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined, HighlightOutlined, UnorderedListOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
+import { TeamOutlined, BankOutlined, MessageOutlined, CustomerServiceOutlined, TableOutlined, DatabaseOutlined, PicLeftOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined, HighlightOutlined, UnorderedListOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
 import { checkAuthorities } from '../utils/auth';
 import logo from '../logo.png';
 import './SideMenu.css';
@@ -62,7 +62,7 @@ function SideMenu(props) {
             </span>
           }>
           <Menu.Item key={"/main/create_student"} icon={<FileAddOutlined />}>录入名单</Menu.Item>
-          <Menu.Item key={"/main/student_list"} icon={<SolutionOutlined />}>学员名单</Menu.Item>
+          <Menu.Item key={"/main/student_list"} icon={<SolutionOutlined />}>我的名单</Menu.Item>
         </SubMenu>)}
 
         {checkAuthForMenu(["自派单权", "全名单派单权", "审核订单权限", "查看所有订单", "订单来源管理", "机构订单权限"],
@@ -74,9 +74,10 @@ function SideMenu(props) {
                 <span>订单管理</span>
               </span>
             }>
+            {checkAuthForMenu(["全名单派单权"], <Menu.Item key={"/main/all_student_list"} icon={<PicLeftOutlined />}>学员名单</Menu.Item>)}
             {checkAuthForMenu(["全名单派单权"], <Menu.Item key={"/main/dispatch_order"} icon={<FileSyncOutlined />}>派单</Menu.Item>)}
             {checkAuthForMenu(["审核订单权限"], <Menu.Item key={"/main/review_order"} icon={<AuditOutlined />}>审核订单</Menu.Item>)}
-            {checkAuthForMenu(["审核订单权限", "查看所有订单"], <Menu.Item key={"/main/order_list"} icon={<BarsOutlined />}>订单列表</Menu.Item>)}
+            {checkAuthForMenu(["审核订单权限", "查看所有订单"], <Menu.Item key={"/main/order_list"} icon={<BarsOutlined />}>派单记录</Menu.Item>)}
             {checkAuthForMenu(["自派单权", "全名单派单权"], <Menu.Item key={"/main/order_list/author"} icon={<BarsOutlined />}>我的订单</Menu.Item>)}
             {checkAuthForMenu(["机构订单权限"], <Menu.Item key={"/main/order_list/org"} icon={<BarsOutlined />}>推荐列表</Menu.Item>)}
             {checkAuthForMenu(["订单来源管理"], <Menu.Item key={"/main/order_source"} icon={<GroupOutlined />}>订单来源</Menu.Item>)}

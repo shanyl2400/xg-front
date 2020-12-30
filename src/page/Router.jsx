@@ -28,6 +28,7 @@ const Dashboard = loadable(() => import('./NewDashboard'));
 const Login = loadable(() => import('./Login'));
 const OrderRemarksList = loadable(() => import('./OrderRemarksList'));
 const StatisticTable = loadable(() => import('./StatisticTable'));
+const AllStudentList = loadable(() => import('./AllStudentList'));
 
 const UpdateOrg = loadable(() => import('./UpdateOrg'));
 const OrgInfo = loadable(() => import('./OrgInfo'));
@@ -67,6 +68,9 @@ function XgRouter() {
             </Route>
             <Route path="/main/subject_list">
                 <SubjectList />
+            </Route>
+            <Route path="/main/all_student_list">
+                <AllStudentList />
             </Route>
             <Route path="/main/create_org">
                 <CreateOrg />
