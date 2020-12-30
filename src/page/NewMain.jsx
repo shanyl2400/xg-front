@@ -18,8 +18,7 @@ function Main() {
 
     return (
         <Router>
-            <Layout
-                style={{ height: '100%' }}>
+            <Layout>
                 <Sider>
                     <SideMenu></SideMenu>
                 </Sider>
@@ -27,7 +26,7 @@ function Main() {
                     <XgRouter />
                 </Content>
             </Layout>
-        </Router>
+        </Router >
     );
 }
 
