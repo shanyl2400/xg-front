@@ -33,6 +33,7 @@ const AllStudentList = loadable(() => import('./AllStudentList'));
 const UpdateOrg = loadable(() => import('./UpdateOrg'));
 const OrgInfo = loadable(() => import('./OrgInfo'));
 const UpdateOrgSelf = loadable(() => import('./UpdateOrgSelf'));
+const OrderNotifies = loadable(() => import('./OrderNotifies'));
 function XgRouter() {
     return (
         <Switch>
@@ -47,6 +48,9 @@ function XgRouter() {
             </Route>
             <Route path="/main/create_student">
                 <CreateStudent />
+            </Route>
+            <Route path="/main/order_notify">
+                <OrderNotifies />
             </Route>
             <Route path="/main/dispatch_order">
                 <OrderDispatch />

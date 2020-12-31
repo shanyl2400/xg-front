@@ -1,7 +1,7 @@
 import { Menu } from 'antd';
 import React from 'react';
 import { useHistory, useLocation } from "react-router-dom";
-import { TeamOutlined, BankOutlined, MessageOutlined, CustomerServiceOutlined, TableOutlined, DatabaseOutlined, PicLeftOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined, HighlightOutlined, UnorderedListOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
+import { TeamOutlined, BankOutlined, MessageOutlined, CustomerServiceOutlined, BellOutlined, TableOutlined, DatabaseOutlined, PicLeftOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined, HighlightOutlined, UnorderedListOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
 import { checkAuthorities } from '../utils/auth';
 import logo from '../logo.png';
 import './SideMenu.css';
@@ -143,6 +143,8 @@ function SideMenu(props) {
               <span>消息中心</span>
             </span>
           }>
+          {checkAuthForMenu(["查看所有订单", "录单权"], <Menu.Item key={"/main/order_notify"} icon={<BellOutlined />}>系统消息</Menu.Item>)}
+
           <Menu.Item key={"/main/remark_list"} icon={<CustomerServiceOutlined />}>订单回访</Menu.Item>
         </SubMenu>)}
 

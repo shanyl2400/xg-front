@@ -277,6 +277,34 @@ export async function listOrderRemarks(page, pageSize, params) {
     }
 }
 
+export async function listOrderNotifies(page, pageSize, data) {
+    try {
+        let res = await axios.get(baseURL + `/notifies/orders?page=${page ? page : ""}&page_size=${pageSize ? pageSize : ""}&status=${data ? data.status : ""}&order_by=created_at desc`);
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
+export async function marksOrderNotifyRead(id) {
+    try {
+
+        let res = await axios.put(baseURL + `/notify/orders/` + id);
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
+export async function listAuthorOrderNotifies(page, pageSize, data) {
+    try {
+        let res = await axios.get(baseURL + `/notifies/orders/author?page=${page ? page : ""}&page_size=${pageSize ? pageSize : ""}&status=${data ? data.status : ""}&order_by=created_at desc`);
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
 export async function marksOrderRemarksRead(id) {
     try {
         let data = {

@@ -140,7 +140,7 @@ function StudentList(props) {
         <Breadcrumb.Item>学员管理</Breadcrumb.Item>
         <Breadcrumb.Item>学员名单</Breadcrumb.Item>
       </Breadcrumb>
-      <StudentFilter status={[1, 2]} onFilterChange={handleStudentFilter} />
+      <StudentFilter status={[1, 3]} onFilterChange={handleStudentFilter} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

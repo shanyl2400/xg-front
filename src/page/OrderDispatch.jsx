@@ -119,7 +119,7 @@ function OrderDispatch(props) {
         <Breadcrumb.Item>派单</Breadcrumb.Item>
       </Breadcrumb>
 
-      <StudentFilter status={[1, 2]} onFilterChange={handleStudentFilter} />
+      <StudentFilter status={[1, 3]} onFilterChange={handleStudentFilter} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}
