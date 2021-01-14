@@ -119,7 +119,7 @@ function AllStudentList(props) {
         <Breadcrumb.Item>学员名单</Breadcrumb.Item>
       </Breadcrumb>
 
-      <StudentFilter onFilterChange={handleStudentFilter} isDispatched={0} />
+      <StudentFilter onFilterChange={handleStudentFilter} isDispatched={false} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

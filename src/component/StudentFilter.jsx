@@ -6,15 +6,11 @@ const { Option } = Select;
 const { Search } = Input;
 function StudentFilter(props) {
     const [status, setStatus] = useState(props.status);
-    if (props.isDispatched) {
-        props.isDispatched = 1;
-    }
     const [isDispatched, setIsDispatched] = useState(props.isDispatched);
-    const [keywords, setKeyowrds] = useState("");
+    const [keywords, setKeywords] = useState("");
 
     let handleChangeStatus = async e => {
         setStatus(e);
-        console.log(e)
         props.onFilterChange({
             status: e,
             noDispatch: isDispatched,
@@ -26,7 +22,7 @@ function StudentFilter(props) {
         setIsDispatched(e);
         props.onFilterChange({
             status: status,
-            noDispatch: e == 1,
+            noDispatch: e,
             keywords: keywords,
         });
     }
@@ -49,9 +45,9 @@ function StudentFilter(props) {
                 </Select>
             </Col>
             <Col offset={1}>
-                类型：<Select defaultValue={1} value={isDispatched} style={{ width: 120 }} onChange={handleChangeIsDispatch}>
-                    <Option value={0}>所有名单</Option>
-                    <Option value={1}>未派名单</Option>
+                类型：<Select defaultValue={false} value={isDispatched} style={{ width: 120 }} onChange={handleChangeIsDispatch}>
+                    <Option value={false}>所有名单</Option>
+                    <Option value={true}>未派名单</Option>
                 </Select>
             </Col>
 
@@ -61,7 +57,7 @@ function StudentFilter(props) {
                     onSearch={value => handleChangeSearch(value)}
                     style={{ width: 200 }}
                     value={keywords}
-                    onChange={e => setKeyowrds(e.target.value)}
+                    onChange={e => setKeywords(e.target.value)}
                 />
             </Col>
         </Row>
