@@ -33,8 +33,6 @@ async function fetchStudent(page, pageSize, data) {
   return students
 }
 
-let status = 0;
-let noDispatch = false;
 let pageIndex = 1;
 function AllStudentList(props) {
   const columns = [
@@ -90,6 +88,9 @@ function AllStudentList(props) {
   ];
 
   const [students, setStudents] = useState([]);
+  const [status, setStatus] = useState([0]);
+  const [noDispatch, setNoDispatch] = useState(false);
+
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
@@ -105,8 +106,8 @@ function AllStudentList(props) {
     setStudents(res);
   }
   let handleStudentFilter = async e => {
-    status = e.status;
-    noDispatch = e.noDispatch;
+    setStatus(e.status);
+    setNoDispatch(e.noDispatch)
     let res = await fetchStudent(pageIndex, pageSize, e);
     setStudents(res);
   }
@@ -115,7 +116,7 @@ function AllStudentList(props) {
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-        <Breadcrumb.Item>派单</Breadcrumb.Item>
+        <Breadcrumb.Item>学员名单</Breadcrumb.Item>
       </Breadcrumb>
 
       <StudentFilter onFilterChange={handleStudentFilter} isDispatched={0} />

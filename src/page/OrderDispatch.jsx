@@ -33,8 +33,7 @@ async function fetchStudent(page, pageSize, data) {
   return students
 }
 
-let status = 0;
-let noDispatch = true;
+
 let pageIndex = 1;
 function OrderDispatch(props) {
   const columns = [
@@ -91,6 +90,8 @@ function OrderDispatch(props) {
   ];
 
   const [students, setStudents] = useState([]);
+  const [status, setStatus] = useState([1, 3]);
+  const [noDispatch, setNoDispatch] = useState(true);
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
@@ -106,8 +107,10 @@ function OrderDispatch(props) {
     setStudents(res);
   }
   let handleStudentFilter = async e => {
-    status = e.status;
-    noDispatch = e.noDispatch;
+    // status = e.status;
+    // noDispatch = e.noDispatch;
+    setStatus(e.status)
+    setNoDispatch(e.noDispatch)
     let res = await fetchStudent(pageIndex, pageSize, e);
     setStudents(res);
   }

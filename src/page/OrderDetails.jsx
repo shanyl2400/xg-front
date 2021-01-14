@@ -184,6 +184,9 @@ function OrderDetails(props) {
                 <Row gutter={[16, 16]} key={1}>
                     <Col span={12}>状态：{getOrderStatus(orderInfo.status)}</Col>
                 </Row>
+                <Row gutter={[16, 16]} key={1}>
+                    <Col span={12}>备注：{orderInfo.student_summary.note}</Col>
+                </Row>
             </Card>
 
             <Title level={5}>缴费情况</Title>
