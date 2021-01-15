@@ -40,3 +40,15 @@
     transform: rotate(360deg);
   }
 }
+::-webkit-scrollbar{
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb{
+  border-radius: 1em;
+  background-color: rgba(105, 105, 105, 0.2);
+}
+::-webkit-scrollbar-track{
+  border-radius: 1em;
+  background-color: rgba(87, 87, 87, 0.1);
+}

@@ -32,7 +32,9 @@ function SideMenu(props) {
         style={{
           height: "100vh",
           position: "fixed",
-          width: 256
+          width: 256,
+          overflowY: "overlay",
+          overflowX: "hidden"
         }}
         defaultSelectedKeys={[location.pathname]}
         defaultOpenKeys={[]}
