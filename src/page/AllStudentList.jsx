@@ -5,10 +5,9 @@ import { getStudentStatus } from '../utils/status';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 
-const pageSize = 10;
-
-async function fetchStudent(page, pageSize, data) {
-  const rawRes = await listAllStudentAPI(page, pageSize, data);
+async function fetchStudent(page, curPageSize, data) {
+  console.log(curPageSize);
+  const rawRes = await listAllStudentAPI(page, curPageSize, data);
   const rawStudents = rawRes.result.students;
   let students = {
     total: rawRes.result.total,
@@ -33,7 +32,6 @@ async function fetchStudent(page, pageSize, data) {
   return students
 }
 
-let pageIndex = 1;
 function AllStudentList(props) {
   const columns = [
     {
@@ -90,6 +88,8 @@ function AllStudentList(props) {
   const [students, setStudents] = useState([]);
   const [status, setStatus] = useState([0]);
   const [noDispatch, setNoDispatch] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(1);
 
   let history = useHistory();
   useEffect(() => {
@@ -100,11 +100,13 @@ function AllStudentList(props) {
     fetchData();
   }, []);
 
-  let handleChangePage = async e => {
-    pageIndex = e;
-    let res = await fetchStudent(e, pageSize, { status: status, noDispatch: noDispatch });
+  let handleChangePage = async (e, curPageSize) => {
+    setPageIndex(e);
+    setPageIndex(curPageSize);
+    let res = await fetchStudent(e, curPageSize, { status: status, noDispatch: noDispatch });
     setStudents(res);
   }
+
   let handleStudentFilter = async e => {
     setStatus(e.status);
     setNoDispatch(e.noDispatch)
@@ -125,7 +127,7 @@ function AllStudentList(props) {
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={students.data} />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
+      <Pagination onChange={handleChangePage} defaultCurrent={pageIndex} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
     </div>
   );
 }

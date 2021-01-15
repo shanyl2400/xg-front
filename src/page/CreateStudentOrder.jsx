@@ -259,7 +259,7 @@ function CreateStudentOrder(props) {
                 columns={columns}
                 dataSource={orgs.data}
             />
-            <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgs.total} />
+            <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgs.total} />
 
             <Row gutter={[16, 16]} style={{ marginTop: "30px" }}>
                 {/* <Col offset={18} span={2}><Button type="primary" onClick={() => handleCreateOrder()}>派单</Button></Col> */}

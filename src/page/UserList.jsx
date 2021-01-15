@@ -118,7 +118,7 @@ function UserList(props) {
 
       <Row>
         <Col span={12}>
-          <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={users.total} />
+          <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={users.total} />
         </Col>
       </Row>
     </div>

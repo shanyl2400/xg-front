@@ -119,7 +119,7 @@ function OrderRemarksList(props) {
                 columns={columns}
                 dataSource={records}
             />
-            <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={remarksTotal} />
+            <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={remarksTotal} />
         </div>
     );
 }

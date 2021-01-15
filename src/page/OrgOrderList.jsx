@@ -191,7 +191,7 @@ function OrgOrderList(props) {
         columns={columns}
         dataSource={orders.data}
       />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={total} />
+      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={total} />
 
       <OrderSignupModel refreshData={() => fetchData(currentPage)} id={orderId} visible={signupOrderModelVisible} closeModel={handleCloseSignupOrderModel} />
       <OrderDepositModel refreshData={() => fetchData(currentPage)} id={orderId} visible={depositOrderModelVisible} closeModel={handleCloseDepositOrderModel} />

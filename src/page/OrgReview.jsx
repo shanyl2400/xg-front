@@ -113,7 +113,7 @@ function OrgReview(props) {
         columns={columns}
         dataSource={orgList}
       />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
+      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
       <ReviewOrgModel refreshData={() => fetchData()} orgData={orgData} visible={reviewOrgModelVisible} closeModel={() => { setReviewOrgModelVisible(false) }} />
     </div>
   );

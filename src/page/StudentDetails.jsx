@@ -81,7 +81,7 @@ function StudentDetails(props) {
         <div style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
                 <Breadcrumb.Item>学员管理</Breadcrumb.Item>
-                <Breadcrumb.Item>学员名单</Breadcrumb.Item>
+                <Breadcrumb.Item>学员信息</Breadcrumb.Item>
             </Breadcrumb>
             <Card style={{ width: "100%", margin: "20px 5px" }}>
                 <Row gutter={[16, 16]}>
@@ -133,7 +133,7 @@ function StudentDetails(props) {
                 dataSource={student.orders}
             />
 
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 16]} style={{ marginTop: 10 }}>
                 <Col offset={22} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
             </Row>
 

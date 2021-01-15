@@ -122,7 +122,7 @@ function OrgList(props) {
         columns={columns}
         dataSource={orgList}
       />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
+      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
       <RevokeOrgModel refreshData={() => fetchData(pageIndex)} orgData={orgData} visible={revokeOrgModelVisible} closeModel={() => { setRevokeOrgModelVisible(false) }} />
     </div>
   );

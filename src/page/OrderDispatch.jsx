@@ -5,7 +5,6 @@ import { getStudentStatus } from '../utils/status';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 
-const pageSize = 10;
 
 async function fetchStudent(page, pageSize, data) {
   const rawRes = await listAllStudentAPI(page, pageSize, data);
@@ -33,8 +32,6 @@ async function fetchStudent(page, pageSize, data) {
   return students
 }
 
-
-let pageIndex = 1;
 function OrderDispatch(props) {
   const columns = [
     {
@@ -92,6 +89,10 @@ function OrderDispatch(props) {
   const [students, setStudents] = useState([]);
   const [status, setStatus] = useState([1, 3]);
   const [noDispatch, setNoDispatch] = useState(true);
+
+
+  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(1);
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
@@ -101,9 +102,10 @@ function OrderDispatch(props) {
     fetchData();
   }, []);
 
-  let handleChangePage = async e => {
-    pageIndex = e;
-    let res = await fetchStudent(e, pageSize, { status: status, noDispatch: noDispatch });
+  let handleChangePage = async (e, curPageSize) => {
+    setPageIndex(e);
+    setPageSize(curPageSize);
+    let res = await fetchStudent(e, curPageSize, { status: status, noDispatch: noDispatch });
     setStudents(res);
   }
   let handleStudentFilter = async e => {

@@ -72,7 +72,7 @@ function OrderList(props) {
   let history = useHistory();
   let [orders, setOrders] = useState({ total: 0 });
 
-  const fetchData = async (index, data) => {
+  const fetchData = async (index, pageSize, data) => {
     let res = await listOrdersAPI(index, pageSize, data);
     if (res.err_msg == "success") {
       setOrders({
@@ -85,24 +85,28 @@ function OrderList(props) {
   }
 
   useEffect(() => {
-    fetchData(1, null);
+    fetchData(1, pageSize, null);
   }, []);
 
-  let handleChangePage = (page) => {
-    pageIndex = page;
-    fetchData(page, queryValue);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(1);
+
+  let handleChangePage = (page, curPageSize) => {
+    setPageIndex(page);
+    setPageSize(curPageSize);
+    fetchData(page, curPageSize, queryValue);
   }
 
   let handleChangeFilter = value => {
     queryValue = value
-    fetchData(pageIndex, value);
+    fetchData(pageIndex, pageSize, value);
   }
 
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-        <Breadcrumb.Item>订单列表</Breadcrumb.Item>
+        <Breadcrumb.Item>派单记录</Breadcrumb.Item>
       </Breadcrumb>
 
       <OrderFilter onChangeFilter={handleChangeFilter}></OrderFilter>

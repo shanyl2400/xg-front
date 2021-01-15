@@ -4,8 +4,6 @@ import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
 import { listAuthOrdersAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
 import OrderFilter from "../component/OrderFilter";
-const pageSize = 10;
-let pageIndex = 1;
 let queryValue = {};
 function AuthorOrderList(props) {
   const columns = [
@@ -64,7 +62,10 @@ function AuthorOrderList(props) {
   ];
   let history = useHistory();
   let [orders, setOrders] = useState({ total: 0 })
-  const fetchData = async (index, value) => {
+
+  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(1);
+  const fetchData = async (index, pageSize, value) => {
     let res = await listAuthOrdersAPI(index, pageSize, value);
     if (res.err_msg == "success") {
       setOrders({
@@ -80,12 +81,15 @@ function AuthorOrderList(props) {
     fetchData(1, null);
   }, []);
 
-  let handleChangePage = (page) => {
-    fetchData(page, queryValue);
+  let handleChangePage = (current, curPageSize) => {
+    setPageSize(curPageSize);
+    setPageIndex(current);
+    fetchData(current, curPageSize, queryValue);
   }
+
   let handleChangeFilter = value => {
     queryValue = value;
-    fetchData(pageIndex, value);
+    fetchData(pageIndex, pageSize, value);
   }
 
   return (

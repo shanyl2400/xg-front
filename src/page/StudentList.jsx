@@ -146,7 +146,7 @@ function StudentList(props) {
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={students.data} />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
+      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
     </div>
   );
 }
