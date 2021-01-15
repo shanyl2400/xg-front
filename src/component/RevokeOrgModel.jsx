@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Card, Row, Col, Button, message } from 'antd';
+import { Modal, Card, Row, Col, Button, Descriptions, message } from 'antd';
 import { revokeOrgReview } from '../api/api';
 import { parseAddress } from "../utils/address";
 
@@ -27,7 +27,12 @@ function RevokeOrgModel(props) {
             visible={props.visible}
             footer={null}
         >
-            <Card style={{ width: "100%", margin: "20px 5px" }}>
+            <Descriptions bordered >
+                <Descriptions.Item label="机构名称" span={3}>{props.orgData.name}</Descriptions.Item>
+                <Descriptions.Item label="手机号" span={3}>{props.orgData.telephone}</Descriptions.Item>
+                <Descriptions.Item label="地址" span={3}>{parseAddress(props.orgData.address)}</Descriptions.Item>
+            </Descriptions>
+            {/* <Card style={{ width: "100%", margin: "20px 5px" }}>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>机构名称：{props.orgData.name}</Col>
                 </Row>
@@ -37,11 +42,8 @@ function RevokeOrgModel(props) {
                 <Row gutter={[16, 16]}>
                     <Col span={12}>地址：{parseAddress(props.orgData.address)}</Col>
                 </Row>
-                {/* <Row gutter={[16, 16]} key={1}>
-                        <Col span={12}>状态：已认证</Col>
-                </Row> */}
 
-            </Card>
+            </Card> */}
 
             <Row style={{ marginTop: 30 }}>
                 <Col offset={16} span={4}>

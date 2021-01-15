@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Modal, message } from 'antd';
+import { Form, Button, Modal, Descriptions } from 'antd';
 import { getOrgAPI } from '../api/api';
 import { parseAddress } from "../utils/address";
 
@@ -8,7 +8,7 @@ const layout = {
     wrapperCol: { span: 18 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 18, span: 16 },
+    wrapperCol: { offset: 21, span: 16 },
 };
 function SubOrgDetailsModel(props) {
     const [orgInfo, setOrgInfo] = useState({})
@@ -41,18 +41,25 @@ function SubOrgDetailsModel(props) {
 
     return (
         <Modal
-            title="添加分校"
+            title="分校信息"
             visible={props.visible}
             footer={null}
             onCancel={onClose}
-        >   <div style={{ padding: 20, height: "100%", width: "100%" }}>
-                <div>校区名: {orgInfo.name}</div>
+        >   <div style={{ padding: 0, height: "100%", width: "100%" }}>
+                {/* <div>校区名: {orgInfo.name}</div>
                 <div>地址: {parseAddress(address)}</div>
                 <div>支持课程: {orgInfo.intentSubject != null && orgInfo.intentSubject.map((v) => <span>{v},</span>
-                )}</div>
+                )}</div> */}
+
+                <Descriptions bordered >
+                    <Descriptions.Item label="校区名" span={3}>{orgInfo.name}</Descriptions.Item>
+                    <Descriptions.Item label="地址" span={3}>{parseAddress(address)}</Descriptions.Item>
+                    <Descriptions.Item label="支持课程" span={3}>{orgInfo.intentSubject != null && orgInfo.intentSubject.map((v) => <div>{v}</div>
+                    )}</Descriptions.Item>
+                </Descriptions>
 
                 <Form.Item {...tailLayout}>
-                    <Button htmlType="button" onClick={onClose}>
+                    <Button htmlType="button" style={{ marginTop: 10 }} onClick={onClose}>
                         返回
             </Button>
                 </Form.Item>
