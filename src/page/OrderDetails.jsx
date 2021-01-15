@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, message } from 'antd';
+import { Button, Card, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, Descriptions, message } from 'antd';
 import { getOrderAPI, marksOrderRemarksRead } from '../api/api';
 import { getOrderStatus, getPaymentStatus } from '../utils/status';
 import AddMarkModel from '../component/AddMarkModel';
@@ -158,7 +158,26 @@ function OrderDetails(props) {
                 <Breadcrumb.Item>订单管理</Breadcrumb.Item>
                 <Breadcrumb.Item>订单详情</Breadcrumb.Item>
             </Breadcrumb>
-            <Card style={{ width: "100%", margin: "20px 5px" }}>
+            <Descriptions title="基本信息" bordered style={{ marginBottom: 20, marginTop: 20 }}>
+                <Descriptions.Item label="姓名">{orderInfo.student_summary.name}</Descriptions.Item>
+                <Descriptions.Item label="性别">{orderInfo.student_summary.gender ? "男" : "女"}</Descriptions.Item>
+                <Descriptions.Item label="邮箱">{orderInfo.student_summary.email}</Descriptions.Item>
+                <Descriptions.Item label="手机号：">{orderInfo.student_summary.telephone}</Descriptions.Item>
+                <Descriptions.Item label="代理人">{orderInfo.author_name}</Descriptions.Item>
+                <Descriptions.Item label="居住地址" >{parseAddress(orderInfo.student_summary.address)}</Descriptions.Item>
+                <Descriptions.Item label="推荐机构" span={3}>{orderInfo.org_name}</Descriptions.Item>
+                <Descriptions.Item label="报名意向" span={3}>
+                    <div style={{ margin: "0px 0px" }}>
+                        {orderInfo.intent_subject != undefined && orderInfo.intent_subject.map((v, id) => (
+                            <div key={id}>{v}</div>
+                        ))}
+                    </div>
+                </Descriptions.Item>
+                <Descriptions.Item label="状态" span={3}>{getOrderStatus(orderInfo.status)}</Descriptions.Item>
+                <Descriptions.Item label="备注">{orderInfo.student_summary.note}</Descriptions.Item>
+            </Descriptions>
+
+            {/* <Card style={{ width: "100%", margin: "20px 5px" }}>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>姓名：{orderInfo.student_summary.name}</Col>
                     <Col span={12}>性别：{orderInfo.student_summary.gender ? "男" : "女"}</Col>
@@ -169,7 +188,6 @@ function OrderDetails(props) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>推荐机构：{orderInfo.org_name}</Col>
-                    {/* <Col span={12}>订单来源：百度</Col> */}
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={24}>报名：
@@ -187,7 +205,7 @@ function OrderDetails(props) {
                 <Row gutter={[16, 16]} key={1}>
                     <Col span={12}>备注：{orderInfo.student_summary.note}</Col>
                 </Row>
-            </Card>
+            </Card> */}
 
             <Title level={5}>缴费情况</Title>
             <Table

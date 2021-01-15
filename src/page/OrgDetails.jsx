@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, Row, Col, Typography, message } from 'antd';
+import { Button, Card, Breadcrumb, Row, Col, Typography, Descriptions, message } from 'antd';
 import { getOrgAPI } from '../api/api';
 import SubOrgInfoTable from '../component/SubOrgInfoTable';
 import { parseAddress } from "../utils/address";
@@ -43,7 +43,16 @@ function OrgDetails(props) {
         <Breadcrumb.Item>机构管理</Breadcrumb.Item>
         <Breadcrumb.Item>机构详情</Breadcrumb.Item>
       </Breadcrumb>
-      <Card style={{ width: "100%", margin: "20px 5px" }}>
+
+      <Descriptions title="基本信息"
+        bordered style={{ marginBottom: 20, marginTop: 20 }}>
+        <Descriptions.Item label="机构名称" span={2}>{orgData.name}</Descriptions.Item>
+        <Descriptions.Item label="联系电话" span={2}>{orgData.telephone}</Descriptions.Item>
+        <Descriptions.Item label="地址" span={3}>{parseAddress(orgData.address)}</Descriptions.Item>
+        <Descriptions.Item label="状态" span={3}>{getStatusName(orgData.status)}</Descriptions.Item>
+      </Descriptions>
+
+      {/* <Card style={{ width: "100%", margin: "20px 5px" }}>
         <Row gutter={[16, 16]}>
           <Col span={12}>机构名称：{orgData.name}</Col>
         </Row>
@@ -53,18 +62,19 @@ function OrgDetails(props) {
         <Row gutter={[16, 16]} key={1}>
           <Col span={12}>状态：{getStatusName(orgData.status)}</Col>
         </Row>
-      </Card>
+      </Card> */}
 
-      {orgData.sub_orgs != undefined && orgData.subOrgs != null && <h3>分校区</h3>}
+      { orgData.sub_orgs != undefined && orgData.subOrgs != null && <h3>分校区</h3>}
 
-      {orgData.sub_orgs != undefined && <SubOrgInfoTable value={orgData.sub_orgs} />
+      {
+        orgData.sub_orgs != undefined && <SubOrgInfoTable value={orgData.sub_orgs} />
       }
 
       <Row gutter={[16, 16]}>
         <Col offset={22} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
       </Row>
 
-    </div>
+    </div >
   );
 }
 export default OrgDetails;
