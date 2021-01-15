@@ -13,7 +13,7 @@ export function loginAPI(name, password) {
         console.log(res.data);
         return res.data;
     }).catch(error => {
-        console.error(error)
+        console.log(error)
         return null;
     })
 }

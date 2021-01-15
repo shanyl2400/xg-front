@@ -14,6 +14,7 @@
     "http-proxy-middleware": "^1.0.5",
     "npm": "^6.14.8",
     "react": "^16.13.1",
+    "react-app-polyfill": "^2.0.0",
     "react-dom": "^16.13.1",
     "react-loadable": "^5.5.0",
     "react-router": "^5.2.0",
@@ -33,12 +34,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "ie 11"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "ie 11"
     ]
   }
 }
