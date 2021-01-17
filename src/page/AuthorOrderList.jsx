@@ -78,7 +78,7 @@ function AuthorOrderList(props) {
 
   }
   useEffect(() => {
-    fetchData(1, null);
+    fetchData(1, pageSize, null);
   }, []);
 
   let handleChangePage = (current, curPageSize) => {
