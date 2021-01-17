@@ -17,6 +17,14 @@ function CreateStudentOrder(props) {
     let history = useHistory();
     const ordersColumns = [
         {
+            title: '派单时间',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: createdAt => (
+                <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+            ),
+        },
+        {
             title: '推荐机构',
             dataIndex: 'org_name',
             key: 'org_name',
@@ -35,6 +43,16 @@ function CreateStudentOrder(props) {
                     {getStatusName(status)}
                 </span>
             ),
+        },
+        {
+            title: '操作',
+            dataIndex: 'id',
+            key: 'id',
+            render: (id) => (
+                <span>
+                    <a onClick={() => details(id)}>详情</a>
+                </span>
+            )
         }
     ]
     const columns = [
@@ -139,6 +157,10 @@ function CreateStudentOrder(props) {
 
         fetchData();
     }, [id])
+
+    const details = (id) => {
+        history.push("/main/order_details/" + id);
+    }
 
     const searchOrgs = async (orgQueryParams, curPage) => {
         const orgRes = await listSubOrgsAPI(orgQueryParams, curPage, pageSize);
