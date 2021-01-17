@@ -87,7 +87,7 @@ function AllStudentList(props) {
 
   const [students, setStudents] = useState([]);
   const [status, setStatus] = useState([0]);
-  const [noDispatch, setNoDispatch] = useState(true);
+  const [noDispatch, setNoDispatch] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(1);
 

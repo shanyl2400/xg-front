@@ -109,7 +109,7 @@ function StudentList(props) {
 
   const [students, setStudents] = useState([]);
   const [status, setStatus] = useState([0]);
-  const [noDispatch, setNoDispatch] = useState(false);
+  const [noDispatch, setNoDispatch] = useState(true);
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(1);
 
