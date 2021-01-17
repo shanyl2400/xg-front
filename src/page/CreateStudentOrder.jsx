@@ -15,6 +15,28 @@ function CreateStudentOrder(props) {
     const [allSucjects, setAllSubjects] = useState([]);
     let { id } = useParams();
     let history = useHistory();
+    const ordersColumns = [
+        {
+            title: '推荐机构',
+            dataIndex: 'org_name',
+            key: 'org_name',
+        },
+        {
+            title: '推荐学科',
+            dataIndex: 'intent_subject',
+            key: 'intent_subject',
+        },
+        {
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => (
+                <span>
+                    {getStatusName(status)}
+                </span>
+            ),
+        }
+    ]
     const columns = [
         {
             title: '#',
@@ -254,21 +276,15 @@ function CreateStudentOrder(props) {
                 </Row>
             </Card> */}
 
-            {student.orders != undefined && student.orders.length > 0 ? <Title level={4}>已推荐机构</Title> : ""}
-            {student.orders != undefined && student.orders.map((order) => (
-                <Card style={{ width: "100%", margin: "20px 5px" }} key={"card-" + order.id}>
-                    <Row gutter={[16, 16]} key={"key-" + order.id}>
-                        <Col span={12}>推荐机构：{order.org_name}</Col>
-                    </Row>
-                    <Row gutter={[16, 16]} key={"sub-" + order.id}>
-                        <Col span={12}>推荐学科：{order.intent_subject}</Col>
-                    </Row>
-                    <Row gutter={[16, 16]} key={"status-" + order.id}>
-                        <Col span={12}>状态：{getStatusName(order.status)}</Col>
-                    </Row>
-                </Card>
-            ))}
+            <Title level={4}>已推荐机构</Title>
+            <Table
+                pagination={false}
+                style={{ marginTop: 20, marginBottom: 40 }}
+                columns={ordersColumns}
+                dataSource={student.orders} />
 
+
+            <Title level={4}>推荐机构</Title>
             <SubOrgFilter onFilterChange={handleFilter} />
             <Table
                 pagination={false}

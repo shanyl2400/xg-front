@@ -49,9 +49,6 @@ function getStatusName(status) {
   }
 }
 
-let pageIndex = 1;
-let status = 0;
-let noDispatch = true;
 function StudentList(props) {
   const columns = [
     {
@@ -111,6 +108,10 @@ function StudentList(props) {
   ];
 
   const [students, setStudents] = useState([]);
+  const [status, setStatus] = useState([0]);
+  const [noDispatch, setNoDispatch] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(1);
 
   let history = useHistory();
   useEffect(() => {
@@ -121,15 +122,16 @@ function StudentList(props) {
     fetchData();
   }, []);
 
-  let handleChangePage = async e => {
-    pageIndex = e
-    let res = await fetchStudent(pageIndex, pageSize, { status: status, noDispatch: noDispatch })
+  let handleChangePage = async (e, curPageSize) => {
+    setPageIndex(e);
+    setPageIndex(curPageSize);
+    let res = await fetchStudent(pageIndex, curPageSize, { status: status, noDispatch: noDispatch })
     setStudents(res);
   }
 
   let handleStudentFilter = async e => {
-    status = e.status;
-    noDispatch = e.noDispatch;
+    setStatus(e.status);
+    setNoDispatch(e.noDispatch)
     let res = await fetchStudent(pageIndex, pageSize, e)
     setStudents(res);
   }
@@ -138,15 +140,15 @@ function StudentList(props) {
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>学员管理</Breadcrumb.Item>
-        <Breadcrumb.Item>学员名单</Breadcrumb.Item>
+        <Breadcrumb.Item>我的名单</Breadcrumb.Item>
       </Breadcrumb>
-      <StudentFilter status={[1, 3]} onFilterChange={handleStudentFilter} />
+      <StudentFilter status={[1, 3]} onFilterChange={handleStudentFilter} isDispatched={true} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={students.data} />
-      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
+      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
     </div>
   );
 }
