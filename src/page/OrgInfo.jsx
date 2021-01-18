@@ -30,6 +30,13 @@ function OrgInfo(props) {
                     org.sub_orgs[i].intentSubject = getIntentSubjects(org.sub_orgs[i].subjects);
                 }
                 setOrgInfo(res.org);
+                form.setFieldsValue({
+                    name: org.name,
+                    telephone: org.telephone,
+                    address: { region: org.address, ext: org.address_ext },
+                    addressData: { region: org.address, ext: org.address_ext },
+                    subOrgs: org.sub_orgs,
+                })
             } else {
                 message.warning("获取机构信息失败：" + res.err_msg);
                 history.goBack();
@@ -46,7 +53,7 @@ function OrgInfo(props) {
         }
         return ret;
     }
-    console.log(orgInfo)
+    console.log(">>>>", orgInfo.sub_orgs)
 
     return (
         <div style={{ padding: 40, height: "100%", width: "100%" }}>
@@ -57,6 +64,7 @@ function OrgInfo(props) {
             <Form {...layout}
                 name="control-ref"
                 style={{ marginTop: "30px", marginLeft: "-40px" }}
+                form={form}
             >
                 <Form.Item name="name" label="机构名称" rules={[{ required: true }]} >
                     {orgInfo.name}
@@ -71,7 +79,7 @@ function OrgInfo(props) {
                 </Form.Item>
 
                 <Form.Item name="subOrgs" label="分校" rules={[{ required: false }]} >
-                    <SubOrgInfoTable orgs={orgInfo.sub_orgs} />
+                    <SubOrgInfoTable mode="form" value={orgInfo.sub_orgs} editable={false} />
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>

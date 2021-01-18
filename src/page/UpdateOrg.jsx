@@ -64,7 +64,6 @@ function UpdateOrg(props) {
         form.validateFields().then(async e => {
             let formData = form.getFieldsValue();
             let subOrgInfos = [];
-            console.log(formData);
             for (let i = 0; i < formData.subOrgs.length; i++) {
                 let so = formData.subOrgs[i];
                 subOrgInfos = subOrgInfos.concat({
