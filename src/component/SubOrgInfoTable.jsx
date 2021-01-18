@@ -144,7 +144,6 @@ function SubOrgInfoTable(props) {
         return newOrgs
     }
     useEffect(() => {
-        console.log(">>>>>:", props)
         if (props.value != null) {
             setOrgs(parseOrgs(props.value));
         }
