@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Breadcrumb, message } from 'antd';
+import { Form, Input, Button, Breadcrumb, Typography, Descriptions, Row, Col, message } from 'antd';
 import { useParams, useHistory } from "react-router-dom";
 import SubOrgInfoTable from '../component/SubOrgInfoTable';
 import { getOrgAPI } from '../api/api';
@@ -12,6 +12,7 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 12, span: 16 },
 };
+const { Title } = Typography;
 function OrgInfo(props) {
     const [form] = Form.useForm();
     let history = useHistory();
@@ -53,7 +54,6 @@ function OrgInfo(props) {
         }
         return ret;
     }
-    console.log(">>>>", orgInfo.sub_orgs)
 
     return (
         <div style={{ padding: 40, height: "100%", width: "100%" }}>
@@ -61,33 +61,29 @@ function OrgInfo(props) {
                 <Breadcrumb.Item>机构管理</Breadcrumb.Item>
                 <Breadcrumb.Item>修改机构</Breadcrumb.Item>
             </Breadcrumb>
-            <Form {...layout}
-                name="control-ref"
-                style={{ marginTop: "30px", marginLeft: "-40px" }}
-                form={form}
-            >
-                <Form.Item name="name" label="机构名称" rules={[{ required: true }]} >
-                    {orgInfo.name}
-                </Form.Item>
 
-                <Form.Item name="telephone" label="联系方式" rules={[{ required: true }]} >
-                    {orgInfo.telephone}
-                </Form.Item>
+            <Descriptions title="基本信息"
+                bordered style={{ marginBottom: 20, marginTop: 20 }}>
+                <Descriptions.Item label="机构名称" span={3}>{orgInfo.name}</Descriptions.Item>
+                <Descriptions.Item label="联系电话" span={3}>{orgInfo.telephone}</Descriptions.Item>
+                <Descriptions.Item label="地址" span={3}> {orgInfo.address}{orgInfo.address_ext}</Descriptions.Item>
+            </Descriptions>
 
-                <Form.Item name="addressData" label="机构地址" rules={[{ required: true }]} >
-                    {orgInfo.address}{orgInfo.address_ext}
-                </Form.Item>
-
-                <Form.Item name="subOrgs" label="分校" rules={[{ required: false }]} >
+            <Descriptions title="校区信息"
+                style={{ marginBottom: 20, marginTop: 20 }}>
+                <div name="subOrgs">
                     <SubOrgInfoTable mode="form" value={orgInfo.sub_orgs} editable={false} />
-                </Form.Item>
+                </div>
+            </Descriptions>
 
-                <Form.Item {...tailLayout}>
-                    <Button onClick={() => { history.goBack() }} htmlType="button">
+            <Row gutter={[16, 16]}>
+                <Col offset={22} span={1}>
+                    <Button offset={16} onClick={() => { history.goBack() }} htmlType="button">
                         返回
-                    </Button>
-                </Form.Item>
-            </Form>
+            </Button>
+                </Col>
+            </Row>
+
         </div>
     );
 }

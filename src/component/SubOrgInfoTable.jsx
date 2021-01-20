@@ -152,8 +152,8 @@ function SubOrgInfoTable(props) {
 
     return (
 
-        <div>
-            <Table columns={columns} dataSource={orgs} />
+        <div style={{ width: "100%" }}>
+            <Table pagination={false} style={{ width: "100%" }} columns={columns} dataSource={orgs} />
             {isEditMode() && <Button onClick={handleAddSubOrgModel}>添加分校</Button>}
             <SubOrgDetailsModel data={orgs} id={detailsOrgID} visible={detailsModelVisible} closeModel={cancelDetailsMode} />
             <SubOrgEditModel
