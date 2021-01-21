@@ -15,8 +15,9 @@ function saveSideInfo(name, res) {
     console.log(res.data.auths)
     sessionStorage.setItem("role_name", res.data.role_name);
     sessionStorage.setItem("org_name", res.data.org_name);
+    sessionStorage.setItem("avatar", res.data.avatar);
     let auths = ""
-    for(let i = 0; i < res.data.auths.length; i ++){
+    for (let i = 0; i < res.data.auths.length; i++) {
         auths = auths + res.data.auths[i].name + ", ";
     }
     sessionStorage.setItem("auths", auths);
@@ -32,7 +33,7 @@ function Login(props) {
     let history = useHistory();
     const doLogin = (props) => {
         let roleId = sessionStorage.getItem("role_id");
-        switch(roleId){
+        switch (roleId) {
             case "1":
                 history.push("/main");
                 break;
@@ -54,13 +55,13 @@ function Login(props) {
             case "7":
                 history.push("/main/order_list/org");
                 break;
-            default: 
+            default:
                 history.push("/main/user_info");
         }
     }
 
     let token = sessionStorage.getItem("token");
-    if(token != null){
+    if (token != null) {
         doLogin(props);
     }
     const handleClick = async e => {
@@ -84,7 +85,7 @@ function Login(props) {
     const keyUp = (e) => {
         if (e.keyCode === 13) {
             handleClick();
-       }
+        }
     }
 
     return (

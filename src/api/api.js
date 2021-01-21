@@ -1,7 +1,8 @@
 import axios from "axios"; //导入axios
 
-// const baseURL = "http://localhost:8088/api"
-const baseURL = "http://101.133.139.38:8088/api"
+export const website = "http://localhost:8088"
+// export const website = "http://101.133.139.38:8088/api"
+export const baseURL = website + "/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
 
