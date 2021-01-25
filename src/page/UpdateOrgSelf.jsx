@@ -18,7 +18,8 @@ function UpdateOrg(props) {
     const [form] = Form.useForm();
     let history = useHistory();
 
-    let { id } = useParams();
+    // let { id } = useParams();
+    let id = sessionStorage.getItem("org_id");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,7 +78,7 @@ function UpdateOrg(props) {
                     subjects: so.subjects,
                 })
             }
-            let res = await updateOrgSelfAPI(id, {
+            let res = await updateOrgSelfAPI({
                 org: {
                     name: formData.name,
                     telephone: formData.telephone,
@@ -87,10 +88,10 @@ function UpdateOrg(props) {
                 sub_orgs: subOrgInfos
             })
             if (res.err_msg == "success") {
-                message.success("机构添加成功");
+                message.success("机构更新成功");
                 history.goBack();
             } else {
-                message.error("机构添加失败");
+                message.error("机构更新失败");
             }
 
         });
