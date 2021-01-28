@@ -17,7 +17,7 @@ function OrderList(props) {
     //   key: 'id',
     // },
     {
-      title: '代理人',
+      title: '派单员',
       dataIndex: 'publisher_name',
       key: 'publisher_name',
     },

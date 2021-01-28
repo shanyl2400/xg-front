@@ -40,7 +40,7 @@ function ReviewOrderModel(props) {
             <Card style={{ width: "100%", margin: "5px 5px" }}>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>姓名：{props.paymentData.student_name}</Col>
-                    <Col span={12}>代理人：{props.paymentData.publisher_name}</Col>
+                    <Col span={12}>派单员：{props.paymentData.publisher_name}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>推荐机构：{props.paymentData.org_name}</Col>

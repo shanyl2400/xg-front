@@ -163,8 +163,9 @@ function OrderDetails(props) {
                 <Descriptions.Item label="性别">{orderInfo.student_summary.gender ? "男" : "女"}</Descriptions.Item>
                 <Descriptions.Item label="邮箱">{orderInfo.student_summary.email}</Descriptions.Item>
                 <Descriptions.Item label="手机号：">{orderInfo.student_summary.telephone}</Descriptions.Item>
-                <Descriptions.Item label="代理人">{orderInfo.author_name}</Descriptions.Item>
                 <Descriptions.Item label="居住地址" >{parseAddress(orderInfo.student_summary.address)}</Descriptions.Item>
+                <Descriptions.Item label="录单员">{orderInfo.author_name}</Descriptions.Item>
+                <Descriptions.Item label="派单员">{orderInfo.publisher_name}</Descriptions.Item>
                 <Descriptions.Item label="推荐机构" span={3}>{orderInfo.org_name}</Descriptions.Item>
                 <Descriptions.Item label="报名意向" span={3}>
                     <div style={{ margin: "0px 0px" }}>

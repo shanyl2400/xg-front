@@ -35,7 +35,7 @@ async function fetchStudent(page, pageSize, data) {
 function OrderDispatch(props) {
   const columns = [
     {
-      title: '代理人',
+      title: '录单员',
       dataIndex: 'author',
       key: 'author',
     },

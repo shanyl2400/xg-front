@@ -8,7 +8,7 @@ const { RangePicker } = DatePicker;
 // let pageIndex = 1;
 const columns = [
     {
-        title: '平台',
+        title: '订单来源',
         dataIndex: 'group_name',
         key: 'group_name',
     },

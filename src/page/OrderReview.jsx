@@ -10,7 +10,7 @@ let currentPage = 1;
 function OrderReview(props) {
   const columns = [
     {
-      title: '代理人',
+      title: '派单员',
       dataIndex: 'publisher_name',
       key: 'publisher_name',
     },

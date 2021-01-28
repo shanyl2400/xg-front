@@ -258,7 +258,7 @@ function CreateStudentOrder(props) {
                 <Descriptions.Item label="性别">{student.gender ? "男" : "女"}</Descriptions.Item>
                 <Descriptions.Item label="邮箱">{student.email}</Descriptions.Item>
                 <Descriptions.Item label="手机号：">{student.telephone}</Descriptions.Item>
-                <Descriptions.Item label="代理人">{student.authorName}</Descriptions.Item>
+                <Descriptions.Item label="录单员">{student.authorName}</Descriptions.Item>
                 <Descriptions.Item label="居住地址" >{parseAddress(student.address)}{student.address_ext}</Descriptions.Item>
                 <Descriptions.Item label="报名意向">
                     <div style={{ margin: "0px 0px" }}>

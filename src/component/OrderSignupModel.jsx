@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Card, Row, Col, Button, message, InputNumber , Form, Select } from 'antd';
+import { Modal, Card, Row, Col, Button, message, InputNumber, Form, Select } from 'antd';
 import { getOrderStatus } from '../utils/status';
-import { getOrderAPI, signupOrderAPI} from '../api/api';
+import { getOrderAPI, signupOrderAPI } from '../api/api';
 
 const layout = {
     labelCol: { offset: 2, span: 4 },
@@ -21,26 +21,26 @@ function OrderSignupModel(props) {
     })
     const [form] = Form.useForm();
     let onSubmit = async () => {
-        form.validateFields().then(async e=>{
+        form.validateFields().then(async e => {
             let amount = Number(form.getFieldValue("amount"));
             let res = await signupOrderAPI(props.id, {
                 title: "学费",
                 amount: amount
             });
-            if(res.err_msg == "success"){
+            if (res.err_msg == "success") {
                 message.success("名单已报名");
                 props.closeModel();
                 props.refreshData();
-            }else{
+            } else {
                 message.error("报名失败" + res.err_msg);
             }
             form.resetFields();
-          });
+        });
     }
 
     useEffect(() => {
         const fetchData = async () => {
-            if(props.id == 0){
+            if (props.id == 0) {
                 return;
             }
             let res = await getOrderAPI(props.id);
@@ -63,7 +63,7 @@ function OrderSignupModel(props) {
             <Card style={{ width: "100%", margin: "5px 5px" }}>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>姓名：{orderInfo.student_summary.name}</Col>
-                    <Col span={12}>代理人：{orderInfo.publisher_name}</Col>
+                    <Col span={12}>派单员：{orderInfo.publisher_name}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>推荐机构：{orderInfo.org_name}</Col>
@@ -71,8 +71,8 @@ function OrderSignupModel(props) {
                 <Row gutter={[16, 16]}>
                     <Col span={24}>报名：
                         <ul style={{ margin: "10px 10px" }}>
-                            {orderInfo.intent_subject.map((v, id)=>
-                            <li key={id}>{v}</li>
+                            {orderInfo.intent_subject.map((v, id) =>
+                                <li key={id}>{v}</li>
                             )}
                         </ul>
 
@@ -95,11 +95,11 @@ function OrderSignupModel(props) {
                     </Select>
                  </Form.Item> */}
                 <Form.Item name="amount" label="金额" rules={[{ required: true }]} >
-                    <InputNumber  placeholder="请输入报名交费" style={{ width: 220 }}/>
+                    <InputNumber placeholder="请输入报名交费" style={{ width: 220 }} />
                 </Form.Item>
             </Form>
 
-            <Row style={{marginTop:30}}>
+            <Row style={{ marginTop: 30 }}>
                 <Col offset={15} span={4}>
                     <Button onClick={onCancel}>取消</Button>
                 </Col>
