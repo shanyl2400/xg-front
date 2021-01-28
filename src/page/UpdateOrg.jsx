@@ -86,10 +86,10 @@ function UpdateOrg(props) {
                 sub_orgs: subOrgInfos
             })
             if (res.err_msg == "success") {
-                message.success("机构添加成功");
+                message.success("机构更新成功");
                 history.goBack();
             } else {
-                message.error("机构添加失败");
+                message.error("机构更新失败");
             }
 
         });
