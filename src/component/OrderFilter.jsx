@@ -1,9 +1,11 @@
-import { Col, message, Row, Select, Input } from "antd";
+import { Col, message, Row, Select, Input, Button, Modal } from "antd";
 import React, { useEffect, useState } from "react";
-import { listOrderSourcesAPI, listOrgsAPI, listUsersAPI } from "../api/api";
+import { listOrderSourcesAPI, listOrgsAPI, exportOrdersAPI } from "../api/api";
+import { ExportOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { Search } = Input;
+const { confirm } = Modal;
 let querySubject = "";
 let createdStartAt = "";
 let createdEndAt = "";
@@ -102,6 +104,26 @@ function OrderFilter(props) {
             createdEndAt: createdEndAt,
         })
     }
+    const doExport = () => {
+        confirm({
+            title: '确认导出?',
+            icon: <ExportOutlined />,
+            content: '是否确认导出派单记录？',
+            onOk() {
+                exportOrdersAPI({
+                    status: status,
+                    orgId: orgId,
+                    orderSource: orderSource,
+                    subject: querySubject,
+                    createdStartAt: createdStartAt,
+                    createdEndAt: createdEndAt,
+                });
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
 
     return (
         <div>
@@ -133,6 +155,11 @@ function OrderFilter(props) {
                             <Option key={value.id} value={value.id}>{value.name}</Option>
                         ))}
                     </Select>
+                </Col>
+
+                <Col offset={1}>
+                    {/* <Button onClick={doExport}>导出</Button> */}
+                    <Button onClick={doExport} icon={<ExportOutlined />} >导出</Button>
                 </Col>
 
             </Row>

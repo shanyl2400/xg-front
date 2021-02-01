@@ -441,6 +441,39 @@ export async function listOrdersAPI(page, pageSize, data) {
     }
 }
 
+
+
+export async function exportOrdersAPI(data) {
+    try {
+        let api = `/orders/export?page=0`;
+        if (data != null) {
+            if (data.status != undefined && data.status != 0) {
+                api = api + `&status=${data.status}`;
+            }
+            if (data.orgId != undefined && data.orgId != 0) {
+                api = api + `&to_org_ids=${data.orgId}`;
+            }
+            if (data.orderSource != undefined && data.orderSource != 0) {
+                api = api + `&order_sources=${data.orderSource}`;
+            }
+            if (data.subject != undefined && data.subject != "") {
+                api = api + `&keywords=${data.subject}`;
+            }
+            if (data.createdStartAt != undefined && data.createdEndAt != undefined &&
+                data.createdStartAt != "" && data.createdEndAt != "") {
+                api = api + `&create_start_at=${data.createdStartAt}&create_end_at=${data.createdEndAt}`;
+            }
+        }
+        api = api + `&order_by=updated_at desc`;
+
+        // let res = await axios.get(baseURL + api);
+        let res = await Download("get", baseURL + api, null, "派单记录.xlsx")
+        return res.data;
+    } catch (e) {
+        return { err_msg: e }
+    }
+}
+
 export async function listAuthOrdersAPI(page, pageSize, data) {
     try {
         let api = `/orders/author?page=${page}&page_size=${pageSize}`;
@@ -641,4 +674,48 @@ export async function revokeOrderAPI(id) {
     } catch (e) {
         return { err_msg: e }
     }
+}
+
+function Download(method = "get", url, params, fileName) {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: method,
+            url: url,
+            params: params,
+            responseType: 'blob'
+        })
+            .then(res => {
+                let reader = new FileReader();
+                let data = res.data;
+                reader.onload = e => {
+                    if (e.target.result.indexOf('Result') != -1 && JSON.parse(e.target.result).Result == false) {
+                        // 进行错误处理
+                    } else {
+                        if (!fileName) {
+                            let contentDisposition = res.headers['content-disposition'];
+                            if (contentDisposition) {
+                                fileName = window.decodeURI(res.headers['content-disposition'].split('=')[2].split("''")[1], "UTF-8");
+                            }
+                        }
+                        executeDownload(data, fileName);
+                    }
+                };
+                reader.readAsText(data);
+                resolve(res.data);
+            })
+    });
+}
+//  模拟点击a 标签进行下载
+function executeDownload(data, fileName) {
+    if (!data) {
+        return
+    }
+    let url = window.URL.createObjectURL(new Blob([data]));
+    let link = document.createElement('a');
+    link.style.display = 'none';
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
