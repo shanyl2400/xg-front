@@ -98,7 +98,7 @@ function AuthorOrderList(props) {
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>我的订单</Breadcrumb.Item>
       </Breadcrumb>
-      <OrderFilter onChangeFilter={handleChangeFilter}></OrderFilter>
+      <OrderFilter onChangeFilter={handleChangeFilter} hasExport={false}></OrderFilter>
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

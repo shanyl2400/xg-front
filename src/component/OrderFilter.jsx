@@ -157,10 +157,11 @@ function OrderFilter(props) {
                     </Select>
                 </Col>
 
-                <Col offset={1}>
+                {props.hasExport && (<Col offset={1}>
                     {/* <Button onClick={doExport}>导出</Button> */}
                     <Button onClick={doExport} icon={<ExportOutlined />} >导出</Button>
-                </Col>
+                </Col>)}
+
 
             </Row>
             <Row style={{ marginTop: 20, marginBottom: -10 }}>

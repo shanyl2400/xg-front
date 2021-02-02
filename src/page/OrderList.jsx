@@ -109,7 +109,7 @@ function OrderList(props) {
         <Breadcrumb.Item>派单记录</Breadcrumb.Item>
       </Breadcrumb>
 
-      <OrderFilter onChangeFilter={handleChangeFilter}></OrderFilter>
+      <OrderFilter onChangeFilter={handleChangeFilter} hasExport={true}></OrderFilter>
 
       <Table
         pagination={false}
