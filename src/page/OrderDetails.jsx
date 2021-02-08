@@ -225,7 +225,7 @@ function OrderDetails(props) {
             />
 
             <Row style={{ marginTop: 8 }} gutter={[16, 16]} >
-                <Col offset={20} span={1}><Button onClick={() => openAddMarkModel()} type="primary">添加回访</Button></Col>
+                <Col offset={20} span={1}><Button onClick={() => openAddMarkModel()} type="primary">回访</Button></Col>
                 <Col offset={1} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
             </Row>
 

@@ -125,7 +125,7 @@ function StudentList(props) {
   let handleChangePage = async (e, curPageSize) => {
     setPageIndex(e);
     setPageIndex(curPageSize);
-    let res = await fetchStudent(pageIndex, curPageSize, { status: status, noDispatch: noDispatch })
+    let res = await fetchStudent(e, curPageSize, { status: status, noDispatch: noDispatch })
     setStudents(res);
   }
 
