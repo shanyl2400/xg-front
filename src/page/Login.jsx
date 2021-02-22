@@ -29,7 +29,6 @@ function Login(props) {
     let [userName, setUserName] = useState("");
     let [password, setPassword] = useState("");
     let [hasInvalidNamePassword, setHasInvalidNamePassword] = useState(false);
-
     let history = useHistory();
     const doLogin = (props) => {
         let roleId = sessionStorage.getItem("role_id");

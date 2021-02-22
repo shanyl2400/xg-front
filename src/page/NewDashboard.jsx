@@ -4,7 +4,6 @@ import SummaryData from '../component/SummaryData';
 import ReactEcharts from "echarts-for-react";
 import { getStatisticsSummaryAPI, listUsersWithOrgIdAPI, getStatisticsTableAPI, listOrderSourcesAPI, listOrgsAPI } from '../api/api';
 import { message, Typography, Table, Select, Row, Col } from 'antd';
-
 const { Title } = Typography;
 const { Option } = Select;
 function NewDashboard(props) {
@@ -281,6 +280,8 @@ function NewDashboard(props) {
       order_source: e,
     });
   }
+
+
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
       <SummaryData color="#c23531" title="总业绩" data={"￥" + summaryData.performance_total} />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'antd';
+import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import SubOrgDetailsModel from './SubOrgDetailsModel';
 import TableSubOrgModel from './TableSubOrgModel';
 import SubOrgEditModel from './SubOrgEditModel';
@@ -11,6 +12,7 @@ function SubOrgInfoTable(props) {
         {
             title: '校区名',
             dataIndex: 'name',
+            width: 120,
             key: 'name',
         },
         {
@@ -22,14 +24,23 @@ function SubOrgInfoTable(props) {
         {
             title: '操作',
             dataIndex: 'id',
+            width: 100,
             key: 'id',
-            render: (text, v) => <span>
-                <a onClick={() => clickDetails(v.id)} >详情</a>
-                {isEditMode() && (<span>
-                    /<a onClick={() => clickUpdate(v.id)}>修改</a>
-                /<a onClick={() => clickDelete(v.id)}>删除</a>
-                </span>)}
+            // render: (text, v) => <span>
+            //     <a onClick={() => clickDetails(v.id)} >详情</a>
+            //     <span><SearchOutlined onClick={() => clickDetails(v.id)} /></span>
+            //     {isEditMode() && (<span>
+            //         /<a onClick={() => clickUpdate(v.id)}>修改</a>
+            //     /<a onClick={() => clickDelete(v.id)}>删除</a>
+            //     </span>)}
 
+            // </span>,
+            render: (text, v) => <span>
+                <EyeOutlined style={{ fontSize: 14 }} onClick={() => clickDetails(v.id)} />
+                {isEditMode() && (<span>
+                    <EditOutlined style={{ fontSize: 14, marginLeft: 6 }} onClick={() => clickUpdate(v.id)} />
+                    <DeleteOutlined style={{ fontSize: 14, marginLeft: 6, color: "#cf1322" }} onClick={() => clickDelete(v.id)} />
+                </span>)}
             </span>,
         }
     ]
@@ -153,7 +164,7 @@ function SubOrgInfoTable(props) {
     return (
 
         <div style={{ width: "100%" }}>
-            <Table pagination={false} style={{ width: "100%" }} columns={columns} dataSource={orgs} />
+            <Table pagination={{ position: 'bottom', pageSize: 5, size: "small" }} style={{ width: "100%" }} columns={columns} dataSource={orgs} />
             {isEditMode() && <Button onClick={handleAddSubOrgModel}>添加分校</Button>}
             <SubOrgDetailsModel data={orgs} id={detailsOrgID} visible={detailsModelVisible} closeModel={cancelDetailsMode} />
             <SubOrgEditModel
