@@ -18,9 +18,9 @@ function OrderList(props) {
     //   key: 'id',
     // },
     {
-      title: '派单员',
-      dataIndex: 'publisher_name',
-      key: 'publisher_name',
+      title: '录单员',
+      dataIndex: 'author_name',
+      key: 'author_name',
     },
     {
       title: '派单时间',
