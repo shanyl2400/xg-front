@@ -5,6 +5,7 @@ import { getStudentStatus } from '../utils/status';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 import { formatDate } from "../utils/date";
+import { hideTelephone } from "../utils/telephone";
 
 async function fetchStudent(page, curPageSize, data) {
   console.log(curPageSize);
@@ -60,6 +61,11 @@ function AllStudentList(props) {
       title: '联系电话',
       dataIndex: 'telephone',
       key: 'telephone',
+      render: telephone => (
+        <span>
+          {hideTelephone(telephone)}
+        </span>
+      ),
     },
     {
       title: '派单数',

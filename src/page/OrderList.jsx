@@ -5,6 +5,7 @@ import { listOrdersAPI, listOrgsAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
 import OrderFilter from "../component/OrderFilter";
 import { formatDate } from "../utils/date";
+import { hideTelephone } from "../utils/telephone";
 const pageSize = 10;
 const { Option } = Select;
 
@@ -44,6 +45,10 @@ function OrderList(props) {
       title: '联系电话',
       dataIndex: 'student_telephone',
       key: 'student_telephone',
+      render: telephone => (
+        <span>
+          {hideTelephone(telephone)}
+        </span>)
     },
     {
       title: '推荐科目',

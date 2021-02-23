@@ -7,6 +7,7 @@ import { getOrderStatus } from '../utils/status';
 import OrderPayModel from '../component/OrderPayModel'
 import OrderDepositModel from '../component/OrderDepositModel'
 import OrderSignupModel from '../component/OrderSignupModel'
+import { hideTelephone } from "../utils/telephone";
 
 import { formatDate } from "../utils/date";
 const pageSize = 10;
@@ -41,6 +42,10 @@ function OrgOrderList(props) {
       title: '联系电话',
       dataIndex: 'student_telephone',
       key: 'student_telephone',
+      render: telephone => (
+        <span>
+          {hideTelephone(telephone)}
+        </span>)
     },
     {
       title: '推荐科目',

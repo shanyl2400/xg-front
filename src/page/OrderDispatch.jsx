@@ -5,6 +5,7 @@ import { getStudentStatus } from '../utils/status';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 import { formatDate } from "../utils/date";
+import { hideTelephone } from "../utils/telephone";
 
 async function fetchStudent(page, pageSize, data) {
   const rawRes = await listAllStudentAPI(page, pageSize, data);
@@ -59,6 +60,10 @@ function OrderDispatch(props) {
       title: '联系电话',
       dataIndex: 'telephone',
       key: 'telephone',
+      render: telephone => (
+        <span>
+          {hideTelephone(telephone)}
+        </span>)
     },
     // {
     //   title: '报名意向',

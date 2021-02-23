@@ -4,6 +4,7 @@ import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
 import { listAuthOrdersAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
 import { formatDate } from "../utils/date";
+import { hideTelephone } from "../utils/telephone";
 import OrderFilter from "../component/OrderFilter";
 let queryValue = {};
 function AuthorOrderList(props) {
@@ -35,6 +36,10 @@ function AuthorOrderList(props) {
       title: '联系电话',
       dataIndex: 'student_telephone',
       key: 'student_telephone',
+      render: telephone => (
+        <span>
+          {hideTelephone(telephone)}
+        </span>)
     },
     {
       title: '推荐科目',

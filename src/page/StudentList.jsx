@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 import { parseAddress } from "../utils/address";
 import { formatDate } from "../utils/date";
+import { hideTelephone } from "../utils/telephone";
 
 const pageSize = 10;
 const { Option } = Select;
@@ -81,6 +82,10 @@ function StudentList(props) {
       title: '联系电话',
       dataIndex: 'telephone',
       key: 'telephone',
+      render: telephone => (
+        <span>
+          {hideTelephone(telephone)}
+        </span>)
     },
     // {
     //   title: '报名意向',

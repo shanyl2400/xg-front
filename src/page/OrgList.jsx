@@ -6,6 +6,7 @@ import OrgFilter from '../component/OrgFilter';
 import { listOrgsAPI, getOrgAPI } from '../api/api';
 import { getOrgStatus } from '../utils/status';
 import { checkAuthorities } from '../utils/auth';
+import { hideTelephone } from "../utils/telephone";
 
 const pageSize = 10;
 let pageIndex = 1;
@@ -26,6 +27,10 @@ function OrgList(props) {
       title: '联系方式',
       dataIndex: 'telephone',
       key: 'telephone',
+      render: telephone => (
+        <span>
+          {hideTelephone(telephone)}
+        </span>)
     },
     {
       title: '状态',

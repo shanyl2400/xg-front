@@ -6,6 +6,7 @@ import CreateOrderModal from '../component/CreateOrderModal';
 import { getStudentByIdAPI, listSubOrgsAPI, listOrgsAPI } from '../api/api';
 import { parseAddress } from '../utils/address';
 import { formatDate } from "../utils/date";
+import { hideTelephone } from "../utils/telephone";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -81,6 +82,10 @@ function CreateStudentOrder(props) {
             title: '联系电话',
             dataIndex: 'telephone',
             key: 'telephone',
+            render: telephone => (
+                <span>
+                    {hideTelephone(telephone)}
+                </span>)
         },
         {
             title: '距离',
