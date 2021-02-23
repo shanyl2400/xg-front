@@ -5,6 +5,7 @@ import SubOrgFilter from '../component/SubOrgFilter';
 import CreateOrderModal from '../component/CreateOrderModal';
 import { getStudentByIdAPI, listSubOrgsAPI, listOrgsAPI } from '../api/api';
 import { parseAddress } from '../utils/address';
+import { formatDate } from "../utils/date";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -21,7 +22,7 @@ function CreateStudentOrder(props) {
             dataIndex: 'created_at',
             key: 'created_at',
             render: createdAt => (
-                <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+                <span>{formatDate(new Date(Date.parse(createdAt)))}</span>
             ),
         },
         {
@@ -56,15 +57,16 @@ function CreateStudentOrder(props) {
         }
     ]
     const columns = [
-        {
-            title: '#',
-            dataIndex: 'id',
-            key: 'id',
-        },
+        // {
+        //     title: '#',
+        //     dataIndex: 'id',
+        //     key: 'id',
+        // },
         {
             title: '校区名称',
             dataIndex: 'name',
             key: 'name',
+            fixed: 'left',
         },
         {
             title: '校区地址',
@@ -74,11 +76,6 @@ function CreateStudentOrder(props) {
                     {parseAddress(record.address)}{record.address_ext}
                 </span>
             ),
-        },
-        {
-            title: '学科',
-            dataIndex: 'subjects',
-            key: 'subjects',
         },
         {
             title: '联系电话',
@@ -95,8 +92,27 @@ function CreateStudentOrder(props) {
             ),
         },
         {
+            title: '学科',
+            dataIndex: 'subjects',
+            key: 'subjects',
+            render: (text, record) => (
+                <span>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                        {text.map((v, id) =>
+                            <li key={id}>{id < 5 ? v : ""}</li>
+                        )}
+                        {text.length > 5 ? "……" : ""}
+
+                    </ul>
+
+                </span>
+            )
+        },
+        {
             title: '操作',
             key: 'action',
+            width: 80,
+            fixed: 'right',
             render: (text, record) => (
                 <span>
                     <a onClick={() => openCreateOrderModal(record)}>派单</a>
@@ -190,7 +206,20 @@ function CreateStudentOrder(props) {
                 console.error("invalid subject");
                 continue;
             }
-            res.push(parts[0] + "-" + parts[1]);
+            let nameLike = parts[0] + "-" + parts[1];
+            let hasNameLike = false;
+            for (let j = 0; j < res.length; j++) {
+                if (res[j] == nameLike) {
+                    hasNameLike = true;
+                    break;
+                }
+            }
+            if (!hasNameLike) {
+                res.push(nameLike);
+            }
+            if (parts.length == 3) {
+                res.push(parts[0] + "-" + parts[1] + "-" + parts[2]);
+            }
         }
         return res;
     }
@@ -313,6 +342,7 @@ function CreateStudentOrder(props) {
                 style={{ marginTop: "30px" }}
                 columns={columns}
                 dataSource={orgs.data}
+                scroll={{ x: "max-content" }}
             />
             <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgs.total} />
 

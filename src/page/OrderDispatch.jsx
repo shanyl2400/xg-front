@@ -4,7 +4,7 @@ import { listAllStudentAPI } from '../api/api';
 import { getStudentStatus } from '../utils/status';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
-
+import { formatDate } from "../utils/date";
 
 async function fetchStudent(page, pageSize, data) {
   const rawRes = await listAllStudentAPI(page, pageSize, data);
@@ -20,8 +20,9 @@ async function fetchStudent(page, pageSize, data) {
       id: rawStudents[i].id,
       author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
-      created_at: createdAt.toLocaleString(),
-      updated_at: updatedAt.toLocaleString(),
+      created_at: formatDate(createdAt),
+      updated_at: formatDate(updatedAt),
+      order_count: rawStudents[i].order_count,
       address: rawStudents[i].address,
       telephone: rawStudents[i].telephone,
       intent_subject: rawStudents[i].intent_subject,
@@ -80,7 +81,7 @@ function OrderDispatch(props) {
       render: (text, record) => (
         <Space size="middle">
           <a onClick={() => history.push("/main/student_details/" + record.id)}>详情</a>
-          <a onClick={() => history.push("/main/student_order/" + record.id)}>派单</a>
+          <a onClick={() => history.push("/main/student_order/" + record.id)}>派单({record.order_count})</a>
         </Space>
       ),
     },

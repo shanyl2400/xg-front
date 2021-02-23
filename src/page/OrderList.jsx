@@ -4,6 +4,7 @@ import { Breadcrumb, message, Space, Table, Pagination, Row, Col, Select } from 
 import { listOrdersAPI, listOrgsAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
 import OrderFilter from "../component/OrderFilter";
+import { formatDate } from "../utils/date";
 const pageSize = 10;
 const { Option } = Select;
 
@@ -26,7 +27,7 @@ function OrderList(props) {
       dataIndex: 'created_at',
       key: 'created_at',
       render: createdAt => (
-        <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+        <span>{formatDate(new Date(Date.parse(createdAt)))}</span>
       ),
     },
     {

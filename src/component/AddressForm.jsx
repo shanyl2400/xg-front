@@ -31,10 +31,13 @@ function AddressForm(props) {
             ext: curExt
         });
     }
+    const filter = (inputValue, path) => {
+        return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
+    }
     return (
         <Row>
             <Col span={10}>
-                <Cascader options={options} placeholder="请选择" value={region} onChange={changeAddressRegion} />
+                <Cascader showSearch={{ filter }} options={options} placeholder="请选择" value={region} onChange={changeAddressRegion} />
             </Col>
             <Col offset={1} span={12}>
                 <Input placeholder="请输入详细地址" value={ext} onChange={changeAddressExt} />

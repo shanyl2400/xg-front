@@ -4,6 +4,7 @@ import { listStudentAPI, listOrgsAPI } from '../api/api';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 import { parseAddress } from "../utils/address";
+import { formatDate } from "../utils/date";
 
 const pageSize = 10;
 const { Option } = Select;
@@ -23,8 +24,9 @@ async function fetchStudent(page, pageSize, data) {
       author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
       address: rawStudents[i].address,
-      created_at: createdAt.toLocaleString(),
-      updated_at: updatedAt.toLocaleString(),
+      created_at: formatDate(createdAt),
+      updated_at: formatDate(updatedAt),
+      order_count: rawStudents[i].order_count,
       address_ext: rawStudents[i].address_ext,
       telephone: rawStudents[i].telephone,
       intent_subject: rawStudents[i].intent_subject,
@@ -51,11 +53,11 @@ function getStatusName(status) {
 
 function StudentList(props) {
   const columns = [
-    {
-      title: '录单员',
-      dataIndex: 'author',
-      key: 'author',
-    },
+    // {
+    //   title: '录单员',
+    //   dataIndex: 'author',
+    //   key: 'author',
+    // },
     {
       title: '录单时间',
       dataIndex: 'created_at',
@@ -101,14 +103,14 @@ function StudentList(props) {
       render: (text, record) => (
         <Space size="middle">
           <a onClick={() => history.push("/main/student_details/" + record.id)}>详情</a>
-          <a onClick={() => history.push("/main/student_order/" + record.id)}>派单</a>
+          <a onClick={() => history.push("/main/student_order/" + record.id)}>派单({record.order_count})</a>
         </Space>
       ),
     },
   ];
 
   const [students, setStudents] = useState([]);
-  const [status, setStatus] = useState([0]);
+  const [status, setStatus] = useState([]);
   const [noDispatch, setNoDispatch] = useState(true);
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(1);
@@ -142,7 +144,7 @@ function StudentList(props) {
         <Breadcrumb.Item>学员管理</Breadcrumb.Item>
         <Breadcrumb.Item>我的名单</Breadcrumb.Item>
       </Breadcrumb>
-      <StudentFilter status={[1, 3]} onFilterChange={handleStudentFilter} isDispatched={true} />
+      <StudentFilter status={[]} onFilterChange={handleStudentFilter} isDispatched={true} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

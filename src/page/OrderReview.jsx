@@ -5,6 +5,7 @@ import ReviewOrderModel from '../component/ReviewOrderModel';
 import { getPendingPaymentAPI } from '../api/api';
 import { getPaymentStatus } from '../utils/status';
 
+import { formatDate } from "../utils/date";
 let pageSize = 10;
 let currentPage = 1;
 function OrderReview(props) {
@@ -19,7 +20,7 @@ function OrderReview(props) {
       dataIndex: 'created_at',
       key: 'created_at',
       render: createdAt => (
-        <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+        <span>{formatDate(new Date(Date.parse(createdAt)))}</span>
       ),
     },
     {

@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-// export const website = "http://localhost:8088"
-export const website = "http://101.133.139.38:8088"
+export const website = "http://localhost:8088"
+// export const website = "http://101.133.139.38:8088"
 export const baseURL = website + "/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
@@ -26,7 +26,7 @@ export async function updatePasswordAPI(password) {
         })
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -35,7 +35,7 @@ export async function listSubjectsAPI() {
         let res = await axios.get(baseURL + "/subjects/details/0")
         return res.data.subjects;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -44,7 +44,7 @@ export async function listSubjectsTreeAPI() {
         let res = await axios.get(baseURL + "/subjects/tree")
         return res.data.subjects;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -53,7 +53,7 @@ export async function listSubjectsTreeAPIWithData() {
         let res = await axios.get(baseURL + "/subjects/tree")
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -63,7 +63,7 @@ export async function listSubjectsAllAPI() {
         let res = await axios.get(baseURL + "/subjects/all")
         return res.data.subjects;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -72,7 +72,7 @@ export async function listAuths() {
         let res = await axios.get(baseURL + "/auths/")
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -81,7 +81,7 @@ export async function createRole(data) {
         let res = await axios.post(baseURL + "/role/", data)
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -90,7 +90,7 @@ export async function createStudentAPI(values) {
         let res = await axios.post(baseURL + "/student/", values);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -99,7 +99,7 @@ export async function listStudentAPI(page, pageSize, data) {
         let res = await axios.get(baseURL + `/students/private?page=${page}&page_size=${pageSize}&status=${data.status}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}&order_by=created_at desc`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -111,7 +111,7 @@ export async function listAllStudentAPI(page, pageSize, data) {
         let res = await axios.get(baseURL + `/students/?page=${page}&page_size=${pageSize}&status=${data.status}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}&order_by=created_at desc`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 export async function getStudentByIdAPI(id) {
@@ -119,7 +119,7 @@ export async function getStudentByIdAPI(id) {
         let res = await axios.get(baseURL + "/student/" + id);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -136,7 +136,7 @@ export async function listOrgsAPI(page, pageSize, data) {
         let res = await axios.get(api);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -153,7 +153,7 @@ export async function listSubOrgsAPI(condition, page, pageSize) {
         let res = await axios.get(baseURL + `/orgs/campus?address=${address}&subjects=${subjects}&student_id=${studentId}&page=${page}&page_size=${pageSize}&parent_id=${parentId}&name=${condition.name ? condition.name : ""}`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -162,7 +162,7 @@ export async function listOrderSourcesAPI() {
         let res = await axios.get(baseURL + "/order_sources/")
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -171,7 +171,7 @@ export async function createOrderSourcesAPI(data) {
         let res = await axios.post(baseURL + "/order_source/", data)
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -180,7 +180,7 @@ export async function createOrderAPI(data) {
         let res = await axios.post(baseURL + "/order/", data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -191,7 +191,7 @@ export async function getStatisticsSummaryAPI() {
         let res = await axios.get(baseURL + api);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 export async function getStatisticsTableAPI(data) {
@@ -199,7 +199,7 @@ export async function getStatisticsTableAPI(data) {
         let res = await axios.get(baseURL + `/statistics/table?org_id=${data.org_id}&author=${data.author}&publisher_id=${data.publisher_id}&order_source=${data.order_source}`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -215,7 +215,7 @@ export async function getStatisticsTableGroupAPI(data) {
         let res = await axios.get(api);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -224,7 +224,7 @@ export async function getStatisticsGraphAPI() {
         let res = await axios.get(baseURL + "/statistics/graph");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -242,7 +242,7 @@ export async function listPendingOrgsAPI(page, pageSize, data) {
         // let res = await axios.get(baseURL + "/orgs/pending");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 export async function getOrgAPI(id) {
@@ -250,7 +250,7 @@ export async function getOrgAPI(id) {
         let res = await axios.get(baseURL + "/org/" + id);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -261,7 +261,7 @@ export async function createSubjectAPI(data) {
         let res = await axios.post(baseURL + "/subject/", data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -274,7 +274,7 @@ export async function listOrderRemarks(page, pageSize, params) {
         let res = await axios.get(baseURL + `/orders/remarks?page=${page ? page : ""}&page_size=${pageSize ? pageSize : ""}&status=${status ? status : ""}&order_by=created_at desc`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -283,7 +283,7 @@ export async function listOrderNotifies(page, pageSize, data) {
         let res = await axios.get(baseURL + `/notifies/orders?page=${page ? page : ""}&page_size=${pageSize ? pageSize : ""}&status=${data ? data.status : ""}&order_by=created_at desc`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -293,7 +293,7 @@ export async function marksOrderNotifyRead(id) {
         let res = await axios.put(baseURL + `/notify/orders/` + id);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -302,7 +302,7 @@ export async function listAuthorOrderNotifies(page, pageSize, data) {
         let res = await axios.get(baseURL + `/notifies/orders/author?page=${page ? page : ""}&page_size=${pageSize ? pageSize : ""}&status=${data ? data.status : ""}&order_by=created_at desc`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -315,7 +315,7 @@ export async function marksOrderRemarksRead(id) {
         let res = await axios.put(baseURL + `/orders/marks`, data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -328,7 +328,7 @@ export async function marksOrderRemarksUnread(id) {
         let res = await axios.put(baseURL + `/orders/marks`, data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -337,7 +337,7 @@ export async function batchCreateSubjectAPI(data) {
         let res = await axios.post(baseURL + "/subjects/", data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -348,7 +348,7 @@ export async function addOrderMarkAPI(id, content) {
         });
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -357,7 +357,7 @@ export async function createOrgAPI(data) {
         let res = await axios.post(baseURL + "/org/", data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -367,7 +367,7 @@ export async function updateOrgAPI(id, data) {
         let res = await axios.put(baseURL + `/org/${id}`, data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -378,7 +378,7 @@ export async function updateOrgSelfAPI(data) {
         let res = await axios.put(baseURL + `/org/`, data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -387,7 +387,7 @@ export async function rejectOrgReview(id) {
         let res = await axios.put(baseURL + "/org/" + id + "/review/reject");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -396,7 +396,7 @@ export async function approveOrgReview(id) {
         let res = await axios.put(baseURL + "/org/" + id + "/review/approve");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -405,7 +405,7 @@ export async function revokeOrgReview(id) {
         let res = await axios.put(baseURL + "/org/" + id + "/revoke");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -437,7 +437,7 @@ export async function listOrdersAPI(page, pageSize, data) {
 
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -470,7 +470,7 @@ export async function exportOrdersAPI(data) {
         let res = await Download("get", baseURL + api, null, "派单记录.xlsx")
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -501,7 +501,7 @@ export async function listAuthOrdersAPI(page, pageSize, data) {
         // let res = await axios.get(baseURL + "/orders/author?page=" + page + "&page_size=" + pageSize)
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -512,7 +512,7 @@ export async function listOrgOrdersAPI(page, pageSize) {
         let res = await axios.get(baseURL + api);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -522,7 +522,7 @@ export async function listPendingOrdersAPI() {
         let res = await axios.get(baseURL + "/orders/pending")
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -531,7 +531,7 @@ export async function getOrgSubjectsAPI(id) {
         let res = await axios.get(baseURL + "/org/" + id + "/subjects");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 export async function getOrderAPI(id) {
@@ -542,7 +542,7 @@ export async function getOrderAPI(id) {
         let res = await axios.get(baseURL + "/order/" + id);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -552,7 +552,7 @@ export async function getPendingPaymentAPI(page, pageSize) {
         let res = await axios.get(baseURL + `/payments/pending?page=${page ? page : ""}&page_size=${pageSize ? pageSize : ""}`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -561,7 +561,7 @@ export async function acceptPaymentAPI(id) {
         let res = await axios.put(baseURL + "/payment/" + id + "/review/accept");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -570,7 +570,7 @@ export async function rejectPaymentAPI(id) {
         let res = await axios.put(baseURL + "/payment/" + id + "/review/reject");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -580,7 +580,7 @@ export async function listRolesAPI() {
         let res = await axios.get(baseURL + "/roles/");
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -589,7 +589,7 @@ export async function createUserAPI(values) {
         let res = await axios.post(baseURL + "/user/", values);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -603,7 +603,7 @@ export async function listUsersAPI(page, pageSize, data) {
         let res = await axios.get(api);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -613,7 +613,7 @@ export async function listUsersWithOrgIdAPI(orgId, page, pageSize) {
         let res = await axios.get(baseURL + `/users/?page=${page}&page_size=${pageSize}&org_id=${orgId}`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -622,7 +622,7 @@ export async function resetUserPasswordAPI(id) {
         let res = await axios.put(baseURL + "/user/reset/" + id);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -631,7 +631,7 @@ export async function signupOrderAPI(id, data) {
         let res = await axios.put(baseURL + "/order/" + id + "/signup", data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 export async function depositOrderAPI(id, data) {
@@ -639,7 +639,7 @@ export async function depositOrderAPI(id, data) {
         let res = await axios.put(baseURL + "/order/" + id + "/deposit", data);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -654,7 +654,7 @@ export async function payOrderAPI(id, data) {
         }
 
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -663,7 +663,7 @@ export async function invalidOrderAPI(id) {
         let res = await axios.put(baseURL + `/order/${id}/invalid`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 
@@ -672,7 +672,7 @@ export async function revokeOrderAPI(id) {
         let res = await axios.put(baseURL + `/order/${id}/revoke`);
         return res.data;
     } catch (e) {
-        return { err_msg: e }
+        return e.response.data
     }
 }
 

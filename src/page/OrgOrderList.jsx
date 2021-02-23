@@ -8,6 +8,7 @@ import OrderPayModel from '../component/OrderPayModel'
 import OrderDepositModel from '../component/OrderDepositModel'
 import OrderSignupModel from '../component/OrderSignupModel'
 
+import { formatDate } from "../utils/date";
 const pageSize = 10;
 let currentPage = 1;
 const { confirm } = Modal;
@@ -23,7 +24,7 @@ function OrgOrderList(props) {
       dataIndex: 'created_at',
       key: 'created_at',
       render: createdAt => (
-        <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+        <span>{formatDate(new Date(Date.parse(createdAt)))}</span>
       ),
     },
     {

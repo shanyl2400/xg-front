@@ -3,21 +3,22 @@ import { useHistory } from "react-router-dom";
 import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
 import { listAuthOrdersAPI } from '../api/api';
 import { getOrderStatus } from '../utils/status';
+import { formatDate } from "../utils/date";
 import OrderFilter from "../component/OrderFilter";
 let queryValue = {};
 function AuthorOrderList(props) {
   const columns = [
-    {
-      title: '派单员',
-      dataIndex: 'publisher_name',
-      key: 'publisher_name',
-    },
+    // {
+    //   title: '派单员',
+    //   dataIndex: 'publisher_name',
+    //   key: 'publisher_name',
+    // },
     {
       title: '派单时间',
       dataIndex: 'created_at',
       key: 'created_at',
       render: createdAt => (
-        <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+        <span>{formatDate(new Date(Date.parse(createdAt)))}</span>
       ),
     },
     {
@@ -96,7 +97,7 @@ function AuthorOrderList(props) {
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-        <Breadcrumb.Item>我的订单</Breadcrumb.Item>
+        <Breadcrumb.Item>我的派单</Breadcrumb.Item>
       </Breadcrumb>
       <OrderFilter onChangeFilter={handleChangeFilter} hasExport={false}></OrderFilter>
       <Table

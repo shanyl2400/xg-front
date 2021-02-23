@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { Button, Card, Breadcrumb, message, Row, Col, Typography, Descriptions, Table, Space } from 'antd';
 import { getStudentByIdAPI } from '../api/api';
 import { parseAddress } from '../utils/address';
+import { formatDate } from "../utils/date";
 const { Title } = Typography;
 function StudentDetails(props) {
     const columns = [
@@ -11,7 +12,7 @@ function StudentDetails(props) {
             dataIndex: 'created_at',
             key: 'created_at',
             render: createdAt => (
-                <span>{new Date(Date.parse(createdAt)).toLocaleString()}</span>
+                <span>{formatDate(new Date(Date.parse(createdAt)))}</span>
             ),
         },
         {

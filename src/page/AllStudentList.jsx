@@ -4,6 +4,7 @@ import { listAllStudentAPI } from '../api/api';
 import { getStudentStatus } from '../utils/status';
 import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
+import { formatDate } from "../utils/date";
 
 async function fetchStudent(page, curPageSize, data) {
   console.log(curPageSize);
@@ -20,8 +21,9 @@ async function fetchStudent(page, curPageSize, data) {
       id: rawStudents[i].id,
       author_id: rawStudents[i].author,
       student_name: rawStudents[i].name,
-      created_at: createdAt.toLocaleString(),
-      updated_at: updatedAt.toLocaleString(),
+      created_at: formatDate(createdAt),
+      updated_at: formatDate(updatedAt),
+      order_count: rawStudents[i].order_count,
       address: rawStudents[i].address,
       telephone: rawStudents[i].telephone,
       intent_subject: rawStudents[i].intent_subject,
@@ -58,6 +60,11 @@ function AllStudentList(props) {
       title: '联系电话',
       dataIndex: 'telephone',
       key: 'telephone',
+    },
+    {
+      title: '派单数',
+      key: 'order_count',
+      dataIndex: 'order_count',
     },
     // {
     //   title: '报名意向',
@@ -117,8 +124,8 @@ function AllStudentList(props) {
   return (
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
-        <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-        <Breadcrumb.Item>学员名单</Breadcrumb.Item>
+        <Breadcrumb.Item>学员管理</Breadcrumb.Item>
+        <Breadcrumb.Item>所有名单</Breadcrumb.Item>
       </Breadcrumb>
 
       <StudentFilter onFilterChange={handleStudentFilter} isDispatched={false} />

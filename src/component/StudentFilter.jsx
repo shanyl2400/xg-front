@@ -6,6 +6,7 @@ const { Option } = Select;
 const { Search } = Input;
 function StudentFilter(props) {
     const [status, setStatus] = useState(props.status);
+    console.log(props.status);
     const [isDispatched, setIsDispatched] = useState(props.isDispatched);
     const [keywords, setKeywords] = useState("");
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Breadcrumb, Typography, Col, Input, Button, Row, Select, message, Tree, Modal, Space } from 'antd';
+import { Breadcrumb, Typography, Col, Input, Button, Row, Cascader, Select, message, Tree, Modal, Space } from 'antd';
 import { listSubjectsTreeAPIWithData, createSubjectAPI, batchCreateSubjectAPI } from '../api/api';
 
 const { Option } = Select;
@@ -62,12 +62,36 @@ function SubjectList(props) {
   const handleChangeBatchSubjectsValue = (e) => {
     setBatchSubjectsValue(e.target.value);
   }
-  const handleUpdateSubjectClassify = (e) => {
-    setSubjectClassify(e)
+  // const handleUpdateSubjectClassify = (e) => {
+  //   setSubjectClassify(e)
+  // }
+  // const handleBatchAddSubjectClassify = (e) => {
+  //   setBatchAddSubjectClassify(e)
+  // }
+  const handleChangeSubjects = (e, option) => {
+    let maxLevel = 0;
+    let selectedOption = 0;
+    for (let i = 0; i < option.length; i++) {
+      if (maxLevel < option[i].level) {
+        selectedOption = option[i];
+        maxLevel = option[i].level;
+      }
+    }
+    setSubjectClassify(selectedOption.id);
   }
-  const handleBatchAddSubjectClassify = (e) => {
-    setBatchAddSubjectClassify(e)
+
+  const handleBatchChangeSubjects = (e, option) => {
+    let maxLevel = 0;
+    let selectedOption = 0;
+    for (let i = 0; i < option.length; i++) {
+      if (maxLevel < option[i].level) {
+        selectedOption = option[i];
+        maxLevel = option[i].level;
+      }
+    }
+    setBatchAddSubjectClassify(selectedOption.id);
   }
+
   const handleAddSubject = async () => {
     if (subjectName.trim() == "") {
       message.warn("课程名不能为空");
@@ -83,6 +107,7 @@ function SubjectList(props) {
       setSubjectClassify(1);
       fetchData();
     } else {
+      console.log(res);
       message.error("添加失败," + res.err_msg);
     }
   }
@@ -150,13 +175,16 @@ function SubjectList(props) {
             <Col className="gutter-row" span={2}>
               课程名：
         </Col>
-            <Col className="gutter-row" span={4}>
+            {/* <Col className="gutter-row" span={4}>
               <Select defaultValue={0} style={{ width: 120 }} value={subjectClassify} onSelect={handleUpdateSubjectClassify}>
                 <Option value={0}>无</Option>
                 {subjects.classify.map((v) =>
                   <Option value={v.id}>{v.name}</Option>
                 )}
               </Select>
+            </Col> */}
+            <Col className="gutter-row" span={4}>
+              <Cascader options={subjects.subjects} placeholder="请选择父课程" onChange={handleChangeSubjects} changeOnSelect />
             </Col>
             <Col className="gutter-row" span={4}>
               <Input placeholder="请填写课程名" value={subjectName} onChange={handleUpdateSubjectName} />
@@ -184,12 +212,14 @@ function SubjectList(props) {
           </Col>
           <Col className="gutter-row" span={10}>
             分类：
-            <Select defaultValue={0} style={{ width: 120 }} value={batchAddSubjectClassify} onSelect={handleBatchAddSubjectClassify}>
+            {/* <Select defaultValue={0} style={{ width: 120 }} value={batchAddSubjectClassify} onSelect={handleBatchAddSubjectClassify}>
               <Option value={0}>无</Option>
               {subjects.classify.map((v) =>
                 <Option value={v.id}>{v.name}</Option>
               )}
-            </Select>
+            </Select> */}
+            <Cascader options={subjects.subjects} placeholder="请选择父课程" onChange={handleBatchChangeSubjects} changeOnSelect />
+
           </Col>
         </Space>
       </Modal>
