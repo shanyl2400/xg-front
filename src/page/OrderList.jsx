@@ -9,8 +9,6 @@ import { hideTelephone } from "../utils/telephone";
 const pageSize = 10;
 const { Option } = Select;
 
-let pageIndex = 1;
-let queryValue = {};
 function OrderList(props) {
   const columns = [
     // {
@@ -77,6 +75,7 @@ function OrderList(props) {
   ];
   let history = useHistory();
   let [orders, setOrders] = useState({ total: 0 });
+  let [queryValue, setQueryValue] = useState({});
 
   const fetchData = async (index, pageSize, data) => {
     let res = await listOrdersAPI(index, pageSize, data);
@@ -104,7 +103,7 @@ function OrderList(props) {
   }
 
   let handleChangeFilter = value => {
-    queryValue = value
+    setQueryValue(value);
     fetchData(pageIndex, pageSize, value);
   }
 

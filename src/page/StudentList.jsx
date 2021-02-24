@@ -115,15 +115,15 @@ function StudentList(props) {
   ];
 
   const [students, setStudents] = useState([]);
-  const [status, setStatus] = useState([]);
-  const [noDispatch, setNoDispatch] = useState(true);
+
+  const [filter, setFilter] = useState({});
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(1);
 
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(pageIndex, pageSize, { status: status, noDispatch: noDispatch })
+      let res = await fetchStudent(pageIndex, pageSize, filter)
       setStudents(res);
     }
     fetchData();
@@ -132,13 +132,12 @@ function StudentList(props) {
   let handleChangePage = async (e, curPageSize) => {
     setPageIndex(e);
     setPageIndex(curPageSize);
-    let res = await fetchStudent(e, curPageSize, { status: status, noDispatch: noDispatch })
+    let res = await fetchStudent(e, curPageSize, filter)
     setStudents(res);
   }
 
   let handleStudentFilter = async e => {
-    setStatus(e.status);
-    setNoDispatch(e.noDispatch)
+    setFilter(e);
     let res = await fetchStudent(pageIndex, pageSize, e)
     setStudents(res);
   }
@@ -149,7 +148,7 @@ function StudentList(props) {
         <Breadcrumb.Item>学员管理</Breadcrumb.Item>
         <Breadcrumb.Item>我的名单</Breadcrumb.Item>
       </Breadcrumb>
-      <StudentFilter status={[]} onFilterChange={handleStudentFilter} isDispatched={true} />
+      <StudentFilter hideAuthor={true} status={[]} onFilterChange={handleStudentFilter} isDispatched={false} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

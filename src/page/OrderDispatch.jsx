@@ -93,16 +93,15 @@ function OrderDispatch(props) {
   ];
 
   const [students, setStudents] = useState([]);
-  const [status, setStatus] = useState([1, 3]);
-  const [noDispatch, setNoDispatch] = useState(true);
 
+  const [filter, setFilter] = useState({ status: [1, 3], noDispatch: true });
 
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(1);
   let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      let res = await fetchStudent(pageIndex, pageSize, { status: status, noDispatch: noDispatch });
+      let res = await fetchStudent(pageIndex, pageSize, filter);
       setStudents(res);
     }
     fetchData();
@@ -111,14 +110,13 @@ function OrderDispatch(props) {
   let handleChangePage = async (e, curPageSize) => {
     setPageIndex(e);
     setPageSize(curPageSize);
-    let res = await fetchStudent(e, curPageSize, { status: status, noDispatch: noDispatch });
+    let res = await fetchStudent(e, curPageSize, filter);
     setStudents(res);
   }
   let handleStudentFilter = async e => {
     // status = e.status;
     // noDispatch = e.noDispatch;
-    setStatus(e.status)
-    setNoDispatch(e.noDispatch)
+    setFilter(e);
     let res = await fetchStudent(pageIndex, pageSize, e);
     setStudents(res);
   }

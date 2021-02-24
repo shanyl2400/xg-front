@@ -6,7 +6,6 @@ import { getOrderStatus } from '../utils/status';
 import { formatDate } from "../utils/date";
 import { hideTelephone } from "../utils/telephone";
 import OrderFilter from "../component/OrderFilter";
-let queryValue = {};
 function AuthorOrderList(props) {
   const columns = [
     // {
@@ -68,6 +67,7 @@ function AuthorOrderList(props) {
   ];
   let history = useHistory();
   let [orders, setOrders] = useState({ total: 0 })
+  const [queryValue, setQueryValue] = useState({});
 
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(1);
@@ -94,7 +94,7 @@ function AuthorOrderList(props) {
   }
 
   let handleChangeFilter = value => {
-    queryValue = value;
+    setQueryValue(value);
     fetchData(pageIndex, pageSize, value);
   }
 
@@ -104,7 +104,7 @@ function AuthorOrderList(props) {
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
         <Breadcrumb.Item>我的派单</Breadcrumb.Item>
       </Breadcrumb>
-      <OrderFilter onChangeFilter={handleChangeFilter} hasExport={false}></OrderFilter>
+      <OrderFilter hideAuthor={true} onChangeFilter={handleChangeFilter} hasExport={false}></OrderFilter>
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

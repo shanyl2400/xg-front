@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-export const website = "http://localhost:8088"
-// export const website = "http://101.133.139.38:8088"
+// export const website = "http://localhost:8088"
+export const website = "http://101.133.139.38:8088"
 export const baseURL = website + "/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
@@ -96,7 +96,8 @@ export async function createStudentAPI(values) {
 
 export async function listStudentAPI(page, pageSize, data) {
     try {
-        let res = await axios.get(baseURL + `/students/private?page=${page}&page_size=${pageSize}&status=${data.status}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}&order_by=created_at desc`);
+        let params = buildSearchStudentParams(page, pageSize, data)
+        let res = await axios.get(baseURL + `/students/private?` + params);
         return res.data;
     } catch (e) {
         return e.response.data
@@ -105,15 +106,15 @@ export async function listStudentAPI(page, pageSize, data) {
 
 export async function listAllStudentAPI(page, pageSize, data) {
     try {
-        if (data.status == "0") {
-            data.status = "";
-        }
-        let res = await axios.get(baseURL + `/students/?page=${page}&page_size=${pageSize}&status=${data.status}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}&order_by=created_at desc`);
+        let params = buildSearchStudentParams(page, pageSize, data)
+
+        let res = await axios.get(baseURL + `/students/?` + params);
         return res.data;
     } catch (e) {
         return e.response.data
     }
 }
+
 export async function getStudentByIdAPI(id) {
     try {
         let res = await axios.get(baseURL + "/student/" + id);
@@ -412,27 +413,8 @@ export async function revokeOrgReview(id) {
 export async function listOrdersAPI(page, pageSize, data) {
     console.log(data);
     try {
-        let api = `/orders/?page=${page}&page_size=${pageSize}`;
-        if (data != null) {
-            if (data.status != undefined && data.status != 0) {
-                api = api + `&status=${data.status}`;
-            }
-            if (data.orgId != undefined && data.orgId != 0) {
-                api = api + `&to_org_ids=${data.orgId}`;
-            }
-            if (data.orderSource != undefined && data.orderSource != 0) {
-                api = api + `&order_sources=${data.orderSource}`;
-            }
-            if (data.subject != undefined && data.subject != "") {
-                api = api + `&keywords=${data.subject}`;
-            }
-            if (data.createdStartAt != undefined && data.createdEndAt != undefined &&
-                data.createdStartAt != "" && data.createdEndAt != "") {
-                api = api + `&create_start_at=${data.createdStartAt}&create_end_at=${data.createdEndAt}`;
-            }
-        }
-        api = api + `&order_by=updated_at desc`;
-
+        let params = buildSearchOrderParams(page, pageSize, data);
+        let api = `/orders/?` + params;
         let res = await axios.get(baseURL + api);
 
         return res.data;
@@ -441,30 +423,11 @@ export async function listOrdersAPI(page, pageSize, data) {
     }
 }
 
-
-
 export async function exportOrdersAPI(data) {
     try {
-        let api = `/orders/export?page=0`;
-        if (data != null) {
-            if (data.status != undefined && data.status != 0) {
-                api = api + `&status=${data.status}`;
-            }
-            if (data.orgId != undefined && data.orgId != 0) {
-                api = api + `&to_org_ids=${data.orgId}`;
-            }
-            if (data.orderSource != undefined && data.orderSource != 0) {
-                api = api + `&order_sources=${data.orderSource}`;
-            }
-            if (data.subject != undefined && data.subject != "") {
-                api = api + `&keywords=${data.subject}`;
-            }
-            if (data.createdStartAt != undefined && data.createdEndAt != undefined &&
-                data.createdStartAt != "" && data.createdEndAt != "") {
-                api = api + `&create_start_at=${data.createdStartAt}&create_end_at=${data.createdEndAt}`;
-            }
-        }
-        api = api + `&order_by=updated_at desc`;
+        console.log(data)
+        let params = buildSearchOrderParams(1, null, data);
+        let api = `/orders/export?` + params;
 
         // let res = await axios.get(baseURL + api);
         let res = await Download("get", baseURL + api, null, "派单记录.xlsx")
@@ -476,26 +439,8 @@ export async function exportOrdersAPI(data) {
 
 export async function listAuthOrdersAPI(page, pageSize, data) {
     try {
-        let api = `/orders/author?page=${page}&page_size=${pageSize}`;
-        if (data != null) {
-            if (data.status != undefined && data.status != 0) {
-                api = api + `&status=${data.status}`;
-            }
-            if (data.orgId != undefined && data.orgId != 0) {
-                api = api + `&to_org_ids=${data.orgId}`;
-            }
-            if (data.orderSource != undefined && data.orderSource != 0) {
-                api = api + `&order_sources=${data.orderSource}`;
-            }
-            if (data.subject != undefined && data.subject != "") {
-                api = api + `&keywords=${data.subject}`;
-            }
-            if (data.createdStartAt != undefined && data.createdEndAt != undefined &&
-                data.createdStartAt != "" && data.createdEndAt != "") {
-                api = api + `&create_start_at=${data.createdStartAt}&create_end_at=${data.createdEndAt}`;
-            }
-        }
-        api = api + `&order_by=updated_at desc`;
+        let params = buildSearchOrderParams(page, pageSize, data);
+        let api = `/orders/author?` + params;
 
         let res = await axios.get(baseURL + api)
         // let res = await axios.get(baseURL + "/orders/author?page=" + page + "&page_size=" + pageSize)
@@ -718,4 +663,68 @@ function executeDownload(data, fileName) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function buildSearchOrderParams(page, pageSize, data) {
+    let params = `page=${page}&page_size=${pageSize}`;
+    if (data != null) {
+        if (data.status == "0") {
+            data.status = "";
+        }
+        if (data.orderSource == "0") {
+            data.orderSource = "";
+        }
+        if (data.author == "0") {
+            data.author = "";
+        }
+        if (data.orgId == "0") {
+            data.orgId = "";
+        }
+
+        params = params + `&status=${data.status}&to_org_ids=${data.orgId}&keywords=${data.query ? data.query : ""}`
+        params = params + `&author_id=${data.author}&order_sources=${data.orderSource}&intent_subjects=${data.subject ? data.subject : ""}&address=${data.address ? data.address : ""}`
+        if (data.startAt != null && data.endAt != null) {
+            params = params + `&created_start_at=${data.startAt}&created_end_at=${data.endAt}`
+        }
+
+        //order by
+        let orderBy = "created_at"
+        switch (data.orderBy) {
+            case 1:
+                orderBy = "created_at desc";
+                break;
+            case 2:
+                orderBy = "updated_at desc";
+                break;
+            default:
+                orderBy = "created_at desc";
+                break;
+        }
+        params = params + `&order_by=${orderBy}`
+    }
+    return params
+}
+
+function buildSearchStudentParams(page, pageSize, data) {
+    let params = `page=${page}&page_size=${pageSize}`;
+    if (data != null) {
+        if (data.status == "0") {
+            data.status = "";
+        }
+        if (data.orderSource == "0") {
+            data.orderSource = "";
+        }
+        if (data.author_id == "0") {
+            data.author_id = "";
+        }
+        params = params + `&status=${data.status}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}`
+        params = params + `&author_id=${data.author}&order_source_ids=${data.orderSource}&intent_subjects=${data.subject ? data.subject : ""}&address=${data.address ? data.address : ""}`
+        if (data.timeRange != null && data.timeRange.length == 2) {
+            params = params + `&created_start_at=${data.timeRange[0]}&created_end_at=${data.timeRange[1]}`
+        }
+
+        //order by
+        params = params + `&order_by=created_at desc`
+    }
+    return params
 }
