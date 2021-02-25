@@ -106,7 +106,7 @@ function UserList(props) {
       </Breadcrumb>
       <UserFilter onChangeFilter={handleChangeFilter} />
       <Row>
-        <Col span={12}>
+        <Col span={24}>
           <Table
             pagination={false}
             style={{ marginTop: "30px" }}

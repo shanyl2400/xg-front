@@ -136,7 +136,7 @@ function UpdateOrg(props) {
                     </Button>
                 </Form.Item>
             </Form>
-        </div>
+        </div >
     );
 }
 

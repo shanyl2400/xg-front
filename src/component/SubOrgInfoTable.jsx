@@ -162,7 +162,6 @@ function SubOrgInfoTable(props) {
     console.log(props.value);
 
     return (
-
         <div style={{ width: "100%" }}>
             <Table pagination={{ position: 'bottom', pageSize: 5, size: "small" }} style={{ width: "100%" }} columns={columns} dataSource={orgs} />
             {isEditMode() && <Button onClick={handleAddSubOrgModel}>添加分校</Button>}

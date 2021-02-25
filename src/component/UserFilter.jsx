@@ -1,4 +1,4 @@
-import { Col, Row, message, Input, Select } from "antd";
+import { Col, Space, message, Input, Select } from "antd";
 import React, { useState, useEffect } from 'react';
 import { listRolesAPI, listOrgsAPI } from "../api/api";
 
@@ -57,7 +57,7 @@ function UserFilter(props) {
     }, []);
     return (
         <div>
-            <Row style={{ marginTop: 20, marginBottom: -10 }}>
+            <Space size={[10, 5]} style={{ marginTop: 20, marginBottom: -10 }} wrap>
                 <Col>
                     角色：<Select defaultValue={0} style={{ width: 120 }} value={filterRole} onChange={handleChangeRoles} >
                         <Option value={0}>全部</Option>
@@ -66,7 +66,7 @@ function UserFilter(props) {
                         ))}
                     </Select>
                 </Col>
-                <Col offset={1}>
+                <Col>
                     机构：<Select defaultValue={0} style={{ width: 120 }} value={filterOrg} onChange={handleChangeOrgs} >
                         <Option value={0}>全部</Option>
                         {orgs != null && orgs.map((value =>
@@ -74,7 +74,7 @@ function UserFilter(props) {
                         ))}
                     </Select>
                 </Col>
-                <Col offset={1}>
+                <Col>
                     搜索： <Search
                         placeholder="请输入用户名"
                         onChange={handleChangeQuery}
@@ -83,7 +83,7 @@ function UserFilter(props) {
                         value={name}
                     />
                 </Col>
-            </Row>
+            </Space>
 
         </div>
     );

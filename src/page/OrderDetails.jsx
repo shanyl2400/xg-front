@@ -224,9 +224,9 @@ function OrderDetails(props) {
                 dataSource={orderInfo.RemarkInfo}
             />
 
-            <Row style={{ marginTop: 8 }} gutter={[16, 16]} >
-                <Col offset={20} span={1}><Button onClick={() => openAddMarkModel()} type="primary">回访</Button></Col>
-                <Col offset={1} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
+            <Row justify="end" style={{ marginTop: 8 }} gutter={[16, 16]} >
+                <Col><Button onClick={() => openAddMarkModel()} type="primary">回访</Button></Col>
+                <Col><Button onClick={() => history.goBack()}>返回</Button></Col>
             </Row>
 
             <AddMarkModel

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  Button, Modal, Select, Row, Col, message } from 'antd';
+import { Button, Modal, Select, Row, Col, message } from 'antd';
 import { createOrderAPI } from '../api/api';
 
 const { Option } = Select;
@@ -26,7 +26,7 @@ function CreateOrderModal(props) {
             message.success("派单成功");
             onClose();
         } else {
-            message.error("派单失败");
+            message.error("派单失败:" + res.err_msg);
             onClose();
         }
     }
@@ -51,8 +51,8 @@ function CreateOrderModal(props) {
                         </Select>
                     </Col>
                 </Row>
-                <Row>
-                    <Col offset={16}>
+                <Row justify="end">
+                    <Col >
                         <Button htmlType="button" onClick={onClose}>
                             返回
                         </Button>

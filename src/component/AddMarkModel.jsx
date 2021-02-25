@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Row, Col, Button, message } from 'antd';
-import { addOrderMarkAPI} from '../api/api';
+import { addOrderMarkAPI } from '../api/api';
 import TextArea from 'antd/lib/input/TextArea';
 
 const layout = {
@@ -16,11 +16,11 @@ function AddMarkModel(props) {
     let onSubmit = async () => {
         console.log(value);
         let res = await addOrderMarkAPI(props.id, value)
-        if(res.err_msg == "success"){
+        if (res.err_msg == "success") {
             message.success("添加回访成功");
             props.closeModel();
             props.refreshData();
-        }else{
+        } else {
             message.error("添加回访失败，" + res.err_msg);
         }
     }
@@ -33,20 +33,20 @@ function AddMarkModel(props) {
             visible={props.visible}
             footer={null}
         >
-                <Row gutter={[16, 16]}>
+            <Row gutter={[16, 16]}>
                 <TextArea
                     value={value}
                     onChange={changeValue}
                     placeholder="请填写回访信息"
                     autoSize={{ minRows: 3, maxRows: 5 }}
-                    />
-                </Row>
+                />
+            </Row>
 
-            <Row style={{marginTop:30}}>
-                <Col offset={15} span={4}>
+            <Row style={{ marginTop: 30 }} justify="end">
+                <Col>
                     <Button onClick={onCancel}>取消</Button>
                 </Col>
-                <Col span={4}>
+                <Col offset={1}>
                     <Button onClick={onSubmit} type="primary">提交</Button>
                 </Col>
             </Row>

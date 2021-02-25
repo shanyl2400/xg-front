@@ -3,25 +3,9 @@ import { Breadcrumb, Table, Col, Input, Button, Row, Space, Modal, message } fro
 import { listOrderSourcesAPI, createOrderSourcesAPI, deleteOrderSourcesAPI } from '../api/api';
 import { DeleteOutlined } from '@ant-design/icons';
 const { confirm } = Modal;
-const data = [
-  {
-    "id": 1,
-    "name": "百度"
-  },
-  {
-    "id": 2,
-    "name": "360"
-  }
-];
-const total = 10;
-const pageSize = 10;
+
 function OrderResource(props) {
   const columns = [
-    {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
     {
       title: '订单来源',
       dataIndex: 'name',
@@ -92,11 +76,11 @@ function OrderResource(props) {
     <div style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-        <Breadcrumb.Item>订单列表</Breadcrumb.Item>
+        <Breadcrumb.Item>订单来源列表</Breadcrumb.Item>
       </Breadcrumb>
 
       <Row>
-        <Col className="gutter-row" span={6}>
+        <Col className="gutter-row" span={18}>
           <Table
             pagination={false}
             style={{ marginTop: "30px" }}

@@ -156,7 +156,7 @@ function SubjectList(props) {
       </Breadcrumb>
       <Title level={4} style={{ marginTop: 20, marginBottom: 20 }}>课程列表</Title>
       <Row>
-        <Col className="gutter-row" span={10}>
+        <Col className="gutter-row" >
 
           <Tree
             showLine={true}
@@ -169,13 +169,12 @@ function SubjectList(props) {
       </Row>
 
       <Row style={{ marginTop: "20px" }}>
-        <Col className="gutter-row" span={20}>
 
-          <Row>
-            <Col className="gutter-row" span={2}>
-              课程名：
+        <Space wrap>
+          <Col className="gutter-row" >
+            课程名：
         </Col>
-            {/* <Col className="gutter-row" span={4}>
+          {/* <Col className="gutter-row" span={4}>
               <Select defaultValue={0} style={{ width: 120 }} value={subjectClassify} onSelect={handleUpdateSubjectClassify}>
                 <Option value={0}>无</Option>
                 {subjects.classify.map((v) =>
@@ -183,19 +182,18 @@ function SubjectList(props) {
                 )}
               </Select>
             </Col> */}
-            <Col className="gutter-row" span={4}>
-              <Cascader options={subjects.subjects} placeholder="请选择父课程" onChange={handleChangeSubjects} changeOnSelect />
-            </Col>
-            <Col className="gutter-row" span={4}>
-              <Input placeholder="请填写课程名" value={subjectName} onChange={handleUpdateSubjectName} />
-            </Col>
-            <Col style={{ marginLeft: "20px" }} className="gutter-row" span={6}>
-              <Button onClick={handleAddSubject} shape="circle" type="primary">+</Button>
-              <Button onClick={handleBatchAddSubjects} type="primary" style={{ marginLeft: 10 }}>批量加入</Button>
-            </Col>
-          </Row>
+          <Col className="gutter-row" >
+            <Cascader options={subjects.subjects} placeholder="请选择父课程" onChange={handleChangeSubjects} changeOnSelect />
+          </Col>
+          <Col className="gutter-row" >
+            <Input placeholder="请填写课程名" value={subjectName} onChange={handleUpdateSubjectName} />
+          </Col>
+          <Col style={{ marginLeft: "20px" }} className="gutter-row">
+            <Button onClick={handleAddSubject} shape="circle" type="primary">+</Button>
+            <Button onClick={handleBatchAddSubjects} type="primary" style={{ marginLeft: 10 }}>批量加入</Button>
+          </Col>
+        </Space>
 
-        </Col>
       </Row>
 
       <Modal title="批量加入对话框" visible={batchAddModalVisible} onOk={handleSubmitBatchAddModal} onCancel={handleCloseBatchAddModal}>
