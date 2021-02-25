@@ -1,4 +1,4 @@
-import { Col, Row, Select, Input, TreeSelect, Cascader, DatePicker, message } from "antd";
+import { Col, Space, Select, Input, TreeSelect, Form, Cascader, DatePicker, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { listOrgsAPI, listSubjectsTreeAPI, listOrderSourcesAPI, listUsersWithOrgIdAPI } from '../api/api';
 import options from '../component/address';
@@ -175,33 +175,39 @@ function StudentFilter(props) {
         fetchData();
     }, [])
     return (
-        <div>
-            <Row style={{ marginTop: 20, marginBottom: -10 }}>
-                <Col>
-                    状态：<Select mode="multiple" value={status} style={{ width: 120 }} onChange={handleChangeStatus}>
-                        {/* <Option value={0}>全部</Option> */}
-                        <Option value={1}>已创建</Option>
-                        <Option value={3}>冲单成功</Option>
-                        <Option value={2}>冲单失败</Option>
-                    </Select>
-                </Col>
-                <Col offset={1}>
-                    类型：<Select value={isDispatched} style={{ width: 120 }} onChange={handleChangeIsDispatch}>
-                        <Option value={false}>所有名单</Option>
-                        <Option value={true}>未派名单</Option>
-                    </Select>
-                </Col>
-
-                <Col offset={1}>
-                    订单来源：<Select defaultValue={0} value={orderSource} style={{ width: 120 }} onChange={changeOrderSource}>
-                        <Option value={0} key={0}>所有来源</Option>
-                        {formDatas.orderSources != null && formDatas.orderSources.map((v) =>
-                            <Option value={v.id} key={v.id}>{v.name}</Option>
-                        )}
-                    </Select>
-                </Col>
-                {props.hideAuthor ? "" : (<Col offset={1}>
-                    录单员：
+        <Space size={[30, 0]} style={{ marginTop: 20, marginBottom: -10 }} wrap>
+            <Form.Item
+                label="状态："
+            >
+                <Select mode="multiple" value={status} style={{ width: 120 }} onChange={handleChangeStatus}>
+                    {/* <Option value={0}>全部</Option> */}
+                    <Option value={1}>已创建</Option>
+                    <Option value={3}>冲单成功</Option>
+                    <Option value={2}>冲单失败</Option>
+                </Select>
+            </Form.Item>
+            <Form.Item
+                label="类型："
+            >
+                <Select value={isDispatched} style={{ width: 120 }} onChange={handleChangeIsDispatch}>
+                    <Option value={false}>所有名单</Option>
+                    <Option value={true}>未派名单</Option>
+                </Select>
+            </Form.Item>
+            <Form.Item
+                label="订单来源："
+            >
+                <Select defaultValue={0} value={orderSource} style={{ width: 120 }} onChange={changeOrderSource}>
+                    <Option value={0} key={0}>所有来源</Option>
+                    {formDatas.orderSources != null && formDatas.orderSources.map((v) =>
+                        <Option value={v.id} key={v.id}>{v.name}</Option>
+                    )}
+                </Select>
+            </Form.Item>
+            {props.hideAuthor ? "" : (
+                <Form.Item
+                    label="录单员："
+                >
                     <Select
                         defaultValue={0}
                         style={{ width: 140 }}
@@ -216,48 +222,53 @@ function StudentFilter(props) {
                         {formDatas.users != null && formDatas.users.map((v) =>
                             <Option value={v.user_id} key={v.user_id}>{v.name}</Option>
                         )}
-                    </Select>
-                </Col>)}
+                    </Select></Form.Item>
+            )}
 
-
-                <Col offset={1} span={4}>
-                    <TreeSelect
-                        treeData={formDatas.subjectsTree}
-                        style={{ width: "100%" }}
-                        placeholder='请选择专业'
-                        value={subject}
-                        allowClear={true}
-                        onChange={changeSubjects}
-                        labelInValue={true}
-                    />
-                </Col>
-            </Row>
-            <Row style={{ marginTop: 20, marginBottom: -10 }}>
-                <Col>
-                    地址：<Cascader
-                        showSearch={{ addrFilter }}
-                        options={options}
-                        placeholder="请选择"
-                        value={address}
-                        onChange={changeAddress}
-                        changeOnSelect />
-                </Col>
-                <Col offset={1} span={6}>
-                    <RangePicker
-                        value={dates}
-                        onCalendarChange={changeTimeRange} />
-                </Col>
-                <Col offset={1}>
-                    搜索： <Search
-                        placeholder="请输入搜索内容"
-                        onSearch={value => handleChangeSearch(value)}
-                        style={{ width: 200 }}
-                        value={keywords}
-                        onChange={e => setKeywords(e.target.value)}
-                    />
-                </Col>
-            </Row>
-        </div>
+            <Form.Item
+                label="专业："
+                style={{ width: 200 }}
+            >
+                <TreeSelect
+                    treeData={formDatas.subjectsTree}
+                    style={{ width: "100%" }}
+                    placeholder='请选择专业'
+                    value={subject}
+                    allowClear={true}
+                    onChange={changeSubjects}
+                    labelInValue={true}
+                />
+            </Form.Item>
+            <Form.Item
+                label="地址："
+            >
+                <Cascader
+                    showSearch={{ addrFilter }}
+                    options={options}
+                    placeholder="请选择"
+                    value={address}
+                    onChange={changeAddress}
+                    changeOnSelect />
+            </Form.Item>
+            <Form.Item
+                label="日期："
+            >
+                <RangePicker
+                    value={dates}
+                    onCalendarChange={changeTimeRange} />
+            </Form.Item>
+            <Form.Item
+                label="搜索："
+            >
+                <Search
+                    placeholder="请输入搜索内容"
+                    onSearch={value => handleChangeSearch(value)}
+                    style={{ width: 200 }}
+                    value={keywords}
+                    onChange={e => setKeywords(e.target.value)}
+                />
+            </Form.Item>
+        </Space>
 
     )
 }

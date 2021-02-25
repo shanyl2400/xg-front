@@ -1,4 +1,4 @@
-import { Col, message, Row, Select, Input, DatePicker, Radio, TreeSelect, Cascader, Button, Modal } from "antd";
+import { message, Space, Select, Input, Form, DatePicker, Radio, TreeSelect, Cascader, Button, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { listOrderSourcesAPI, listOrgsAPI, listUsersWithOrgIdAPI, listSubjectsTreeAPI, exportOrdersAPI } from "../api/api";
 import { ExportOutlined } from '@ant-design/icons';
@@ -217,29 +217,32 @@ function OrderFilter(props) {
 
     return (
         <div>
-            <Row style={{ marginTop: 20 }}>
-                <Col>
-                    机构：<Select defaultValue={0} style={{ width: 120 }} value={orgId} onChange={handleChangeOrg} >
+            <Space size={[30, 0]} style={{ marginTop: 20 }} wrap>
+                <Form.Item
+                    label="机构："
+                >
+                    <Select defaultValue={0} style={{ width: 120 }} value={orgId} onChange={handleChangeOrg} >
                         <Option value={0}>全部</Option>
                         {selectItems.orgs != null && selectItems.orgs != undefined && selectItems.orgs.map((value =>
                             <Option key={value.id} value={value.id}>{value.name}</Option>
                         ))}
                     </Select>
-                </Col>
+                </Form.Item>
 
-                <Col offset={1}>
-                    状态：<Select defaultValue={0} value={status} style={{ width: 120 }} onChange={handleChangeStatus}>
+                <Form.Item
+                    label="状态："
+                >
+                    <Select defaultValue={0} value={status} style={{ width: 120 }} onChange={handleChangeStatus}>
                         <Option value={0}>全部</Option>
                         <Option value={1}>未报名</Option>
                         <Option value={2}>已报名</Option>
-                        <Option value={3}>
-                            已退费
-            </Option>
+                        <Option value={3}>已退费</Option>
                     </Select>
-                </Col>
+                </Form.Item>
 
-                {props.hideAuthor ? "" : (<Col offset={1}>
-                    录单员：
+                {props.hideAuthor ? "" : (<Form.Item
+                    label="录单员："
+                >
                     <Select
                         defaultValue={0}
                         style={{ width: 140 }}
@@ -255,29 +258,24 @@ function OrderFilter(props) {
                             <Option value={v.user_id} key={v.user_id}>{v.name}</Option>
                         )}
                     </Select>
-                </Col>)}
 
-            </Row>
-            <Row style={{ marginTop: 20 }}>
+                </Form.Item>)}
 
-                <Col>
-                    地址：<Cascader
+                <Form.Item
+                    label="地址："
+                >
+                    <Cascader
                         showSearch={{ addrFilter }}
                         options={options}
                         placeholder="请选择"
                         value={address}
                         onChange={changeAddress}
                         changeOnSelect />
-                </Col>
-                <Col offset={1}>
-                    订单来源：<Select defaultValue={0} value={orderSource} style={{ width: 120 }} onChange={handleChangeOrderSoruces}>
-                        <Option value={0}>全部</Option>
-                        {selectItems.orderSources != null && selectItems.orderSources != undefined && selectItems.orderSources.map((value =>
-                            <Option key={value.id} value={value.id}>{value.name}</Option>
-                        ))}
-                    </Select>
-                </Col>
-                <Col offset={1} span={4}>
+                </Form.Item>
+                <Form.Item
+                    label="专业："
+                    style={{ width: 200 }}
+                >
                     <TreeSelect
                         treeData={formDatas.subjectsTree}
                         style={{ width: "100%" }}
@@ -287,35 +285,53 @@ function OrderFilter(props) {
                         onChange={changeSubjects}
                         labelInValue={true}
                     />
-                </Col>
-
-            </Row>
-            <Row style={{ marginTop: 20 }}>
-                <Col >
-                    搜索： <Search
+                </Form.Item>
+                <Form.Item
+                    label="订单来源："
+                >
+                    <Select defaultValue={0} value={orderSource} style={{ width: 120 }} onChange={handleChangeOrderSoruces}>
+                        <Option value={0}>全部</Option>
+                        {selectItems.orderSources != null && selectItems.orderSources != undefined && selectItems.orderSources.map((value =>
+                            <Option key={value.id} value={value.id}>{value.name}</Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    label="搜索："
+                >
+                    <Search
                         placeholder="请输入搜索内容"
                         onSearch={value => handleChangeSubject(value)}
                         style={{ width: 200 }}
                     />
-                </Col>
-                <Col offset={1} span={6}>
+                </Form.Item>
+                <Form.Item
+                    label="时间："
+                >
                     <RangePicker
                         value={dates}
                         onCalendarChange={changeTimeRange} />
-                </Col>
-                <Col offset={1}>
-                    排序：
+
+                </Form.Item>
+                <Form.Item
+                    label="排序："
+                >
+
                     <Radio.Group value={orderBy} onChange={changeOrderBy}>
                         <Radio.Button value={1}>派单时间</Radio.Button>
                         <Radio.Button value={2}>回访时间</Radio.Button>
                     </Radio.Group>
-                </Col>
 
-                {props.hasExport && (<Col offset={1}>
+                </Form.Item>
+
+                {props.hasExport && (<Form.Item
+                >
+
                     {/* <Button onClick={doExport}>导出</Button> */}
                     <Button onClick={doExport} icon={<ExportOutlined />} >导出</Button>
-                </Col>)}
-            </Row>
+                </Form.Item>
+                )}
+            </Space>
 
         </div>
     );
