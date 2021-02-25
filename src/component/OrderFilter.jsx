@@ -14,7 +14,7 @@ let createdEndAt = "";
 async function getOrderSources() {
     let rawSources = await listOrderSourcesAPI();
     if (rawSources.err_msg != "success") {
-        message.error("无法获取订单来源信息：", rawSources.err_msg);
+        message.error("无法获取订单来源信息：" + rawSources.err_msg);
         return [];
     }
     return rawSources.sources;
@@ -22,7 +22,7 @@ async function getOrderSources() {
 async function getUsers() {
     let users = await listUsersWithOrgIdAPI(1);
     if (users.err_msg != "success") {
-        message.error("无法获取订单来源信息：", users.err_msg);
+        message.error("无法获取订单来源信息：" + users.err_msg);
         return [];
     }
     return users.users;

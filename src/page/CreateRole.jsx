@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Breadcrumb, Input, Form, Button, Checkbox, message } from 'antd';
-import {listAuths, createRole} from "../api/api";
+import { listAuths, createRole } from "../api/api";
 const layout = {
   labelCol: { span: 3 },
   wrapperCol: { span: 10 },
@@ -28,7 +28,7 @@ function CreateRole(props) {
       message.success("创建角色成功");
       form.resetFields();
     } else {
-      message.error("创建角色失败，", res.err_msg);
+      message.error("创建角色失败，" + res.err_msg);
       return
     }
   }
@@ -38,7 +38,7 @@ function CreateRole(props) {
     if (res.err_msg == "success") {
       console.log(res.auths);
       let auths = [];
-      for(let i = 0; i < res.auths.length; i ++){
+      for (let i = 0; i < res.auths.length; i++) {
         auths = auths.concat({
           key: res.auths[i].id,
           label: res.auths[i].name,
@@ -48,7 +48,7 @@ function CreateRole(props) {
 
       setAuths(auths);
     } else {
-      message.error("获取用户列表失败，", res.err_msg);
+      message.error("获取用户列表失败，" + res.err_msg);
       return
     }
   }
@@ -68,7 +68,7 @@ function CreateRole(props) {
         initialValues={{ remember: true }}
         form={form}>
         <Form.Item name="name" label="角色名" rules={[{ required: true }]} >
-          <Input style={{ width: 220 }} onChange={handleChange}/>
+          <Input style={{ width: 220 }} onChange={handleChange} />
         </Form.Item>
 
         <Form.Item name="auth_ids" label="权限" rules={[{ required: true }]} >

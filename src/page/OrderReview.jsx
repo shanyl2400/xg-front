@@ -90,7 +90,7 @@ function OrderReview(props) {
       setPaymentInfo(res.data.records);
       setPaymentTotal(res.data.total);
     } else {
-      message.error("获取审核订单失败,", res.err_msg);
+      message.error("获取审核订单失败," + res.err_msg);
     }
   }
   const handleChangePage = e => {

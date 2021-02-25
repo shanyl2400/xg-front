@@ -81,7 +81,7 @@ function UserList(props) {
         total: res.total,
       });
     } else {
-      message.error("获取用户列表失败，", res.err_msg);
+      message.error("获取用户列表失败，" + res.err_msg);
       return
     }
   }

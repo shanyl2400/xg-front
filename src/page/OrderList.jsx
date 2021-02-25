@@ -85,7 +85,7 @@ function OrderList(props) {
         data: res.data.orders
       });
     } else {
-      message.error("获取订单失败：");
+      message.error("获取订单失败");
     }
   }
 

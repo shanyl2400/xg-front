@@ -30,7 +30,7 @@ function CreateUser(props) {
     if (res.err_msg == "success") {
       roles = res.roles;
     } else {
-      message.error("获取角色列表失败，", res.err_msg);
+      message.error("获取角色列表失败，" + res.err_msg);
       return
     }
 
@@ -38,7 +38,7 @@ function CreateUser(props) {
     if (res2.err_msg == "success") {
       orgs = res2.data.orgs;
     } else {
-      message.error("获取角色列表失败，", res2.err_msg);
+      message.error("获取角色列表失败，" + res2.err_msg);
       return
     }
     allRoles = roles;
@@ -60,7 +60,7 @@ function CreateUser(props) {
       form.resetFields();
       message.success("添加角色成功");
     } else {
-      message.error("添加角色失败，", res.err_msg);
+      message.error("添加角色失败，" + res.err_msg);
     }
   }
   const handleChangeOrg = s => {

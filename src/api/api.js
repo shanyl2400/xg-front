@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-// export const website = "http://localhost:8088"
-export const website = "http://101.133.139.38:8088"
+export const website = "http://localhost:8088"
+// export const website = "http://101.133.139.38:8088"
 export const baseURL = website + "/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
@@ -170,6 +170,15 @@ export async function listOrderSourcesAPI() {
 export async function createOrderSourcesAPI(data) {
     try {
         let res = await axios.post(baseURL + "/order_source/", data)
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function deleteOrderSourcesAPI(id) {
+    try {
+        let res = await axios.delete(baseURL + "/order_source/" + id)
         return res.data;
     } catch (e) {
         return e.response.data
