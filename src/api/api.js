@@ -362,6 +362,15 @@ export async function addOrderMarkAPI(id, content) {
     }
 }
 
+export async function updateOrderStatusAPI(data) {
+    try {
+        let res = await axios.put(baseURL + `/order/`, data);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
 export async function createOrgAPI(data) {
     try {
         let res = await axios.post(baseURL + "/org/", data);
@@ -459,9 +468,10 @@ export async function listAuthOrdersAPI(page, pageSize, data) {
     }
 }
 
-export async function listOrgOrdersAPI(page, pageSize) {
+export async function listOrgOrdersAPI(page, pageSize, data) {
     try {
-        let api = "/orders/org?page=" + page + "&page_size=" + pageSize;
+        let params = buildSearchOrderParams(page, pageSize, data);
+        let api = `/orders/org?` + params;
         api = api + `&order_by=updated_at desc`;
         let res = await axios.get(baseURL + api);
         return res.data;

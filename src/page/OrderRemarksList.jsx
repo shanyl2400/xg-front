@@ -26,7 +26,12 @@ function OrderRemarksList(props) {
     //   ),
     // },
     {
-      title: '内容',
+      title: '信息',
+      dataIndex: 'info',
+      key: 'info',
+    },
+    {
+      title: '备注',
       dataIndex: 'content',
       key: 'content',
     },

@@ -69,7 +69,7 @@ function OrderReview(props) {
       render: (text, record) => (
         <Space size="middle">
           <a onClick={() => history.push("/main/order_details/" + record.order_id)}>详情</a>
-          <a onClick={() => { setPaymentData(record); handleReviewOrderModel(true); }}>审批</a>
+          <a onClick={() => { console.log(record); setPaymentData(record); handleReviewOrderModel(true); }}>审批</a>
         </Space>
       ),
     },

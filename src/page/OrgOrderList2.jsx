@@ -8,6 +8,7 @@ import OrderPayModel from '../component/OrderPayModel'
 import OrderDepositModel from '../component/OrderDepositModel'
 import OrderSignupModel from '../component/OrderSignupModel'
 import { hideTelephone } from "../utils/telephone";
+import OrgOrderFilter from '../component/OrgOrderFilter'
 
 import { formatDate } from "../utils/date";
 const pageSize = 10;
@@ -68,6 +69,11 @@ function OrgOrderList(props) {
             render: (text, record) => (
                 <Space size="middle">
                     <a onClick={() => history.push("/main/order_details/" + record.id)}>详情</a>
+                    {/* <Dropdown overlay={getMenu(record)} trigger={['click']}>
+                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            操作<DownOutlined />
+                        </a>
+                    </Dropdown> */}
                 </Space>
             ),
         },
@@ -91,8 +97,9 @@ function OrgOrderList(props) {
     let [depositOrderModelVisible, setDepositOrderModelVisible] = useState(false);
     let [payOrderModelVisible, setPayOrderModelVisible] = useState(false);
     let [orderId, setOrderId] = useState(0);
-    const fetchData = async (index) => {
-        let res = await listOrgOrdersAPI(index, pageSize);
+    let [queryValue, setQueryValue] = useState({});
+    const fetchData = async (index, data) => {
+        let res = await listOrgOrdersAPI(index, pageSize, data);
         if (res.err_msg == "success") {
             setOrders({
                 total: res.data.total,
@@ -103,11 +110,11 @@ function OrgOrderList(props) {
         }
     }
     useEffect(() => {
-        fetchData(currentPage);
+        fetchData(currentPage, queryValue);
     }, []);
 
     let handleChangePage = (page) => {
-        fetchData(page);
+        fetchData(page, queryValue);
         currentPage = page;
     }
 
@@ -178,6 +185,10 @@ function OrgOrderList(props) {
             },
         });
     }
+    const handleChangeFilter = value => {
+        setQueryValue(value);
+        fetchData(currentPage, value);
+    }
 
     return (
         <div style={{ padding: 40, height: "100%", width: "100%" }}>
@@ -185,6 +196,8 @@ function OrgOrderList(props) {
                 <Breadcrumb.Item>订单管理</Breadcrumb.Item>
                 <Breadcrumb.Item>名单列表</Breadcrumb.Item>
             </Breadcrumb>
+
+            <OrgOrderFilter onChangeFilter={handleChangeFilter} />
             <Table
                 pagination={false}
                 style={{ marginTop: "30px" }}

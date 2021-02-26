@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 
-import { FormOutlined } from '@ant-design/icons';
-import { Button, Card, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, Descriptions, message } from 'antd';
-import { getOrderAPI, marksOrderRemarksRead } from '../api/api';
-import { getOrderStatus, getPaymentStatus } from '../utils/status';
+import { FormOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Button, Modal, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, Descriptions, message } from 'antd';
+import { getOrderAPI, marksOrderRemarksRead, acceptPaymentAPI, rejectPaymentAPI } from '../api/api';
+import { getOrderStatus, getPaymentStatusTags } from '../utils/status';
 import AddMarkModel from '../component/AddMarkModel2';
 import { parseAddress } from '../utils/address';
+import { checkAuthority } from '../utils/auth';
 const { TextArea } = Input;
 const { Title } = Typography;
+const { confirm } = Modal;
 function OrderDetails(props) {
     const remarksColumns = [
         {
@@ -30,7 +32,12 @@ function OrderDetails(props) {
             ),
         },
         {
-            title: '内容',
+            title: '信息',
+            dataIndex: 'info',
+            key: 'info',
+        },
+        {
+            title: '备注',
             dataIndex: 'content',
             key: 'content',
         },
@@ -69,16 +76,16 @@ function OrderDetails(props) {
             dataIndex: 'title',
             key: 'title'
         },
-        {
-            title: '收支',
-            dataIndex: 'mode',
-            key: 'mode',
-            render: mode => (
-                <span>
-                    {mode == 1 ? <Tag color="green">收入</Tag> : <Tag color="red">支出</Tag>}
-                </span>
-            )
-        },
+        // {
+        //     title: '收支',
+        //     dataIndex: 'mode',
+        //     key: 'mode',
+        //     render: mode => (
+        //         <span>
+        //             {mode == 1 ? <Tag color="green">收入</Tag> : <Tag color="red">支出</Tag>}
+        //         </span>
+        //     )
+        // },
         {
             title: '金额',
             dataIndex: 'amount',
@@ -95,10 +102,27 @@ function OrderDetails(props) {
             key: 'status',
             render: (status) => (
                 <span>
-                    {getPaymentStatus(status)}
+                    {getPaymentStatusTags(status)}
                 </span>
             )
         },
+        {
+            title: '审批',
+            dataIndex: 'action',
+            key: 'action',
+            render: (text, record) => {
+                let disableApprove = record.status != 1;
+                return (<div>
+                    {disableApprove ? "" : (
+                        <div>
+                            <a onClick={() => { approveOrder(record.id) }}>通过</a>&nbsp;/&nbsp;
+                            <a onClick={() => { rejectOrder(record.id) }}>拒绝</a>
+                        </div>
+                    )}
+
+                </div>)
+            },
+        }
     ];
     let { id } = useParams();
     let [markModelVisible, setMarkModelVisible] = useState(false);
@@ -135,6 +159,46 @@ function OrderDetails(props) {
             return;
         }
     }
+    const rejectOrder = async (id) => {
+        confirm({
+            title: '确认拒绝?',
+            icon: <CloseOutlined style={{ color: "#cf1322" }} />,
+            content: '是否确认拒绝这笔费用？',
+            async onOk() {
+                let res = await rejectPaymentAPI(id)
+                if (res.err_msg == "success") {
+                    message.warn("缴费已拒绝");
+                    fetchData();
+                } else {
+                    message.error("审核失败，" + res.err_msg);
+                }
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+
+    }
+    const approveOrder = async (id) => {
+        confirm({
+            title: '确认通过?',
+            icon: <CheckOutlined style={{ color: "#237804" }} />,
+            content: '是否确认通过这笔费用？',
+            async onOk() {
+                let res = await acceptPaymentAPI(id)
+                if (res.err_msg == "success") {
+                    message.success("缴费已通过");
+                    fetchData();
+                } else {
+                    message.error("审核失败，" + res.err_msg);
+                }
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+
+    }
 
     const handleMarkRead = async id => {
         let res = await marksOrderRemarksRead(id);
@@ -152,6 +216,10 @@ function OrderDetails(props) {
     }
     const closeAddMarkModel = e => {
         setMarkModelVisible(false);
+    }
+
+    if (!checkAuthority("审核订单权限")) {
+        paymentColumns.pop();
     }
 
     return (
@@ -214,6 +282,7 @@ function OrderDetails(props) {
 
             <AddMarkModel
                 id={orderInfo.id}
+                orderStatus={orderInfo.status}
                 visible={markModelVisible}
                 closeModel={closeAddMarkModel}
                 refreshData={fetchData} />

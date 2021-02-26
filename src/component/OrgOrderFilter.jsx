@@ -29,7 +29,7 @@ async function getUsers() {
 }
 
 
-function OrderFilter(props) {
+function OrgOrderFilter(props) {
     const [orgId, setOrgId] = useState(0);
     const [status, setStatus] = useState(0);
     const [orderSource, setOrderSource] = useState(0);
@@ -69,37 +69,16 @@ function OrderFilter(props) {
     }
 
 
-    const fetchOrgs = async () => {
-        let orgRes = await listOrgsAPI();
-        if (orgRes.err_msg != "success") {
-            message.error("无法获取机构列表");
-            return;
-        }
-
-        let orderSourceRes = await listOrderSourcesAPI();
-        if (orderSourceRes.err_msg != "success") {
-            message.error("无法获取机构列表");
-            return;
-        }
-
-        setSelectItems({
-            orgs: orgRes.data.orgs,
-            orderSources: orderSourceRes.sources,
-        });
-    }
     const fetchData = async () => {
         // const sub = await getSubjects();
-        const orderSources = await getOrderSources();
         const subjectsTree = await listSubjectsTreeAPI();
         const users = await getUsers(1);
         setFormDatas({
-            orderSources: orderSources,
             subjectsTree: subjectsTree,
             users: users,
         });
     }
     useEffect(() => {
-        fetchOrgs();
         fetchData();
     }, []);
     let handleChangeStatus = e => {
@@ -219,17 +198,6 @@ function OrderFilter(props) {
         <div>
             <Space size={[30, 0]} style={{ marginTop: 20 }} wrap>
                 <Form.Item
-                    label="机构："
-                >
-                    <Select defaultValue={0} style={{ width: 120 }} value={orgId} onChange={handleChangeOrg} >
-                        <Option value={0}>全部</Option>
-                        {selectItems.orgs != null && selectItems.orgs != undefined && selectItems.orgs.map((value =>
-                            <Option key={value.id} value={value.id}>{value.name}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-
-                <Form.Item
                     label="状态："
                 >
                     <Select defaultValue={0} value={status} style={{ width: 120 }} onChange={handleChangeStatus}>
@@ -242,27 +210,6 @@ function OrderFilter(props) {
                         <Option value={3}>已退费</Option>
                     </Select>
                 </Form.Item>
-
-                {props.hideAuthor ? "" : (<Form.Item
-                    label="录单员："
-                >
-                    <Select
-                        defaultValue={0}
-                        style={{ width: 140 }}
-                        value={author}
-                        onChange={changeAuthor}
-                        showSearch={true}
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        <Option value={0} key={0}>所有人</Option>
-                        {formDatas.users != null && formDatas.users.map((v) =>
-                            <Option value={v.user_id} key={v.user_id}>{v.name}</Option>
-                        )}
-                    </Select>
-
-                </Form.Item>)}
 
                 <Form.Item
                     label="地址："
@@ -288,16 +235,6 @@ function OrderFilter(props) {
                         onChange={changeSubjects}
                         labelInValue={true}
                     />
-                </Form.Item>
-                <Form.Item
-                    label="订单来源："
-                >
-                    <Select defaultValue={0} value={orderSource} style={{ width: 120 }} onChange={handleChangeOrderSoruces}>
-                        <Option value={0}>全部</Option>
-                        {selectItems.orderSources != null && selectItems.orderSources != undefined && selectItems.orderSources.map((value =>
-                            <Option key={value.id} value={value.id}>{value.name}</Option>
-                        ))}
-                    </Select>
                 </Form.Item>
                 <Form.Item
                     label="搜索："
@@ -340,4 +277,4 @@ function OrderFilter(props) {
     );
 }
 
-export default OrderFilter;
+export default OrgOrderFilter;
