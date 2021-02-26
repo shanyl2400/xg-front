@@ -4,6 +4,7 @@ import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import { Layout } from 'antd';
 import SideMenu from './SideMenu';
 import XgRouter from './Router';
+import MyHeader from '../component/MyHeader';
 
 import "./Main.css";
 
@@ -16,15 +17,35 @@ function Main() {
         history.push("/");
     }
 
+    const [collapsed, setCollepsed] = useState(false);
+    const [theme, setTheme] = useState("light");
+
+    const onCollapse = collapsed => {
+        setCollepsed(collapsed);
+    };
+    const onChangeTheme = theme => {
+        setTheme(theme);
+    }
     return (
         <Router>
             <Layout>
-                <Sider>
-                    <SideMenu></SideMenu>
+                <Sider
+                    trigger={null}
+                    theme={theme}
+                    collapsed={collapsed}
+                    onCollapse={onCollapse}
+                    collapsible>
+                    <SideMenu theme={theme} collapsed={collapsed}></SideMenu>
                 </Sider>
-                <Content style={{ padding: '10px 80px', textAlign: "left", backgroundColor: "#ffffff" }}>
-                    <XgRouter />
-                </Content>
+                <Layout style={{ padding: 10, paddingTop: 5, backgroundColor: "#f0f2f5" }}>
+                    <Header style={{ padding: 0, height: 40, lineHeight: 3, marginBottom: 10, backgroundColor: "#fff" }} >
+                        <MyHeader collapsed={collapsed} theme={theme} handleCollapse={onCollapse} handleTheme={onChangeTheme} />
+                    </Header>
+                    <Content style={{ padding: '0px 0px', textAlign: "left", backgroundColor: "#fff" }}>
+                        <XgRouter />
+                    </Content>
+                </Layout>
+
             </Layout>
         </Router >
     );
