@@ -6,6 +6,8 @@ import NewMain from './page/NewMain';
 import zhCN from 'antd/lib/locale/zh_CN';
 import 'antd/dist/antd.css';
 import './App.css';
+// import 'antd/dist/antd.compact.css';
+// import 'antd/dist/antd.dark.css';
 
 function App() {
   return (

@@ -5,6 +5,7 @@ import { Layout } from 'antd';
 import SideMenu from './SideMenu';
 import XgRouter from './Router';
 import MyHeader from '../component/MyHeader';
+import { backgroundColor, bottomColor } from '../utils/bgcolor'
 
 import "./Main.css";
 
@@ -37,11 +38,11 @@ function Main() {
                     collapsible>
                     <SideMenu theme={theme} collapsed={collapsed}></SideMenu>
                 </Sider>
-                <Layout style={{ padding: 10, paddingTop: 5, backgroundColor: "#f0f2f5" }}>
-                    <Header style={{ padding: 0, height: 40, lineHeight: 3, marginBottom: 10, backgroundColor: "#fff" }} >
+                <Layout style={{ padding: 10, paddingTop: 5, backgroundColor: bottomColor() }}>
+                    <Header style={{ padding: 0, height: 40, lineHeight: 3, marginBottom: 10, backgroundColor: backgroundColor() }} >
                         <MyHeader collapsed={collapsed} theme={theme} handleCollapse={onCollapse} handleTheme={onChangeTheme} />
                     </Header>
-                    <Content style={{ padding: '0px 0px', textAlign: "left", backgroundColor: "#fff" }}>
+                    <Content style={{ padding: '0px 0px', textAlign: "left", backgroundColor: backgroundColor() }}>
                         <XgRouter />
                     </Content>
                 </Layout>

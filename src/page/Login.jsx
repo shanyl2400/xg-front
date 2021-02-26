@@ -6,6 +6,7 @@ import { loginAPI } from '../api/api';
 import logo from '../logo.png';
 import axios from "axios"; //导入axios
 import './Login.css'
+import { backgroundColor } from '../utils/bgcolor';
 const { Header, Footer, Content } = Layout;
 
 function saveSideInfo(name, res) {
@@ -88,12 +89,11 @@ function Login(props) {
     }
 
     return (
-        <Layout onKeyUp={keyUp} style={{ background: '#fff' }}>
-            <Header style={{ background: '#fff' }}>
-            </Header>
-            <Content style={{ padding: '20px 50px' }}>
+        <Layout onKeyUp={keyUp} style={{ height: "100%" }}>
 
-                <div className="site-layout-content">
+            <Content style={{ marginTop: 80, padding: '20px 50px' }}>
+
+                <div className="site-layout-content" >
                     <div className="site-login-item">
                         <img className="login-logo" src={logo} />
                     </div>
@@ -135,7 +135,7 @@ function Login(props) {
                     </div>
                 </div>
             </Content>
-            <Footer style={{ background: '#fff' }}></Footer>
+            <Footer ></Footer>
         </Layout>
     );
 

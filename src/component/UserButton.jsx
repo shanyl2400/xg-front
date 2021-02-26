@@ -3,16 +3,17 @@ import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import { UserOutlined } from '@ant-design/icons';
 import { Row, Col, Space, Avatar } from 'antd';
 import { website } from '../api/api';
+import { backgroundColor } from '../utils/bgcolor';
 
 function UserButton(props) {
     const imageUrl = sessionStorage.getItem("avatar");
-    const [background, setBackground] = useState("#fff");
+    const [background, setBackground] = useState(backgroundColor());
     let history = useHistory();
     const mouseEnter = e => {
         setBackground("#1890ff");
     }
     const mouseLeave = e => {
-        setBackground("#fff");
+        setBackground(backgroundColor());
     }
     const clickButton = e => {
         history.push("/main/user_info");
