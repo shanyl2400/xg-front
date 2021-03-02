@@ -48,7 +48,7 @@ function SideMenu(props) {
           textAlign: "center"
         }}>
           <img src={favicon} className="logo" style={{
-            width: "70%"
+            width: "50%"
           }} />
         </div> : <img src={logo} className="logo" style={{
           maxWidth: 256
