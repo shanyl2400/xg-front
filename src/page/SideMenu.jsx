@@ -40,11 +40,19 @@ function SideMenu(props) {
       defaultOpenKeys={[]}
       mode="inline"
     >
-      {props.collapsed ? <img src={favicon} className="logo" style={{
-        width: "100%"
-      }} /> : <img src={logo} className="logo" style={{
-        maxWidth: 256
-      }} />}
+
+
+
+      {props.collapsed ?
+        <div style={{
+          textAlign: "center"
+        }}>
+          <img src={favicon} className="logo" style={{
+            width: "70%"
+          }} />
+        </div> : <img src={logo} className="logo" style={{
+          maxWidth: 256
+        }} />}
 
 
       {checkAuthForMenu(["查看所有订单"], <Menu.Item key={"/main"} icon={<CompassOutlined />}>控制台</Menu.Item>)}
