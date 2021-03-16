@@ -79,7 +79,7 @@ function StudentDetails(props) {
         }
     }
     return (
-        <div style={{ padding: 40, height: "100%", width: "100%" }}>
+        <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
                 <Breadcrumb.Item>学员管理</Breadcrumb.Item>
                 <Breadcrumb.Item>学员信息</Breadcrumb.Item>
@@ -101,47 +101,6 @@ function StudentDetails(props) {
                 <Descriptions.Item label="订单来源" span={3}>{student.order_source_name}</Descriptions.Item>
                 <Descriptions.Item label="备注">{student.note}</Descriptions.Item>
             </Descriptions>
-            {/* <Card style={{ width: "100%", margin: "20px 5px" }}>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>姓名：{student.name}</Col>
-                    <Col span={12}>性别：{student.gender ? "男" : "女"}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>手机号：{student.telephone}</Col>
-                    <Col span={12}>居住地址：{parseAddress(student.address)}{student.address_ext}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>邮箱：{student.email}</Col>
-                    <Col span={12}>订单来源：{student.order_source_name}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={24}>报名意向：
-                        <ul style={{ margin: "10px 10px" }}>
-                            {student.intent_subject != undefined && student.intent_subject.map(item => (
-                                <li key={item}>{item}</li>
-                            ))}
-                        </ul>
-
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={24}>备注：{student.note}</Col>
-                </Row>
-            </Card> */}
-            {/* {student.orders != undefined && student.orders.length > 0 ? <Title level={4}>已推荐机构</Title> : ""}
-            {student.orders != undefined && student.orders.map((order) => (
-                <Card style={{ width: "100%", margin: "20px 5px" }}>
-                    <Row gutter={[16, 16]} key={order.id}>
-                        <Col span={12}>推荐机构：{order.org_name}</Col>
-                    </Row>
-                    <Row gutter={[16, 16]} key={order.id}>
-                        <Col span={12}>推荐学科：{order.intent_subject}</Col>
-                    </Row>
-                    <Row gutter={[16, 16]} key={order.id}>
-                        <Col span={12}>状态：{getStatusName(order.status)}</Col>
-                    </Row>
-                </Card>
-            ))} */}
 
             <Title level={5}>已推荐机构</Title>
             <Table

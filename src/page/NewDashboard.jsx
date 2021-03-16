@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import SummaryData from '../component/SummaryData';
 import ReactEcharts from "echarts-for-react";
 import { getStatisticsSummaryAPI, listUsersWithOrgIdAPI, getStatisticsTableAPI, listOrderSourcesAPI, listOrgsAPI } from '../api/api';
-import { message, Typography, Table, Select, Row, Col } from 'antd';
+import { message, Typography, Statistic, Table, Select, Row, Col, Card } from 'antd';
+import { PayCircleOutlined, TeamOutlined, RiseOutlined, BankOutlined } from '@ant-design/icons';
+
 const { Title } = Typography;
 const { Option } = Select;
 function NewDashboard(props) {
@@ -283,83 +285,86 @@ function NewDashboard(props) {
 
 
   return (
-    <div style={{ padding: 40, height: "100%", width: "100%" }}>
-      <SummaryData color="#c23531" title="总业绩" data={"￥" + summaryData.performance_total} />
+    <div style={{ padding: 0, height: "100%", width: "100%" }}>
+      {/* <SummaryData color="#c23531" title="总业绩" data={"￥" + summaryData.performance_total} />
       <SummaryData color="#cd6d4b" title="总名单量" data={summaryData.students_total} />
       <SummaryData color="#61a0a8" title="机构数量" data={summaryData.orgs_total} />
-      <SummaryData color="#2f4554" title="成功率" data={summaryData.success_rate / 100 + "%"} />
-
-      <Title level={4}>统计信息</Title>
-
-      <div style={{ marginBottom: 20, marginTop: 20 }}>
-        <Select
-          defaultValue={0}
-          value={selectOrgId}
-          onChange={handleUpdateOrg}
-          style={{ width: 120, marginRight: 20 }} >
-          <Option value={0}>所有机构</Option>
-          {orgs.map((v) =>
-            <Option value={v.id} key={v.id}>{v.name}</Option>
-          )}
-        </Select>
-        <Select
-          defaultValue={0}
-          value={selectAuthor}
-          onChange={handleUpdateAuthor}
-          style={{ width: 120, marginRight: 20 }}
-        >
-          <Option value={0}>所有录单员</Option>
-          {users.map((v) =>
-            <Option value={v.user_id} key={v.id}>{v.name}</Option>
-          )}
-        </Select>
-        <Select
-          value={selectPublisherId}
-          onChange={handleUpdatePublisherId}
-          defaultValue={0}
-          style={{ width: 120, marginRight: 20 }}
-        >
-          <Option value={0}>所有派单员</Option>
-          {users.map((v) =>
-            <Option value={v.user_id} key={v.id}>{v.name}</Option>
-          )}
-        </Select>
-        <Select
-          value={selectOrderSource}
-          onChange={handleUpdateOrderSource}
-          defaultValue={0}
-          style={{ width: 120 }}
-        >
-          <Option value={0}>所有来源</Option>
-          {orderSources.map((v) =>
-            <Option value={v.id} key={v.id}>{v.name}</Option>
-          )}
-        </Select>
-      </div>
-      <div style={{ marginTop: 20, width: "80%", marginLeft: "auto", marginRight: "auto" }}>
-        <Table
-          pagination={false}
-          columns={columns}
-          dataSource={data.tableData}
-          bordered
-        />
-      </div>
-      <Row style={{ marginTop: 30 }}>
-        <Col span={12}>
-          <ReactEcharts
-            option={studentOption}
-            notMerge={true}
-            lazyUpdate={true}
-            theme={"theme_name"} />
+      <SummaryData color="#2f4554" title="成功率" data={summaryData.success_rate / 100 + "%"} /> */}
+      <Row gutter={8} style={{ marginBottom: 10 }}>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="总业绩"
+              value={summaryData.performance_total}
+              precision={2}
+              // valueStyle={{ color: '#3f8600' }}
+              prefix={<PayCircleOutlined />}
+            />
+          </Card>
         </Col>
-        <Col span={12}>
-          <ReactEcharts
-            option={performanceOption}
-            notMerge={true}
-            lazyUpdate={true}
-            theme={"theme_name"} />
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="总名单量"
+              value={summaryData.students_total}
+              prefix={<TeamOutlined />}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="机构数量"
+              value={summaryData.orgs_total}
+              prefix={<BankOutlined />}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="成功率"
+              value={summaryData.success_rate / 100}
+              precision={2}
+              prefix={<RiseOutlined />}
+              suffix="%"
+            />
+          </Card>
         </Col>
       </Row>
+
+
+      <Card title="统计信息">
+
+        <div>
+          <Table
+            pagination={false}
+            columns={columns}
+            dataSource={data.tableData}
+            size="small"
+            bordered
+          />
+        </div>
+      </Card>
+      <Card title="统计表" style={{ marginTop: 20 }}>
+        <Row >
+          <Col span={12}>
+            <ReactEcharts
+              option={studentOption}
+              notMerge={true}
+              lazyUpdate={true}
+              theme={"theme_name"} />
+          </Col>
+          <Col span={12}>
+            <ReactEcharts
+              option={performanceOption}
+              notMerge={true}
+              lazyUpdate={true}
+              theme={"theme_name"} />
+          </Col>
+        </Row>
+      </Card>
+
 
     </div>
   );

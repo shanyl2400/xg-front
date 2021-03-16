@@ -101,7 +101,7 @@ function OrgReview(props) {
   }, []);
 
   return (
-    <div style={{ padding: 40, height: "100%", width: "100%" }}>
+    <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>机构管理</Breadcrumb.Item>
         <Breadcrumb.Item>审核机构</Breadcrumb.Item>

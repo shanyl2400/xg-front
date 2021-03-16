@@ -80,7 +80,7 @@ function OrderRemarksList(props) {
   }
 
   return (
-    <div style={{ padding: 40, height: "100%", width: "100%" }}>
+    <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>消息中心</Breadcrumb.Item>
         <Breadcrumb.Item>回访记录</Breadcrumb.Item>

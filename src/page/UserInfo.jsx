@@ -67,7 +67,7 @@ function UserInfo() {
     }
   }
   return (
-    <div style={{ padding: 40, height: "100%", width: "100%" }}>
+    <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>个人中心</Breadcrumb.Item>
       </Breadcrumb>

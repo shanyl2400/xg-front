@@ -5,7 +5,7 @@
   margin: 0px auto;
 }
 .login-logo{
-    height:80px;
+    height:78px;
 }
 .site-login-item{
     margin-top:20px;
@@ -13,4 +13,7 @@
 
 .site-login-item button{
     float:right;
+}
+.login-page{
+    background: url("../bg.svg");
 }

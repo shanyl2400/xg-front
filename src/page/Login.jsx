@@ -89,16 +89,17 @@ function Login(props) {
     }
 
     return (
-        <Layout onKeyUp={keyUp} style={{ height: "100%" }}>
+        <Layout class="login-page" onKeyUp={keyUp} style={{ height: "100%" }}>
 
-            <Content style={{ marginTop: 80, padding: '20px 50px' }}>
+            <Content style={{ padding: '20px 50px' }}>
 
                 <div className="site-layout-content" >
                     <div className="site-login-item">
                         <img className="login-logo" src={logo} />
                     </div>
-                    <div className="site-login-item" style={{ margin: '40px 0px 0px 0px' }}>
+                    <div style={{ margin: '40px 0px 0px 0px' }}>
                         <Form.Item
+                            style={{ marginBottom: 0 }}
                             validateStatus={hasInvalidNamePassword ? "error" : ""}
                             help={hasInvalidNamePassword ? "账号或密码错误" : ""}
                         >
@@ -108,13 +109,15 @@ function Login(props) {
                                 className="site-login-item-input"
                                 placeholder="请输入用户名"
                                 prefix={<UserOutlined />}
+                                size="large"
                                 onChange={e => handleChangeUserName(e)}
                             />
                         </Form.Item>
 
                     </div>
-                    <div className="site-login-item">
+                    <div >
                         <Form.Item
+                            style={{ marginBottom: 0 }}
                             validateStatus={hasInvalidNamePassword ? "error" : ""}
                             help={hasInvalidNamePassword ? "账号或密码错误" : ""}
                         >
@@ -123,19 +126,25 @@ function Login(props) {
                                 className="site-login-item-input"
                                 placeholder="请输入密码"
                                 prefix={<LockOutlined />}
+                                size="large"
                                 onChange={e => handleChangePassword(e)}
                             />
                         </Form.Item>
                     </div>
 
-                    <div className="site-login-item">
-                        <Button onClick={(e) => handleClick(e)} type="primary">
+                    <Form.Item style={{ marginBottom: 0 }}>
+                        <Button
+                            htmlType="submit"
+                            style={{ width: "100%" }}
+                            onClick={(e) => handleClick(e)}
+                            size="large"
+                            type="primary">
                             登录
                     </Button>
-                    </div>
+                    </Form.Item>
+
                 </div>
             </Content>
-            <Footer ></Footer>
         </Layout>
     );
 

@@ -42,7 +42,7 @@ function Main() {
                     <Header style={{ padding: 0, height: 40, lineHeight: 3, marginBottom: 10, backgroundColor: backgroundColor() }} >
                         <MyHeader collapsed={collapsed} theme={theme} handleCollapse={onCollapse} handleTheme={onChangeTheme} />
                     </Header>
-                    <Content style={{ padding: '0px 0px', textAlign: "left", backgroundColor: backgroundColor() }}>
+                    <Content style={{ padding: '0px 0px', textAlign: "left" }}>
                         <XgRouter />
                     </Content>
                 </Layout>

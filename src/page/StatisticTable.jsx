@@ -219,7 +219,7 @@ function StatisticTable(props) {
     }
 
     return (
-        <div style={{ padding: 40, height: "100%", width: "100%" }}>
+        <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
                 <Breadcrumb.Item>统计数据</Breadcrumb.Item>
                 <Breadcrumb.Item>统计表</Breadcrumb.Item>
@@ -277,6 +277,7 @@ function StatisticTable(props) {
                     pagination={false}
                     columns={columns}
                     dataSource={tableData}
+                    size="small"
                     bordered
                 />
             </div>

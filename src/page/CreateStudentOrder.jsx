@@ -282,7 +282,7 @@ function CreateStudentOrder(props) {
         // }
     }
     return (
-        <div style={{ padding: 40, height: "100%", width: "100%" }}>
+        <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
                 <Breadcrumb.Item>学员管理</Breadcrumb.Item>
                 <Breadcrumb.Item>创建订单</Breadcrumb.Item>

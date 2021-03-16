@@ -205,7 +205,7 @@ function CreateStudent(props) {
   }, [])
 
   return (
-    <div style={{ padding: 40, height: "100%" }}>
+    <div class="app-main-page" style={{ padding: 40, height: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>学员管理</Breadcrumb.Item>
         <Breadcrumb.Item>添加学生</Breadcrumb.Item>

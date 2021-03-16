@@ -149,7 +149,7 @@ function SubjectList(props) {
     setBatchAddModalVisible(false);
   }
   return (
-    <div style={{ padding: 40, height: "100%", width: "100%" }}>
+    <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>课程管理</Breadcrumb.Item>
         <Breadcrumb.Item>课程列表</Breadcrumb.Item>
