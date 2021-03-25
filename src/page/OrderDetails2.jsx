@@ -6,6 +6,7 @@ import { Button, Modal, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Tab
 import { getOrderAPI, marksOrderRemarksRead, acceptPaymentAPI, rejectPaymentAPI } from '../api/api';
 import { getOrderStatus, getPaymentStatusTags } from '../utils/status';
 import AddMarkModel from '../component/AddMarkModel2';
+import UpdatePriceModel from '../component/UpdatePriceModel';
 import { parseAddress } from '../utils/address';
 import { checkAuthority } from '../utils/auth';
 const { TextArea } = Input;
@@ -116,6 +117,7 @@ function OrderDetails(props) {
                     {disableApprove ? "" : (
                         <div>
                             <a onClick={() => { approveOrder(record.id) }}>通过</a>&nbsp;/&nbsp;
+                            <a onClick={() => { updatePrice(record) }}>改价</a>&nbsp;/&nbsp;
                             <a onClick={() => { rejectOrder(record.id) }}>拒绝</a>
                         </div>
                     )}
@@ -126,6 +128,10 @@ function OrderDetails(props) {
     ];
     let { id } = useParams();
     let [markModelVisible, setMarkModelVisible] = useState(false);
+    let [updatePriceModelInfo, setUpdatePriceModelInfo] = useState({
+        visible: false,
+        record: {}
+    });
     let [mark, setMark] = useState("");
     let history = useHistory();
     let [orderInfo, setOrderInfo] = useState({
@@ -158,6 +164,13 @@ function OrderDetails(props) {
             history.goBack();
             return;
         }
+    }
+
+    const updatePrice = async (record) => {
+        setUpdatePriceModelInfo({
+            visible: true,
+            record: record,
+        });
     }
     const rejectOrder = async (id) => {
         confirm({
@@ -216,6 +229,10 @@ function OrderDetails(props) {
     }
     const closeAddMarkModel = e => {
         setMarkModelVisible(false);
+    }
+
+    const closeUpdatePriceModel = e => {
+        setUpdatePriceModelInfo({ visible: false, record: {} });
     }
 
     if (!checkAuthority("审核订单权限")) {
@@ -286,6 +303,13 @@ function OrderDetails(props) {
                 visible={markModelVisible}
                 closeModel={closeAddMarkModel}
                 refreshData={fetchData} />
+
+            <UpdatePriceModel
+                closeModel={closeUpdatePriceModel}
+                visible={updatePriceModelInfo.visible}
+                refreshData={fetchData}
+                record={updatePriceModelInfo.record}
+            />
         </div>
     );
 }

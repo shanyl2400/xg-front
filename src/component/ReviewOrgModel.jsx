@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Card, Row, Col, Button, message } from 'antd';
+import { Modal, Descriptions, Row, Col, Button, message } from 'antd';
 import { rejectOrgReview, approveOrgReview } from '../api/api';
 import { parseAddress } from '../utils/address';
+import OrgCertificationView from './OrgCertificationView';
+import { formatDate } from '../utils/date';
 
 const layout = {
     labelCol: { offset: 2, span: 4 },
@@ -37,31 +39,32 @@ function ReviewOrgModel(props) {
             title="审批机构"
             visible={props.visible}
             footer={null}
+            onCancel={onCancel}
+            width={600}
         >
-            <Card style={{ width: "100%", margin: "20px 5px" }}>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>机构名称：{props.orgData.name}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>手机号：{props.orgData.telephone}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>地址：{parseAddress(props.orgData.address)}</Col>
-                </Row>
-                {/* <Row gutter={[16, 16]} key={1}>
-                        <Col span={12}>状态：已认证</Col>
-                </Row> */}
-
-            </Card>
-
+            <Descriptions title="基本信息"
+                bordered style={{ marginBottom: 20 }}>
+                <Descriptions.Item label="名称" span={4}>{props.orgData.name}</Descriptions.Item>
+                <Descriptions.Item label="电话" span={4}>{props.orgData.telephone}</Descriptions.Item>
+                <Descriptions.Item label="地址" span={4}> {props.orgData.address}{props.orgData.address_ext}</Descriptions.Item>
+                <Descriptions.Item label="过期时间" span={3}>{props.orgData.expired_at == null ? "无限期" : formatDate(new Date(Date.parse(props.orgData.expired_at)))}</Descriptions.Item>
+                <Descriptions.Item label="结算说明" span={3}> {props.orgData.settlement_instruction == "" ? "默认方案" : props.orgData.settlement_instruction}</Descriptions.Item>
+                <Descriptions.Item label="资质" span={2}>
+                    <OrgCertificationView
+                        businessLicense={props.orgData.business_license}
+                        entityIdentity={props.orgData.corporate_identity}
+                        schoolPermission={props.orgData.school_permission}
+                    />
+                </Descriptions.Item>
+            </Descriptions>
             <Row style={{ marginTop: 30 }}>
-                <Col offset={12} span={4}>
+                <Col offset={15} span={3}>
                     <Button onClick={onCancel}>取消</Button>
                 </Col>
-                <Col span={4}>
+                <Col span={3}>
                     <Button onClick={onReject} type="primary" danger>驳回</Button>
                 </Col>
-                <Col span={4}>
+                <Col span={3}>
                     <Button onClick={onApprove} type="primary">通过</Button>
                 </Col>
             </Row>

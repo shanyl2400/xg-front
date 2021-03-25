@@ -39,11 +39,15 @@ export function getStudentStatus(status) {
 export function getOrgStatus(status) {
   switch (status) {
     case 1:
-      return "未审核";
+      return "待审核";
     case 2:
-      return "已认证";
+      return "合作中";
     case 3:
-      return "已吊销";
+      return "黑名单";
+    case 4:
+      return "黑名单";
+    case 5:
+      return "已过期";
     default:
       return "未知";
   }

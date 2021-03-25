@@ -8,7 +8,6 @@ import { getOrgStatus } from '../utils/status';
 
 const pageSize = 10;
 let pageIndex = 1;
-let keywords = "";
 function OrgReview(props) {
   const columns = [
     {
@@ -65,8 +64,8 @@ function OrgReview(props) {
     }
   }
 
-  const fetchData = async () => {
-    let res = await listPendingOrgsAPI(pageIndex, pageSize, { query: keywords });
+  const fetchData = async (pageIndex, data) => {
+    let res = await listPendingOrgsAPI(pageIndex, pageSize, data);
     if (res.err_msg == "success") {
       let tempOrgs = [];
       for (let i = 0; i < res.data.orgs.length; i++) {
@@ -89,15 +88,14 @@ function OrgReview(props) {
   }
   let handleChangePage = page => {
     pageIndex = page;
-    fetchData();
+    fetchData(pageIndex);
   }
   let handleChangeQuery = query => {
     pageIndex = 1;
-    keywords = query;
-    fetchData();
+    fetchData(pageIndex, query);
   }
   useEffect(() => {
-    fetchData();
+    fetchData(pageIndex);
   }, []);
 
   return (
@@ -106,7 +104,7 @@ function OrgReview(props) {
         <Breadcrumb.Item>机构管理</Breadcrumb.Item>
         <Breadcrumb.Item>审核机构</Breadcrumb.Item>
       </Breadcrumb>
-      <OrgFilter onChangeFilter={handleChangeQuery} />
+      <OrgFilter onChangeFilter={handleChangeQuery} hideStatus={true} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}

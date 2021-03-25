@@ -30,6 +30,17 @@ export async function updatePasswordAPI(password) {
     }
 }
 
+export async function updatePaymentAmountAPI(id, data) {
+    try {
+        let res = await axios.put(baseURL + "/payment/" + id + "/amount", {
+            amount: data.amount
+        })
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
 export async function listSubjectsAPI() {
     try {
         let res = await axios.get(baseURL + "/subjects/details/0")
@@ -126,15 +137,20 @@ export async function getStudentByIdAPI(id) {
 
 export async function listOrgsAPI(page, pageSize, data) {
     try {
-        if (page == undefined || pageSize == undefined) {
-            page = 0;
-            pageSize = 0;
-        }
-        let api = baseURL + `/orgs/?page=${page}&page_size=${pageSize}`
-        if (data != undefined && data.query != undefined && data.query != "") {
-            api = api + `&name=${data.query}`;
-        }
-        let res = await axios.get(api);
+
+        let params = buildSearchOrgsParams(page, pageSize, data);
+        let res = await axios.get(baseURL + "/orgs/?" + params);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function listNearExpiredOrgsAPI(page, pageSize, data) {
+    try {
+
+        let params = buildSearchOrgsParams(page, pageSize, data);
+        let res = await axios.get(baseURL + "/orgs/expired?" + params);
         return res.data;
     } catch (e) {
         return e.response.data
@@ -240,14 +256,8 @@ export async function getStatisticsGraphAPI() {
 
 export async function listPendingOrgsAPI(page, pageSize, data) {
     try {
-        if (page == undefined || pageSize == undefined) {
-            page = 0;
-            pageSize = 0;
-        }
-        let api = baseURL + `/orgs/pending?page=${page}&page_size=${pageSize}&order_by=created_at desc`
-        if (data != undefined && data.query != undefined && data.query != "") {
-            api = api + `&name=${data.query}`;
-        }
+        let params = buildSearchOrgsParams(page, pageSize, data);
+        let api = baseURL + `/orgs/pending?` + params;
         let res = await axios.get(api);
         // let res = await axios.get(baseURL + "/orgs/pending");
         return res.data;
@@ -422,6 +432,15 @@ export async function approveOrgReview(id) {
 export async function revokeOrgReview(id) {
     try {
         let res = await axios.put(baseURL + "/org/" + id + "/revoke");
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function renewOrgReview(id, data) {
+    try {
+        let res = await axios.put(baseURL + "/org/" + id + "/renew", data);
         return res.data;
     } catch (e) {
         return e.response.data
@@ -741,6 +760,24 @@ function buildSearchStudentParams(page, pageSize, data) {
         if (data.timeRange != null && data.timeRange.length == 2) {
             params = params + `&created_start_at=${data.timeRange[0]}&created_end_at=${data.timeRange[1]}`
         }
+
+        //order by
+        params = params + `&order_by=created_at desc`
+    }
+    return params
+}
+
+
+function buildSearchOrgsParams(page, pageSize, data) {
+    let params = `page=${page}&page_size=${pageSize}`;
+    if (data != null) {
+        if (data.status == "0") {
+            data.status = "";
+        } else if (data.status == "3") {
+            data.status = "3,4"
+        }
+        params = params + `&status=${data.status}&name=${data.keywords ? data.keywords : ""}`
+        params = params + `&subsubjects=${data.subjects ? data.subjects : ""}&address=${data.address ? data.address : ""}`
 
         //order by
         params = params + `&order_by=created_at desc`

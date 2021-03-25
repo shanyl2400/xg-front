@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, message } from 'antd';
 import { useParams, useHistory } from "react-router-dom";
 import SubOrgInfoTable from '../component/SubOrgInfoTable';
-import { getOrgAPI, updateOrgSelfAPI } from '../api/api';
+import { getOrgAPI, updateOrgSelfAPI, website } from '../api/api';
 import SubOrgEditModelAddress from '../component/SubOrgEditModelAddress';
+import OrgCertification from '../component/OrgCertification';
 const { TextArea } = Input;
 
 const layout = {
@@ -18,9 +19,12 @@ function UpdateOrg(props) {
     const [form] = Form.useForm();
     let history = useHistory();
 
-    // let { id } = useParams();
     let id = sessionStorage.getItem("org_id");
-
+    const [certificationInfo, setCertificationInfo] = useState({
+        businessLicense: null,
+        entityIdentity: null,
+        schoolPermission: null
+    });
     useEffect(() => {
         const fetchData = async () => {
             let res = await getOrgAPI(id);
@@ -39,6 +43,7 @@ function UpdateOrg(props) {
                     addressData: { region: org.address, ext: org.address_ext },
                     subOrgs: org.sub_orgs,
                 })
+                handleCertificationURL(org);
             } else {
                 message.warning("获取机构信息失败：" + res.err_msg);
                 history.goBack();
@@ -47,7 +52,28 @@ function UpdateOrg(props) {
         }
         fetchData();
     }, []);
-
+    const handleCertificationURL = org => {
+        let businessLicense = buildURLFile(1, "business_license", org.business_license);
+        let schoolPermission = buildURLFile(2, "school_permission", org.school_permission);
+        let entityIdentity = buildURLFile(3, "corporate_identity", org.corporate_identity);
+        setCertificationInfo({
+            businessLicense: businessLicense,
+            schoolPermission: schoolPermission,
+            entityIdentity: entityIdentity,
+        });
+    }
+    const buildURLFile = (id, name, source) => {
+        if (source == "") {
+            return null;
+        }
+        return {
+            uid: id,
+            name: name,
+            status: 'done',
+            source: source,
+            url: website + "/data/org_attach/" + source,
+        };
+    }
     const getIntentSubjects = (subjects) => {
         let ret = [];
         if (subjects == null) {
@@ -58,8 +84,6 @@ function UpdateOrg(props) {
         }
         return ret;
     }
-
-
 
     const handleSubmit = () => {
         form.validateFields().then(async e => {
@@ -78,7 +102,7 @@ function UpdateOrg(props) {
                     subjects: so.subjects,
                 })
             }
-            let res = await updateOrgSelfAPI({
+            let request = {
                 org: {
                     name: formData.name,
                     telephone: formData.telephone,
@@ -86,7 +110,9 @@ function UpdateOrg(props) {
                     address_ext: formData.addressData.ext,
                 },
                 sub_orgs: subOrgInfos
-            })
+            };
+            request = buildCertification(request);
+            let res = await updateOrgSelfAPI(request)
             if (res.err_msg == "success") {
                 message.success("机构更新成功");
                 history.goBack();
@@ -96,6 +122,35 @@ function UpdateOrg(props) {
 
         });
     }
+
+    const buildCertification = req => {
+        req.org.business_license = certificationInfo.businessLicense == null ? "" : certificationInfo.businessLicense.source;
+        req.org.corporate_identity = certificationInfo.entityIdentity == null ? "" : certificationInfo.entityIdentity.source;
+        req.org.school_permission = certificationInfo.schoolPermission == null ? "" : certificationInfo.schoolPermission.source;
+        return req;
+    }
+    const handleBusinessLicense = source => {
+        setCertificationInfo({
+            entityIdentity: certificationInfo.entityIdentity,
+            businessLicense: source,
+            schoolPermission: certificationInfo.schoolPermission,
+        });
+    }
+    const handleEntityIdentity = source => {
+        setCertificationInfo({
+            businessLicense: certificationInfo.businessLicense,
+            entityIdentity: source,
+            schoolPermission: certificationInfo.schoolPermission,
+        });
+    }
+    const handleSchoolPermission = source => {
+        setCertificationInfo({
+            businessLicense: certificationInfo.businessLicense,
+            entityIdentity: certificationInfo.entityIdentity,
+            schoolPermission: source,
+        });
+    }
+
     return (
         <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
@@ -123,6 +178,17 @@ function UpdateOrg(props) {
 
                 <Form.Item name="addressData" label="机构地址" rules={[{ required: true }]} >
                     <SubOrgEditModelAddress />
+                </Form.Item>
+
+                <Form.Item label="资质信息" rules={[{ required: true }]} >
+                    <OrgCertification
+                        businessLicense={certificationInfo.businessLicense}
+                        entityIdentity={certificationInfo.entityIdentity}
+                        schoolPermission={certificationInfo.schoolPermission}
+                        updateBusinessLicense={handleBusinessLicense}
+                        updateEntityIdentity={handleEntityIdentity}
+                        updateSchoolPermission={handleSchoolPermission}
+                    />
                 </Form.Item>
 
                 <Form.Item name="subOrgs" label="分校" rules={[{ required: false }]} >

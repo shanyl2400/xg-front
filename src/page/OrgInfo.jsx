@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Breadcrumb, Typography, Descriptions, Row, Col, message } from 'antd';
 import { useParams, useHistory } from "react-router-dom";
 import SubOrgInfoTable from '../component/SubOrgInfoTable';
+import OrgCertificationView from '../component/OrgCertificationView';
 import { getOrgAPI } from '../api/api';
+import { formatDate } from '../utils/date';
+import { getOrgStatus } from '../utils/status';
 const { TextArea } = Input;
 
 const layout = {
@@ -59,7 +62,7 @@ function OrgInfo(props) {
         <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
             <Breadcrumb>
                 <Breadcrumb.Item>机构管理</Breadcrumb.Item>
-                <Breadcrumb.Item>修改机构</Breadcrumb.Item>
+                <Breadcrumb.Item>机构详情</Breadcrumb.Item>
             </Breadcrumb>
 
             <Descriptions title="基本信息"
@@ -67,6 +70,15 @@ function OrgInfo(props) {
                 <Descriptions.Item label="机构名称" span={3}>{orgInfo.name}</Descriptions.Item>
                 <Descriptions.Item label="联系电话" span={3}>{orgInfo.telephone}</Descriptions.Item>
                 <Descriptions.Item label="地址" span={3}> {orgInfo.address}{orgInfo.address_ext}</Descriptions.Item>
+                <Descriptions.Item label="状态" span={3}>{getOrgStatus(orgInfo.status)}</Descriptions.Item>
+                <Descriptions.Item label="过期时间" span={3}>{orgInfo.expired_at == null ? "无限期" : formatDate(new Date(Date.parse(orgInfo.expired_at)))}</Descriptions.Item>
+                <Descriptions.Item label="资质情况" span={2}>
+                    <OrgCertificationView
+                        businessLicense={orgInfo.business_license}
+                        entityIdentity={orgInfo.corporate_identity}
+                        schoolPermission={orgInfo.school_permission}
+                    />
+                </Descriptions.Item>
             </Descriptions>
 
             <Descriptions title="校区信息"
@@ -76,7 +88,7 @@ function OrgInfo(props) {
                 </div>
             </Descriptions>
 
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 16]} style={{ marginTop: 5 }}>
                 <Col offset={22} span={1}>
                     <Button offset={16} onClick={() => { history.goBack() }} htmlType="button">
                         返回

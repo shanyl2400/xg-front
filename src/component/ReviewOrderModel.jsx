@@ -36,6 +36,7 @@ function ReviewOrderModel(props) {
             title="审批订单"
             visible={props.visible}
             footer={null}
+            onCancel={onCancel}
         >
             <Card style={{ width: "100%", margin: "5px 5px" }}>
                 <Row gutter={[16, 16]}>

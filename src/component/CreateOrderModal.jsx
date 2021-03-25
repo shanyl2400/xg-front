@@ -21,7 +21,6 @@ function CreateOrderModal(props) {
             to_org_id: props.org.id,
             intent_subjects: [subject],
         })
-        console.log(res)
         if (res.err_msg == "success") {
             message.success("派单成功");
             onClose();

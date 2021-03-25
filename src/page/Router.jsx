@@ -29,6 +29,7 @@ const Login = loadable(() => import('./Login'));
 const OrderRemarksList = loadable(() => import('./OrderRemarksList'));
 const StatisticTable = loadable(() => import('./StatisticTable'));
 const AllStudentList = loadable(() => import('./AllStudentList'));
+const OrgNearExpireList = loadable(() => import('./OrgNearExpireList'));
 
 const UpdateOrg = loadable(() => import('./UpdateOrg'));
 const OrgInfo = loadable(() => import('./OrgInfo'));
@@ -84,6 +85,9 @@ function XgRouter() {
             </Route>
             <Route path="/main/org_list">
                 <OrgList />
+            </Route>
+            <Route path="/main/org_near_expire_list">
+                <OrgNearExpireList />
             </Route>
             <Route path="/main/create_user">
                 <CreateUser />

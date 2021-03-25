@@ -1,19 +1,87 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Input } from 'antd';
+import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 import SubOrgDetailsModel from './SubOrgDetailsModel';
 import TableSubOrgModel from './TableSubOrgModel';
 import SubOrgEditModel from './SubOrgEditModel';
 
 import { parseAddress } from "../utils/address";
 let currentID = 100000000;
+let searchInput;
 function SubOrgInfoTable(props) {
+    const getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Space>
+                    <Button
+                        type="primary"
+                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                        icon={<SearchOutlined />}
+                        size="small"
+                        style={{ width: 90 }}
+                    >
+                        Search
+              </Button>
+                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                        Reset
+              </Button>
+                    <Button
+                        type="link"
+                        size="small"
+                        onClick={() => {
+                            confirm({ closeDropdown: false });
+                            setTableSearchInfo({
+                                searchText: selectedKeys[0],
+                                searchedColumn: dataIndex,
+                            });
+                        }}
+                    >
+                        Filter
+              </Button>
+                </Space>
+            </div>
+        ),
+        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+        onFilter: (value, record) =>
+            record[dataIndex]
+                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                : '',
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => searchInput.select(), 100);
+            }
+        },
+        render: text =>
+            searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[tableSearchInfo.searchText]}
+                    autoEscape
+                    textToHighlight={text ? text.toString() : ''}
+                />
+            ) : (
+                text
+            ),
+    });
+
     const columns = [
         {
             title: '校区名',
             dataIndex: 'name',
             width: 120,
             key: 'name',
+            ...getColumnSearchProps('name'),
         },
         {
             title: '地址',
@@ -26,17 +94,8 @@ function SubOrgInfoTable(props) {
             dataIndex: 'id',
             width: 100,
             key: 'id',
-            // render: (text, v) => <span>
-            //     <a onClick={() => clickDetails(v.id)} >详情</a>
-            //     <span><SearchOutlined onClick={() => clickDetails(v.id)} /></span>
-            //     {isEditMode() && (<span>
-            //         /<a onClick={() => clickUpdate(v.id)}>修改</a>
-            //     /<a onClick={() => clickDelete(v.id)}>删除</a>
-            //     </span>)}
-
-            // </span>,
             render: (text, v) => <span>
-                <EyeOutlined style={{ fontSize: 14 }} onClick={() => clickDetails(v.id)} />
+                <SearchOutlined style={{ fontSize: 14 }} onClick={() => clickDetails(v.id)} />
                 {isEditMode() && (<span>
                     <EditOutlined style={{ fontSize: 14, marginLeft: 6 }} onClick={() => clickUpdate(v.id)} />
                     <DeleteOutlined style={{ fontSize: 14, marginLeft: 6, color: "#cf1322" }} onClick={() => clickDelete(v.id)} />
@@ -50,6 +109,11 @@ function SubOrgInfoTable(props) {
     let [modelCreateVisible, setCreateModelVisible] = useState(false);
     let [modelEditVisible, setEditModelVisible] = useState(false);
     let [orgs, setOrgs] = useState([]);
+    let [tableSearchInfo, setTableSearchInfo] = useState({
+        searchText: '',
+        searchedColumn: '',
+    });
+    let [searchedColumn, setSearchedColumn] = useState("");
 
     const isEditMode = () => {
         if (props.editable == true) {
@@ -159,8 +223,20 @@ function SubOrgInfoTable(props) {
             setOrgs(parseOrgs(props.value));
         }
     }, [props.value])
-    console.log(props.value);
 
+    const handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+
+        setTableSearchInfo({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+
+    const handleReset = clearFilters => {
+        clearFilters();
+        setTableSearchInfo({ searchText: '' });
+    };
     return (
         <div style={{ width: "100%" }}>
             <Table pagination={{ position: 'bottom', pageSize: 5, size: "small" }} style={{ width: "100%" }} columns={columns} dataSource={orgs} />

@@ -3,6 +3,7 @@ import { Breadcrumb, Typography, Col, Input, Button, Row, Cascader, Select, mess
 import { listSubjectsTreeAPIWithData, createSubjectAPI, batchCreateSubjectAPI } from '../api/api';
 
 const { Option } = Select;
+const { DirectoryTree } = Tree;
 const { Title } = Typography;
 const { TextArea } = Input;
 function SubjectList(props) {

@@ -56,7 +56,6 @@ function UserInfo() {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, imageUrl => {
         if (info.file.response.err_msg == "success") {
-          console.log(info.file.response.name);
           setImageUrl(info.file.response.name);
           sessionStorage.setItem("avatar", info.file.response.name)
         }

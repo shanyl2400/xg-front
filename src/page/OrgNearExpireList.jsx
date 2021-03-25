@@ -5,39 +5,14 @@ import { useHistory } from "react-router-dom";
 import RevokeOrgModel from '../component/RevokeOrgModel';
 import RenewOrgModel from '../component/RenewOrgModel';
 import OrgFilter from '../component/OrgFilter';
-import { listOrgsAPI, getOrgAPI } from '../api/api';
+import { listNearExpiredOrgsAPI, getOrgAPI } from '../api/api';
 import { getOrgStatus } from '../utils/status';
 import { checkAuthorities } from '../utils/auth';
 import { hideTelephone } from "../utils/telephone";
 
 const pageSize = 10;
 let pageIndex = 1;
-function OrgList(props) {
-
-  const menu = (record) => {
-    return (
-      <Menu>
-        <Menu.Item key="1">
-          {
-            checkAuthorities(["机构管理"]) && record.id > 1 && record.status == 2 ? <a onClick={() => { history.push("/main/org_update/" + record.id) }}>修改</a> : <span></span>
-          }
-        </Menu.Item>
-
-        <Menu.Item key="2">
-          {
-            checkAuthorities(["机构管理"]) && record.id > 1 && record.status == 2 ? <a onClick={() => { handleRenew(record.id) }}>延期</a> : <span></span>
-          }
-        </Menu.Item>
-        <Menu.Item key="3">
-          {
-            checkAuthorities(["机构审核"]) && record.id > 1 && record.status == 2 ? <a onClick={() => { handleRevoke(record.id) }}>吊销</a> : <span></span>
-          }
-        </Menu.Item>
-      </Menu>
-    );
-  }
-
-
+function OrgNearExpireList(props) {
   const columns = [
     {
       title: '#',
@@ -75,14 +50,8 @@ function OrgList(props) {
         <Space size="middle">
           <a onClick={() => { history.push("/main/org_details/" + record.id) }}>详情</a>
           {
-            checkAuthorities(["机构管理", "机构审核"]) && record.id > 1 && record.status == 2 ? (<Dropdown overlay={menu(record)} trigger={['click']}>
-              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                操作 <DownOutlined />
-              </a>
-            </Dropdown>) : ""
+            checkAuthorities(["机构管理"]) && record.id > 1 && record.status == 2 ? <a onClick={() => { handleRenew(record.id) }}>延期</a> : <span></span>
           }
-
-
         </Space>
       ),
     },
@@ -119,7 +88,7 @@ function OrgList(props) {
   }
 
   const fetchData = async (page, data) => {
-    let res = await listOrgsAPI(page, pageSize, data);
+    let res = await listNearExpiredOrgsAPI(page, pageSize, data);
     if (res.err_msg == "success") {
       let tempOrgs = [];
       for (let i = 0; i < res.data.orgs.length; i++) {
@@ -174,4 +143,4 @@ function OrgList(props) {
   );
 }
 
-export default OrgList;
+export default OrgNearExpireList;

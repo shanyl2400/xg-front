@@ -46,7 +46,6 @@ function TableSubOrgModel(props) {
                 message.warn("请选择支持课程");
                 return;
             }
-            console.log(">>>>>>>>>:", form.getFieldsValue());
             props.submitForm(form.getFieldsValue());
             form.resetFields();
         });

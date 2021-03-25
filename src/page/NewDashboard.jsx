@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SummaryData from '../component/SummaryData';
 import ReactEcharts from "echarts-for-react";
 import { getStatisticsSummaryAPI, listUsersWithOrgIdAPI, getStatisticsTableAPI, listOrderSourcesAPI, listOrgsAPI } from '../api/api';
@@ -18,6 +18,8 @@ function NewDashboard(props) {
   let [selectAuthor, setSelectAuthor] = useState(0);
   let [selectPublisherId, setSelectPublisherId] = useState(0);
   let [selectOrderSource, setSelectOrderSource] = useState(0);
+  const timerRef = useRef();
+  const [count, setCount] = useState(0);
   let studentOption = {
     title: {
       text: '录单量',
@@ -125,49 +127,67 @@ function NewDashboard(props) {
       ),
     },
   ];
-
-  useEffect(() => {
-    const fetchData = async (filter) => {
-      refreshStatistics(filter);
-      let userRes = await listUsersWithOrgIdAPI(1, 0, 0);
-      if (userRes.err_msg == "success") {
-        console.log("user:", userRes.users);
-        setUsers(userRes.users);
-      } else {
-        message.warning("获取用户信息失败：" + userRes.err_msg);
-        return;
-      }
-
-      let osRes = await listOrderSourcesAPI();
-      if (osRes.err_msg == "success") {
-        console.log("or:", osRes.sources);
-        setOrderSources(osRes.sources);
-      } else {
-        message.warning("获取订单来源信息失败：" + osRes.err_msg);
-        return;
-      }
-      let orgRes = await listOrgsAPI();
-      if (orgRes.err_msg == "success") {
-        console.log("orgs:", orgRes.data.orgs);
-        let tmpOrg = [];
-        for (let i = 0; i < orgRes.data.orgs.length; i++) {
-          if (orgRes.data.orgs[i].id != 1) {
-            tmpOrg.push(orgRes.data.orgs[i]);
-          }
-        }
-        setOrgs(tmpOrg);
-      } else {
-        message.warning("获取机构信息失败：" + orgRes.err_msg);
-        return;
-      }
+  const fetchData = async (filter) => {
+    refreshStatistics(filter);
+    let userRes = await listUsersWithOrgIdAPI(1, 0, 0);
+    if (userRes.err_msg == "success") {
+      console.log("user:", userRes.users);
+      setUsers(userRes.users);
+    } else {
+      message.warning("获取用户信息失败：" + userRes.err_msg);
+      return;
     }
+
+    let osRes = await listOrderSourcesAPI();
+    if (osRes.err_msg == "success") {
+      console.log("or:", osRes.sources);
+      setOrderSources(osRes.sources);
+    } else {
+      message.warning("获取订单来源信息失败：" + osRes.err_msg);
+      return;
+    }
+    let orgRes = await listOrgsAPI();
+    if (orgRes.err_msg == "success") {
+      console.log("orgs:", orgRes.data.orgs);
+      let tmpOrg = [];
+      for (let i = 0; i < orgRes.data.orgs.length; i++) {
+        if (orgRes.data.orgs[i].id != 1) {
+          tmpOrg.push(orgRes.data.orgs[i]);
+        }
+      }
+      setOrgs(tmpOrg);
+    } else {
+      message.warning("获取机构信息失败：" + orgRes.err_msg);
+      return;
+    }
+  }
+  useEffect(() => {
     fetchData({
       org_id: selectOrgId,
       author: selectAuthor,
       publisher_id: selectPublisherId,
       order_source: selectOrderSource,
     });
+
+    // timerRef.current = setInterval(() => {
+    //   if (count < 2) {
+    //     setCount(count => count + 1);
+    //   }
+    //   fetchData({
+    //     org_id: selectOrgId,
+    //     author: selectAuthor,
+    //     publisher_id: selectPublisherId,
+    //     order_source: selectOrderSource,
+    //   });
+    // }, 1000 * 5)
   }, []);
+  // useEffect(() => {
+  //   if (count >= 2) {
+  //     clearInterval(timerRef.current)
+  //   }
+  // }, [count])
+
+
 
   const refreshStatistics = async (filter) => {
     let res = await getStatisticsSummaryAPI();
