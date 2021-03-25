@@ -6,6 +6,7 @@ import StudentFilter from "../component/StudentFilter";
 import { parseAddress } from "../utils/address";
 import { formatDate } from "../utils/date";
 import { hideTelephone } from "../utils/telephone";
+import { getStudentStatus } from "../utils/status";
 
 const pageSize = 10;
 const { Option } = Select;
@@ -36,20 +37,6 @@ async function fetchStudent(page, pageSize, data) {
     })
   }
   return students
-}
-
-function getStatusName(status) {
-  // StudentCreated = iota + 1
-  // StudentConflictFailed
-  // StudentConflictSuccess
-  switch (status) {
-    case 1:
-      return <Tag color="green" key={1}>已创建</Tag>;
-    case 2:
-      return <Tag color="red" key={1}>冲单失败</Tag>;
-    case 3:
-      return <Tag color="yellow" key={1}>冲单成功</Tag>;
-  }
 }
 
 function StudentList(props) {
@@ -98,7 +85,7 @@ function StudentList(props) {
       dataIndex: 'status',
       render: status => (
         <span>
-          {getStatusName(status)}
+          {getStudentStatus(status)}
         </span>
       ),
     },
@@ -142,6 +129,21 @@ function StudentList(props) {
     setStudents(res);
   }
 
+  const handleRowClass = (record, index) => {
+    switch (record.status) {
+      case 1:
+        //新建
+        return "new-student-table-row";
+      case 2:
+        //无效
+        return "invalid-student-table-row";
+      case 3:
+        //有效
+        return "valid-student-table-row";
+
+    }
+    return "";
+  }
   return (
     <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
@@ -153,6 +155,7 @@ function StudentList(props) {
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
+        rowClassName={handleRowClass}
         dataSource={students.data} />
       <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
     </div>

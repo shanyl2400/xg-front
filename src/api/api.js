@@ -145,6 +145,16 @@ export async function listOrgsAPI(page, pageSize, data) {
         return e.response.data
     }
 }
+export async function listConflictStudents(page, pageSize, data) {
+    try {
+        let params = buildSearchConflictParams(page, pageSize, data);
+        let res = await axios.get(baseURL + "/student_conflicts/?" + params);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
 
 export async function listNearExpiredOrgsAPI(page, pageSize, data) {
     try {
@@ -609,6 +619,30 @@ export async function resetUserPasswordAPI(id) {
     }
 }
 
+export async function updateStudentStatus(studentId, status) {
+    try {
+        let res = await axios.put(baseURL + "/student_conflict/student", {
+            student_id: studentId,
+            status: status
+        });
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function updateConflictStatus(recordId, status) {
+    try {
+        let res = await axios.put(baseURL + "/student_conflict/record", {
+            record_id: parseInt(recordId),
+            status: status
+        });
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
 export async function signupOrderAPI(id, data) {
     try {
         let res = await axios.put(baseURL + "/order/" + id + "/signup", data);
@@ -755,7 +789,10 @@ function buildSearchStudentParams(page, pageSize, data) {
         if (data.author_id == "0") {
             data.author_id = "";
         }
-        params = params + `&status=${data.status}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}`
+        if (!data.telephone) {
+            data.telephone = "";
+        }
+        params = params + `&status=${data.status}&telephone=${data.telephone}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}`
         params = params + `&author_id=${data.author}&order_source_ids=${data.orderSource}&intent_subjects=${data.subject ? data.subject : ""}&address=${data.address ? data.address : ""}`
         if (data.timeRange != null && data.timeRange.length == 2) {
             params = params + `&created_start_at=${data.timeRange[0]}&created_end_at=${data.timeRange[1]}`
@@ -778,6 +815,24 @@ function buildSearchOrgsParams(page, pageSize, data) {
         }
         params = params + `&status=${data.status}&name=${data.keywords ? data.keywords : ""}`
         params = params + `&subsubjects=${data.subjects ? data.subjects : ""}&address=${data.address ? data.address : ""}`
+
+        //order by
+        params = params + `&order_by=created_at desc`
+    }
+    return params
+}
+
+
+function buildSearchConflictParams(page, pageSize, data) {
+    let params = `page=${page}&page_size=${pageSize}`;
+    if (data != null) {
+        if (data.status == "0") {
+            data.status = "";
+        }
+        if (!data.telephone) {
+            data.telephone = "";
+        }
+        params = params + `&status=${data.status}&telephone=${data.telephone}`
 
         //order by
         params = params + `&order_by=created_at desc`

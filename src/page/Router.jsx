@@ -35,6 +35,9 @@ const UpdateOrg = loadable(() => import('./UpdateOrg'));
 const OrgInfo = loadable(() => import('./OrgInfo'));
 const UpdateOrgSelf = loadable(() => import('./UpdateOrgSelf'));
 const OrderNotifies = loadable(() => import('./OrderNotifies'));
+const ConflictList = loadable(() => import('./ConflictList'));
+const ConflictHandler = loadable(() => import('./ConflictHandler'));
+
 function XgRouter() {
     return (
         <Switch>
@@ -76,6 +79,12 @@ function XgRouter() {
             </Route>
             <Route path="/main/all_student_list">
                 <AllStudentList />
+            </Route>
+            <Route path="/main/conflict_student_list">
+                <ConflictList />
+            </Route>
+            <Route path="/main/conflict_student/:id">
+                <ConflictHandler />
             </Route>
             <Route path="/main/create_org">
                 <CreateOrg />

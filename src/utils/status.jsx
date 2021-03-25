@@ -23,16 +23,15 @@ export function getOrderStatus(status) {
 }
 
 export function getStudentStatus(status) {
-  // StudentCreated = iota + 1
-  // StudentConflictFailed
-  // StudentConflictSuccess
   switch (status) {
     case 1:
       return <Tag color="green" key={1}>已创建</Tag>;
     case 2:
-      return <Tag color="red" key={1}>冲单失败</Tag>;
+      return <Tag color="red" key={1}>无效</Tag>;
     case 3:
-      return <Tag color="yellow" key={1}>冲单成功</Tag>;
+      return <Tag color="green" key={1}>有效</Tag>;
+    default:
+      return <Tag color="yellow" key={1}>未知</Tag>;
   }
 }
 
@@ -50,6 +49,18 @@ export function getOrgStatus(status) {
       return "已过期";
     default:
       return "未知";
+  }
+}
+
+
+export function getConflictStatus(status) {
+  switch (status) {
+    case 1:
+      return <Tag color="red" key={1}>待处理</Tag>;
+    case 2:
+      return <Tag color="green" key={2}>已处理</Tag>;
+    default:
+      return <Tag color="yellow" key={3}>未知</Tag>;
   }
 }
 export function getPaymentStatus(status) {

@@ -15,3 +15,17 @@
     background: rgba(255, 255, 255, 0.2);
     margin: 16px;
   }
+
+  .new-student-table-row{
+    background-color:#ffd591;
+  }
+  .valid-student-table-row{
+    background:#fff;
+  }
+  .invalid-student-table-row{
+    background-color:#a8071a;
+    color:#fff;
+  }
+  .invalid-student-table-row:hover{
+    color:#000;
+  }

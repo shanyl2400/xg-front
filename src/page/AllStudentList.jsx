@@ -72,11 +72,6 @@ function AllStudentList(props) {
       key: 'order_count',
       dataIndex: 'order_count',
     },
-    // {
-    //   title: '报名意向',
-    //   dataIndex: 'intent_subject',
-    //   key: 'intent_subject',
-    // },
     {
       title: '状态',
       key: 'status',
@@ -127,6 +122,22 @@ function AllStudentList(props) {
     setStudents(res);
   }
 
+  const handleRowClass = (record, index) => {
+    switch (record.status) {
+      case 1:
+        //新建
+        return "new-student-table-row";
+      case 2:
+        //无效
+        return "invalid-student-table-row";
+      case 3:
+        //有效
+        return "valid-student-table-row";
+
+    }
+    return "";
+  }
+
   return (
     <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
@@ -139,6 +150,7 @@ function AllStudentList(props) {
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
+        rowClassName={handleRowClass}
         dataSource={students.data} />
       <Pagination onChange={handleChangePage} defaultCurrent={pageIndex} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
     </div>
