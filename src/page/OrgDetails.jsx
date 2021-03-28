@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, Row, Col, Typography, Descriptions, message } from 'antd';
+import { Button, Card, PageHeader, Row, Col, Typography, Descriptions, message } from 'antd';
 import { getOrgAPI } from '../api/api';
 import SubOrgInfoTable from '../component/SubOrgInfoTable';
 import OrgCertificationView from '../component/OrgCertificationView';
@@ -30,10 +30,11 @@ function OrgDetails(props) {
 
   return (
     <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
-      <Breadcrumb>
-        <Breadcrumb.Item>机构管理</Breadcrumb.Item>
-        <Breadcrumb.Item>机构详情</Breadcrumb.Item>
-      </Breadcrumb>
+      <PageHeader
+        ghost={false}
+        onBack={() => history.goBack()}
+        title="机构名单"
+        subTitle="入驻机构详情"></PageHeader>
 
       <Descriptions title="基本信息"
         bordered style={{ marginBottom: 20, marginTop: 20 }}>
@@ -58,10 +59,6 @@ function OrgDetails(props) {
       {
         orgData.sub_orgs != undefined && <SubOrgInfoTable value={orgData.sub_orgs} />
       }
-
-      <Row gutter={[16, 16]} style={{ marginTop: 5 }}>
-        <Col offset={22} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
-      </Row>
 
     </div >
   );

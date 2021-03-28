@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Card, Breadcrumb, message, Row, Col, Typography, Descriptions, Table, Space } from 'antd';
+import { Button, Card, PageHeader, message, Row, Col, Typography, Descriptions, Table, Space } from 'antd';
 import { getStudentByIdAPI } from '../api/api';
 import { parseAddress } from '../utils/address';
 import { formatDate } from "../utils/date";
@@ -80,10 +80,11 @@ function StudentDetails(props) {
     }
     return (
         <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
-            <Breadcrumb>
-                <Breadcrumb.Item>学员管理</Breadcrumb.Item>
-                <Breadcrumb.Item>学员信息</Breadcrumb.Item>
-            </Breadcrumb>
+            <PageHeader
+                ghost={false}
+                onBack={() => history.goBack()}
+                title="学员名单"
+                subTitle="学员名单详情"></PageHeader>
             <Descriptions title="基本信息" bordered style={{ marginBottom: 20, marginTop: 20 }}>
                 <Descriptions.Item label="姓名">{student.name}</Descriptions.Item>
                 <Descriptions.Item label="性别">{student.gender ? "男" : "女"}</Descriptions.Item>
@@ -109,10 +110,6 @@ function StudentDetails(props) {
                 columns={columns}
                 dataSource={student.orders}
             />
-
-            <Row gutter={[16, 16]} style={{ marginTop: 10 }}>
-                <Col offset={22} span={1}><Button onClick={() => history.goBack()}>返回</Button></Col>
-            </Row>
 
         </div>
     );

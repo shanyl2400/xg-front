@@ -196,9 +196,6 @@ function UpdateOrg(props) {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Button onClick={() => { history.goBack() }} htmlType="button">
-                        返回
-                    </Button>
                     <Button style={{ marginLeft: 10 }} type="primary" onClick={handleSubmit} htmlType="button">
                         保存
                     </Button>

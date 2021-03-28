@@ -24,6 +24,7 @@ function CreateOrderModal(props) {
         if (res.err_msg == "success") {
             message.success("派单成功");
             onClose();
+            props.refresh();
         } else {
             message.error("派单失败:" + res.err_msg);
             onClose();

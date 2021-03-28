@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Breadcrumb, Modal, Space, Table, Button, Row, Col, Card, message } from 'antd';
+import { Breadcrumb, Modal, Space, Table, Button, Row, Col, Card, PageHeader, message } from 'antd';
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import { CloseOutlined, CheckOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import UserFilter from '../component/UserFilter';
@@ -193,34 +193,26 @@ function ConflictHandler(props) {
     }
     return (
         <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
-            <Breadcrumb>
-                <Breadcrumb.Item>学员管理</Breadcrumb.Item>
-                <Breadcrumb.Item>处理冲单</Breadcrumb.Item>
-            </Breadcrumb>
+            <PageHeader
+                ghost={false}
+                onBack={() => history.goBack()}
+                title="冲单详情"
+                subTitle="处理冲突订单信息详情"
+                extra={
+                    [<Button onClick={() => { handleRead() }}>设置为已处理</Button>]
+                }
+            ></PageHeader>
             <Table
                 pagination={false}
                 style={{ marginTop: "30px" }}
                 columns={columns}
                 dataSource={students.data} />
 
-            {/* <Row>
-                <Col span={12}>
-                    <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
-                </Col>
-            </Row> */}
-
             <StudentDetailsModel
                 visible={viewModelInfo.visible}
                 closeModel={closeViewModel}
                 id={viewModelInfo.id}
             />
-
-            <Row justify="end" style={{ marginTop: 10 }}>
-                <Col>
-                    <Button type="link" onClick={() => { handleRead() }} style={{ marginRight: 10 }}>设置为已处理</Button>
-                    <Button onClick={() => { history.goBack() }}>返回</Button>
-                </Col>
-            </Row>
         </div>
     );
 }

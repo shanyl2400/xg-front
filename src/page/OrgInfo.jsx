@@ -88,14 +88,6 @@ function OrgInfo(props) {
                 </div>
             </Descriptions>
 
-            <Row gutter={[16, 16]} style={{ marginTop: 5 }}>
-                <Col offset={22} span={1}>
-                    <Button offset={16} onClick={() => { history.goBack() }} htmlType="button">
-                        返回
-            </Button>
-                </Col>
-            </Row>
-
         </div>
     );
 }

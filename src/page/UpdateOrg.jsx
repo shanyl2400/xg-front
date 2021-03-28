@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Breadcrumb, message } from 'antd';
+import { Form, Input, Button, PageHeader, message } from 'antd';
 import { getOrgAPI, updateOrgAPI, website } from '../api/api';
 
 import { useParams, useHistory } from "react-router-dom";
@@ -156,10 +156,12 @@ function UpdateOrg(props) {
 
     return (
         <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
-            <Breadcrumb>
-                <Breadcrumb.Item>机构管理</Breadcrumb.Item>
-                <Breadcrumb.Item>修改机构</Breadcrumb.Item>
-            </Breadcrumb>
+            <PageHeader
+                ghost={false}
+                onBack={() => history.goBack()}
+                title="修改机构"
+                subTitle="修改当前机构信息"
+            ></PageHeader>
             <Form {...layout}
                 name="control-ref"
                 style={{ marginTop: "30px", marginLeft: "-40px" }}
@@ -201,9 +203,6 @@ function UpdateOrg(props) {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Button onClick={() => { history.goBack() }} htmlType="button">
-                        返回
-                    </Button>
                     <Button style={{ marginLeft: 10 }} type="primary" onClick={handleSubmit} htmlType="button">
                         保存
                     </Button>

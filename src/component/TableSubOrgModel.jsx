@@ -10,7 +10,7 @@ const layout = {
     wrapperCol: { span: 18 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 17, span: 16 },
+    wrapperCol: { offset: 15, span: 16 },
 };
 let index = 0;
 function TableSubOrgModel(props) {

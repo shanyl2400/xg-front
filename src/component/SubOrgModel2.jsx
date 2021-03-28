@@ -9,7 +9,7 @@ const layout = {
     wrapperCol: { span: 18 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 17, span: 16 },
+    wrapperCol: { offset: 16, span: 16 },
 };
 let index = 0;
 function SubOrgModel(props) {
@@ -43,7 +43,7 @@ function SubOrgModel(props) {
     }
     return (
         <Modal
-            title="添加分校"
+            title="添加分校22"
             visible={props.visible}
             footer={null}
             onCancel={onClose}

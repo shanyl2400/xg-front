@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Breadcrumb, message, Row, Col, Select, Typography, Table, Pagination, Descriptions } from 'antd';
+import { Button, Card, Breadcrumb, message, Row, Col, Select, Typography, Table, PageHeader, Pagination, Descriptions } from 'antd';
 import { useParams, useHistory } from "react-router-dom";
 import SubOrgFilter from '../component/SubOrgFilter';
 import CreateOrderModal from '../component/CreateOrderModal';
@@ -138,44 +138,41 @@ function CreateStudentOrder(props) {
     })
     const [createOrderModalVisible, setCreateOrderModalVisible] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const res = await getStudentByIdAPI(id);
-            if (res.err_msg == "success") {
-                setStudent(res.student);
-            } else {
-                message.warn("查不到学生信息");
-                history.goBack();
-            }
-            let s = buildIntentSubjects(res.student.intent_subject)
-
-            setAllSubjects(s);
-            setOrgQueryParams({
-                student_id: id,
-                address: "",
-                parent_id: 0,
-                subjects: s,
-            })
-            const orgRes = await listSubOrgsAPI({
-                student_id: id,
-                address: "",
-                parent_id: 0,
-                subjects: s,
-            }, 1, pageSize);
-            if (orgRes.err_msg == "success") {
-                console.log("total:", orgRes.data.total);
-                setOrgs({
-                    data: orgRes.data.orgs,
-                    total: orgRes.data.total
-                });
-            } else {
-                message.warn("查不到机构信息");
-                history.goBack();
-            }
-
+    const fetchData = async () => {
+        const res = await getStudentByIdAPI(id);
+        if (res.err_msg == "success") {
+            setStudent(res.student);
+        } else {
+            message.warn("查不到学生信息");
+            history.goBack();
         }
+        let s = buildIntentSubjects(res.student.intent_subject)
 
+        setAllSubjects(s);
+        setOrgQueryParams({
+            student_id: id,
+            address: "",
+            parent_id: 0,
+            subjects: s,
+        })
+        const orgRes = await listSubOrgsAPI({
+            student_id: id,
+            address: "",
+            parent_id: 0,
+            subjects: s,
+        }, 1, pageSize);
+        if (orgRes.err_msg == "success") {
+            console.log("total:", orgRes.data.total);
+            setOrgs({
+                data: orgRes.data.orgs,
+                total: orgRes.data.total
+            });
+        } else {
+            message.warn("查不到机构信息");
+            history.goBack();
+        }
+    }
+    useEffect(() => {
         fetchData();
     }, [id])
 
@@ -264,29 +261,14 @@ function CreateStudentOrder(props) {
             subjects: subjects,
             name: e.name
         }, curPage);
-        // const orgRes = await listSubOrgsAPI({
-        //     student_id: id,
-        //     address: e.address,
-        //     subjects: subjects,
-        //     parent_id: e.parent_id,
-        // }, curPage, pageSize);
-        // if (orgRes.err_msg == "success") {
-        //     setOrgs({
-        //         data: orgRes.data.orgs,
-        //         total: orgRes.data.total
-        //     });
-
-        // } else {
-        //     message.warn("查不到机构信息");
-        //     history.goBack();
-        // }
     }
     return (
         <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
-            <Breadcrumb>
-                <Breadcrumb.Item>学员管理</Breadcrumb.Item>
-                <Breadcrumb.Item>创建订单</Breadcrumb.Item>
-            </Breadcrumb>
+            <PageHeader
+                ghost={false}
+                onBack={() => history.goBack()}
+                title="创建订单"
+                subTitle="为学员名单派单"></PageHeader>
             <Descriptions title="学员信息" bordered style={{ marginBottom: 40, marginTop: 20 }}>
                 <Descriptions.Item label="姓名">{student.name}</Descriptions.Item>
                 <Descriptions.Item label="性别">{student.gender ? "男" : "女"}</Descriptions.Item>
@@ -304,33 +286,6 @@ function CreateStudentOrder(props) {
                 <Descriptions.Item label="订单来源" span={3}>{student.order_source_name}</Descriptions.Item>
                 <Descriptions.Item label="备注">{student.note}</Descriptions.Item>
             </Descriptions>
-            {/* <Card style={{ width: "100%", margin: "20px 5px" }}>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>姓名：{student.name}</Col>
-                    <Col span={12}>性别：{student.gender ? "男" : "女"}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>手机号：{student.telephone}</Col>
-                    <Col span={12}>居住地址：{parseAddress(student.address)}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={12}>邮箱：{student.email}</Col>
-                    <Col span={12}>订单来源：{student.order_source_name}</Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={24}>报名意向：
-                        <ul style={{ margin: "10px 10px" }}>
-                            {student.intent_subject != undefined && student.intent_subject.map(item => (
-                                <li key={item}>{item}</li>
-                            ))}
-                        </ul>
-
-                    </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                    <Col span={24}>备注：{student.note}</Col>
-                </Row>
-            </Card> */}
 
             <Title level={4}>已推荐机构</Title>
             <Table
@@ -350,12 +305,12 @@ function CreateStudentOrder(props) {
                 scroll={{ x: "max-content" }}
             />
             <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgs.total} />
-
-            <Row gutter={[16, 16]} style={{ marginTop: "30px" }}>
-                {/* <Col offset={18} span={2}><Button type="primary" onClick={() => handleCreateOrder()}>派单</Button></Col> */}
-                <Col offset={23} span={2}><Button onClick={() => history.goBack()}>返回</Button></Col>
-            </Row>
-            <CreateOrderModal studentId={id} visible={createOrderModalVisible} org={selectedOrg} closeModel={closeCreateOrderModal} />
+            <CreateOrderModal
+                studentId={id}
+                visible={createOrderModalVisible}
+                refresh={fetchData}
+                org={selectedOrg}
+                closeModel={closeCreateOrderModal} />
         </div>
     );
 }

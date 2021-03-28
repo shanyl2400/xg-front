@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 
 import { FormOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, Modal, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, Descriptions, message } from 'antd';
+import { Button, Modal, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, Descriptions, PageHeader, message } from 'antd';
 import { getOrderAPI, marksOrderRemarksRead, acceptPaymentAPI, rejectPaymentAPI } from '../api/api';
 import { getOrderStatus, getPaymentStatusTags } from '../utils/status';
 import AddMarkModel from '../component/AddMarkModel2';
@@ -241,10 +241,17 @@ function OrderDetails(props) {
 
     return (
         <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
-            <Breadcrumb>
-                <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-                <Breadcrumb.Item>订单详情</Breadcrumb.Item>
-            </Breadcrumb>
+            <PageHeader
+                ghost={false}
+                onBack={() => history.goBack()}
+                title="订单详情"
+                subTitle="学员名单派单详情"
+                extra={[
+                    <Button key="1" type="primary" onClick={() => openAddMarkModel()}>
+                        回访
+                    </Button>,
+                ]}
+            ></PageHeader>
             <Descriptions title="基本信息" bordered style={{ marginBottom: 20, marginTop: 20 }}>
                 <Descriptions.Item label="姓名">{orderInfo.student_summary.name}</Descriptions.Item>
                 <Descriptions.Item label="性别">{orderInfo.student_summary.gender ? "男" : "女"}</Descriptions.Item>
@@ -293,10 +300,6 @@ function OrderDetails(props) {
                 dataSource={orderInfo.PaymentInfo}
             />
 
-            <Row justify="end" style={{ marginTop: 8 }} gutter={[16, 16]} >
-                <Col><Button onClick={() => history.goBack()}>返回</Button></Col>
-            </Row>
-
             <AddMarkModel
                 id={orderInfo.id}
                 orderStatus={orderInfo.status}
@@ -310,7 +313,7 @@ function OrderDetails(props) {
                 refreshData={fetchData}
                 record={updatePriceModelInfo.record}
             />
-        </div>
+        </div >
     );
 }
 export default OrderDetails;

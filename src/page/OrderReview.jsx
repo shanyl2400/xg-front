@@ -10,11 +10,11 @@ let pageSize = 10;
 let currentPage = 1;
 function OrderReview(props) {
   const columns = [
-    {
-      title: '录单员',
-      dataIndex: 'author_name',
-      key: 'author_name',
-    },
+    // {
+    //   title: '录单员',
+    //   dataIndex: 'author_name',
+    //   key: 'author_name',
+    // },
     {
       title: '申请时间',
       dataIndex: 'created_at',
@@ -38,11 +38,6 @@ function OrderReview(props) {
       dataIndex: 'title',
       key: 'title',
     },
-    // {
-    //   title: '推荐科目',
-    //   dataIndex: 'intent_subject',
-    //   key: 'intent_subject',
-    // },
     {
       title: '金额',
       dataIndex: 'amount',

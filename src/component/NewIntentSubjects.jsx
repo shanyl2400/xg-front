@@ -17,7 +17,8 @@ function NewIntentSubjects(props) {
                     }
                 }
             }
-            return initValue;
+            return value;
+            // return initValue;
         }
     }
     const tProps = {
