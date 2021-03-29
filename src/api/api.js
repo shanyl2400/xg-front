@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-export const website = "http://localhost:8088"
-// export const website = "http://101.133.139.38:8088"
+// export const website = "http://localhost:8088"
+export const website = "http://101.133.139.38:8088"
 export const baseURL = website + "/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
@@ -205,6 +205,15 @@ export async function createOrderSourcesAPI(data) {
 export async function deleteOrderSourcesAPI(id) {
     try {
         let res = await axios.delete(baseURL + "/order_source/" + id)
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function updateOrderSourcesAPI(id, name) {
+    try {
+        let res = await axios.put(baseURL + "/order_source/" + id, { name: name })
         return res.data;
     } catch (e) {
         return e.response.data
@@ -484,6 +493,20 @@ export async function exportOrdersAPI(data) {
     }
 }
 
+export async function exportStudentsAPI(data) {
+    try {
+        console.log(data)
+        let params = buildSearchStudentParams(1, null, data);
+        let api = `/students/export?` + params;
+
+        // let res = await axios.get(baseURL + api);
+        let res = await Download("get", baseURL + api, null, "学员名单.xlsx")
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
 export async function listAuthOrdersAPI(page, pageSize, data) {
     try {
         let params = buildSearchOrderParams(page, pageSize, data);
@@ -739,6 +762,7 @@ function executeDownload(data, fileName) {
 
 function buildSearchOrderParams(page, pageSize, data) {
     let params = `page=${page}&page_size=${pageSize}`;
+    let orderBy = "created_at desc"
     if (data != null) {
         if (data.status == "0") {
             data.status = "";
@@ -760,7 +784,6 @@ function buildSearchOrderParams(page, pageSize, data) {
         }
 
         //order by
-        let orderBy = "created_at"
         switch (data.orderBy) {
             case 1:
                 orderBy = "created_at desc";
@@ -772,8 +795,8 @@ function buildSearchOrderParams(page, pageSize, data) {
                 orderBy = "created_at desc";
                 break;
         }
-        params = params + `&order_by=${orderBy}`
     }
+    params = params + `&order_by=${orderBy}`
     return params
 }
 
@@ -797,10 +820,9 @@ function buildSearchStudentParams(page, pageSize, data) {
         if (data.timeRange != null && data.timeRange.length == 2) {
             params = params + `&created_start_at=${data.timeRange[0]}&created_end_at=${data.timeRange[1]}`
         }
-
-        //order by
-        params = params + `&order_by=created_at desc`
     }
+    //order by
+    params = params + `&order_by=created_at desc`
     return params
 }
 

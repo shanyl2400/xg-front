@@ -9,6 +9,7 @@ import AddMarkModel from '../component/AddMarkModel2';
 import UpdatePriceModel from '../component/UpdatePriceModel';
 import { parseAddress } from '../utils/address';
 import { checkAuthority } from '../utils/auth';
+import { NO } from '../utils/id';
 const { TextArea } = Input;
 const { Title } = Typography;
 const { confirm } = Modal;
@@ -64,6 +65,14 @@ function OrderDetails(props) {
     ];
 
     const paymentColumns = [
+        {
+            title: '编号',
+            dataIndex: 'id',
+            key: 'id',
+            render: id => (
+                <span>{NO("PM", id)}</span>
+            ),
+        },
         {
             title: '时间',
             dataIndex: 'created_at',
@@ -260,6 +269,7 @@ function OrderDetails(props) {
                 <Descriptions.Item label="居住地址" >{parseAddress(orderInfo.student_summary.address)}</Descriptions.Item>
                 <Descriptions.Item label="录单员">{orderInfo.author_name}</Descriptions.Item>
                 <Descriptions.Item label="派单员">{orderInfo.publisher_name}</Descriptions.Item>
+                <Descriptions.Item label="订单号" span={3}>{NO("OR", orderInfo.id)}</Descriptions.Item>
                 <Descriptions.Item label="推荐机构" span={3}>{orderInfo.org_name}</Descriptions.Item>
                 <Descriptions.Item label="报名意向" span={3}>
                     <div style={{ margin: "0px 0px" }}>

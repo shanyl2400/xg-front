@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 import { formatDate } from "../utils/date";
 import { hideTelephone } from "../utils/telephone";
+import { showTotal } from '../utils/page';
 
 async function fetchStudent(page, pageSize, data) {
   const rawRes = await listAllStudentAPI(page, pageSize, data);
@@ -37,6 +38,14 @@ async function fetchStudent(page, pageSize, data) {
 function OrderDispatch(props) {
   const columns = [
     {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text, record, index) => (
+        <span>{index + 1 + ((pageIndex - 1) * pageSize)}</span>
+      )
+    },
+    {
       title: '录单员',
       dataIndex: 'author',
       key: 'author',
@@ -65,11 +74,6 @@ function OrderDispatch(props) {
           {hideTelephone(telephone)}
         </span>)
     },
-    // {
-    //   title: '报名意向',
-    //   dataIndex: 'intent_subject',
-    //   key: 'intent_subject',
-    // },
     {
       title: '状态',
       key: 'status',
@@ -134,7 +138,13 @@ function OrderDispatch(props) {
         style={{ marginTop: "30px" }}
         columns={columns}
         dataSource={students.data} />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
+      <Pagination
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={students.total} />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { parseAddress } from "../utils/address";
 import { formatDate } from "../utils/date";
 import { hideTelephone } from "../utils/telephone";
 import { getStudentStatus } from "../utils/status";
+import { showTotal } from '../utils/page';
 
 const pageSize = 10;
 const { Option } = Select;
@@ -41,11 +42,14 @@ async function fetchStudent(page, pageSize, data) {
 
 function StudentList(props) {
   const columns = [
-    // {
-    //   title: '录单员',
-    //   dataIndex: 'author',
-    //   key: 'author',
-    // },
+    {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text, record, index) => (
+        <span>{index + 1 + ((pageIndex - 1) * pageSize)}</span>
+      )
+    },
     {
       title: '录单时间',
       dataIndex: 'created_at',
@@ -118,7 +122,7 @@ function StudentList(props) {
 
   let handleChangePage = async (e, curPageSize) => {
     setPageIndex(e);
-    setPageIndex(curPageSize);
+    setPageSize(curPageSize);
     let res = await fetchStudent(e, curPageSize, filter)
     setStudents(res);
   }
@@ -157,7 +161,13 @@ function StudentList(props) {
         columns={columns}
         rowClassName={handleRowClass}
         dataSource={students.data} />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
+      <Pagination
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={students.total} />
     </div>
   );
 }

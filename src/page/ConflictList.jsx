@@ -5,6 +5,7 @@ import { listConflictStudents } from '../api/api';
 import { getConflictStatus } from '../utils/status';
 import { formatDate } from '../utils/date';
 import StudentConflictFilter from '../component/StudentConflictFilter';
+import { showTotal } from '../utils/page';
 
 const pageSize = 10;
 let pageIndex = 1;
@@ -108,7 +109,14 @@ function ConflictList(props) {
                 columns={columns}
                 dataSource={studentList.records}
             />
-            <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={studentList.total} />
+            <Pagination
+                showSizeChanger={false}
+                onChange={handleChangePage}
+                style={{ textAlign: "right", marginTop: 10 }}
+                defaultPageSize={pageSize}
+                size="small"
+                showTotal={showTotal}
+                total={studentList.total} />
         </div>
     );
 }

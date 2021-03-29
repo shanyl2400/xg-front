@@ -6,13 +6,17 @@ import { getOrderStatus } from '../utils/status';
 import { formatDate } from "../utils/date";
 import { hideTelephone } from "../utils/telephone";
 import OrderFilter from "../component/OrderFilter";
+import { showTotal } from '../utils/page';
 function AuthorOrderList(props) {
   const columns = [
-    // {
-    //   title: '派单员',
-    //   dataIndex: 'publisher_name',
-    //   key: 'publisher_name',
-    // },
+    {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text, record, index) => (
+        <span>{index + 1 + ((pageIndex - 1) * pageSize)}</span>
+      )
+    },
     {
       title: '派单时间',
       dataIndex: 'created_at',
@@ -111,7 +115,13 @@ function AuthorOrderList(props) {
         columns={columns}
         dataSource={orders.data}
       />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orders.total} />
+      <Pagination
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={orders.total} />
 
     </div>
   );

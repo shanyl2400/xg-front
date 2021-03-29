@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
 import { useHistory } from "react-router-dom";
 import { listOrderRemarks, marksOrderRemarksRead } from '../api/api';
+import { showTotal } from '../utils/page';
 
 const pageSize = 10;
 let currentPage = 1;
@@ -91,7 +92,14 @@ function OrderRemarksList(props) {
         columns={columns}
         dataSource={records}
       />
-      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={remarksTotal} />
+      <Pagination
+        showSizeChanger={false}
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={remarksTotal} />
     </div>
   );
 }

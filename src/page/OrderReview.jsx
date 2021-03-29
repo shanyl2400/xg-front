@@ -4,6 +4,7 @@ import { Breadcrumb, Pagination, Space, Table, message } from 'antd';
 import ReviewOrderModel from '../component/ReviewOrderModel';
 import { getPendingPaymentAPI } from '../api/api';
 import { getPaymentStatus } from '../utils/status';
+import { showTotal } from '../utils/page';
 
 import { formatDate } from "../utils/date";
 let pageSize = 10;
@@ -110,7 +111,14 @@ function OrderReview(props) {
         columns={columns}
         dataSource={paymentInfo}
       />
-      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={paymentTotal} />
+      <Pagination
+        showSizeChanger={false}
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={paymentTotal} />
       <ReviewOrderModel refreshData={fetchData} paymentData={paymentData} visible={openReviewOrderModel} closeModel={() => handleReviewOrderModel(false)} />
     </div>
   );

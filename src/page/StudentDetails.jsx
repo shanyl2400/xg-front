@@ -99,7 +99,7 @@ function StudentDetails(props) {
                         ))}
                     </div>
                 </Descriptions.Item>
-                <Descriptions.Item label="订单来源" span={3}>{student.order_source_name}</Descriptions.Item>
+                <Descriptions.Item label="订单来源" span={3}>{student.order_source_name}{student.order_source_ext != "" && " (" + student.order_source_ext + ")"}</Descriptions.Item>
                 <Descriptions.Item label="备注">{student.note}</Descriptions.Item>
             </Descriptions>
 

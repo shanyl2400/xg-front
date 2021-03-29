@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb, Table, Col, Input, Button, Row, Space, Modal, message } from 'antd';
 import { listOrderSourcesAPI, createOrderSourcesAPI, deleteOrderSourcesAPI } from '../api/api';
 import { DeleteOutlined } from '@ant-design/icons';
+import UpdateOrderSourceModel from '../component/UpdateOrderSourceModel';
 const { confirm } = Modal;
 
 function OrderResource(props) {
@@ -16,6 +17,7 @@ function OrderResource(props) {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
+          <a onClick={() => updateOrderSourceByID(record.id)}>修改</a>
           <a onClick={() => deleteOrderSourceByID(record.id)}>删除</a>
         </Space>
       ),
@@ -24,7 +26,24 @@ function OrderResource(props) {
 
   let [orderResources, setOrderResources] = useState([])
   let [orderResourceName, setOrderResourceName] = useState("")
+  let [orderResourceUpdateModelInfo, setOrderResourceUpdateModel] = useState({
+    visible: false,
+    id: 0
+  })
 
+  const handleOpenUpdateModel = (id) => {
+    setOrderResourceUpdateModel({
+      visible: true,
+      id: id
+    });
+  }
+
+  const handleCloseUpdateModel = (id) => {
+    setOrderResourceUpdateModel({
+      visible: false,
+      id: 0
+    });
+  }
   const fetchData = async () => {
     let res = await listOrderSourcesAPI();
     if (res.err_msg == "success") {
@@ -39,6 +58,9 @@ function OrderResource(props) {
 
   const handleOrderSourceNameChange = e => {
     setOrderResourceName(e.target.value);
+  }
+  const updateOrderSourceByID = async id => {
+    handleOpenUpdateModel(id);
   }
   const deleteOrderSourceByID = async id => {
     confirm({
@@ -76,7 +98,7 @@ function OrderResource(props) {
     <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-        <Breadcrumb.Item>订单来源列表</Breadcrumb.Item>
+        <Breadcrumb.Item>订单来源</Breadcrumb.Item>
       </Breadcrumb>
 
       <Row>
@@ -109,7 +131,12 @@ function OrderResource(props) {
         </Col>
       </Row>
 
-
+      <UpdateOrderSourceModel
+        visible={orderResourceUpdateModelInfo.visible}
+        id={orderResourceUpdateModelInfo.id}
+        handleCancel={handleCloseUpdateModel}
+        refresh={fetchData}
+      />
     </div>
   );
 }

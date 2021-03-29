@@ -9,6 +9,7 @@ import { listNearExpiredOrgsAPI, getOrgAPI } from '../api/api';
 import { getOrgStatus } from '../utils/status';
 import { checkAuthorities } from '../utils/auth';
 import { hideTelephone } from "../utils/telephone";
+import { showTotal } from '../utils/page';
 
 const pageSize = 10;
 let pageIndex = 1;
@@ -18,6 +19,9 @@ function OrgNearExpireList(props) {
       title: '#',
       dataIndex: 'id',
       key: 'id',
+      render: (text, record, index) => (
+        <span>{index + 1 + ((pageIndex - 1) * pageSize)}</span>
+      )
     },
     {
       title: '机构名称',
@@ -127,7 +131,7 @@ function OrgNearExpireList(props) {
     <div class="app-main-page" style={{ padding: 40, height: "100%", width: "100%" }}>
       <Breadcrumb>
         <Breadcrumb.Item>机构管理</Breadcrumb.Item>
-        <Breadcrumb.Item>机构列表</Breadcrumb.Item>
+        <Breadcrumb.Item>临过期机构</Breadcrumb.Item>
       </Breadcrumb>
       <OrgFilter onChangeFilter={handleChangeQuery} />
       <Table
@@ -136,7 +140,14 @@ function OrgNearExpireList(props) {
         columns={columns}
         dataSource={orgList}
       />
-      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
+      <Pagination
+        showSizeChanger={false}
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={orgCount} />
       <RevokeOrgModel refreshData={() => fetchData(pageIndex)} orgData={orgData} visible={revokeOrgModelVisible} closeModel={() => { setRevokeOrgModelVisible(false) }} />
       <RenewOrgModel refreshData={() => fetchData(pageIndex)} orgData={orgData} visible={renewOrgModelVisible} closeModel={() => { setRenewOrgModelVisible(false) }} />
     </div>

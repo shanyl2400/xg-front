@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import StudentFilter from "../component/StudentFilter";
 import { formatDate } from "../utils/date";
 import { hideTelephone } from "../utils/telephone";
+import { showTotal } from '../utils/page';
 
 async function fetchStudent(page, curPageSize, data) {
   console.log(curPageSize);
@@ -37,6 +38,14 @@ async function fetchStudent(page, curPageSize, data) {
 
 function AllStudentList(props) {
   const columns = [
+    {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text, record, index) => (
+        <span>{index + 1 + ((pageIndex - 1) * pageSize)}</span>
+      )
+    },
     {
       title: '录单员',
       dataIndex: 'author',
@@ -110,7 +119,7 @@ function AllStudentList(props) {
 
   let handleChangePage = async (e, curPageSize) => {
     setPageIndex(e);
-    setPageIndex(curPageSize);
+    setPageSize(curPageSize);
     let res = await fetchStudent(e, curPageSize, filter);
     setStudents(res);
   }
@@ -145,14 +154,24 @@ function AllStudentList(props) {
         <Breadcrumb.Item>所有名单</Breadcrumb.Item>
       </Breadcrumb>
 
-      <StudentFilter onFilterChange={handleStudentFilter} isDispatched={false} />
+      <StudentFilter
+        onFilterChange={handleStudentFilter}
+        isDispatched={false}
+        hasExport={true} />
       <Table
         pagination={false}
         style={{ marginTop: "30px" }}
         columns={columns}
         rowClassName={handleRowClass}
         dataSource={students.data} />
-      <Pagination onChange={handleChangePage} defaultCurrent={pageIndex} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={students.total} />
+      <Pagination
+        onChange={handleChangePage}
+        defaultCurrent={pageIndex}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={students.total} />
     </div>
   );
 }

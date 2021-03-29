@@ -2,7 +2,7 @@
 import React from 'react';
 import { Tag } from 'antd';
 
-import { StopOutlined, CheckCircleOutlined, QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { StopOutlined, CheckCircleOutlined, QuestionCircleOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 
 export function getOrderStatus(status) {
   switch (status) {
@@ -71,6 +71,8 @@ export function getPaymentStatus(status) {
       return "已通过";
     case 3:
       return "已驳回";
+    case 4:
+      return "已修改";
     default:
       return "未知";
   }
@@ -84,8 +86,10 @@ export function getPaymentStatusTags(status) {
       return <Tag icon={<CheckCircleOutlined />} color="green">已通过</Tag>;
     case 3:
       return <Tag icon={<StopOutlined />} color="red">已驳回</Tag>;
+    case 4:
+      return <Tag icon={<ReloadOutlined />} color="orange">已修改</Tag>;
     default:
-      return <Tag icon={<QuestionCircleOutlined />} color="orange">未知</Tag>;
+      return <Tag icon={<QuestionCircleOutlined />} color="red">未知</Tag>;
   }
 
 }

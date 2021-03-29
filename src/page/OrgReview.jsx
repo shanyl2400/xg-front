@@ -5,6 +5,7 @@ import OrgFilter from '../component/OrgFilter';
 import ReviewOrgModel from '../component/ReviewOrgModel';
 import { listPendingOrgsAPI, getOrgAPI } from '../api/api';
 import { getOrgStatus } from '../utils/status';
+import { showTotal } from '../utils/page';
 
 const pageSize = 10;
 let pageIndex = 1;
@@ -111,7 +112,14 @@ function OrgReview(props) {
         columns={columns}
         dataSource={orgList}
       />
-      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
+      <Pagination
+        showSizeChanger={false}
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={orgCount} />
       <ReviewOrgModel refreshData={() => fetchData()} orgData={orgData} visible={reviewOrgModelVisible} closeModel={() => { setReviewOrgModelVisible(false) }} />
     </div>
   );

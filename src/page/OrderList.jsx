@@ -6,16 +6,20 @@ import { getOrderStatus } from '../utils/status';
 import OrderFilter from "../component/OrderFilter";
 import { formatDate } from "../utils/date";
 import { hideTelephone } from "../utils/telephone";
+import { showTotal } from '../utils/page';
 const pageSize = 10;
 const { Option } = Select;
 
 function OrderList(props) {
   const columns = [
-    // {
-    //   title: '#',
-    //   dataIndex: 'id',
-    //   key: 'id',
-    // },
+    {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text, record, index) => (
+        <span>{index + 1 + ((pageIndex - 1) * pageSize)}</span>
+      )
+    },
     {
       title: '录单员',
       dataIndex: 'author_name',
@@ -122,7 +126,13 @@ function OrderList(props) {
         columns={columns}
         dataSource={orders.data}
       />
-      <Pagination onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orders.total} />
+      <Pagination
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={orders.total} />
 
     </div>
   );

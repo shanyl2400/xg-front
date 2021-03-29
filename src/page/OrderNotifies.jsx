@@ -3,6 +3,7 @@ import { Breadcrumb, message, Space, Table, Pagination } from 'antd';
 import { useHistory } from "react-router-dom";
 import { listOrderNotifies, listAuthorOrderNotifies, marksOrderNotifyRead } from '../api/api';
 import { checkAuthority } from '../utils/auth';
+import { showTotal } from '../utils/page';
 
 const pageSize = 10;
 let currentPage = 1;
@@ -119,7 +120,14 @@ function OrderRemarksList(props) {
                 columns={columns}
                 dataSource={records}
             />
-            <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={remarksTotal} />
+            <Pagination
+                showSizeChanger={false}
+                onChange={handleChangePage}
+                style={{ textAlign: "right", marginTop: 10 }}
+                defaultPageSize={pageSize}
+                size="small"
+                showTotal={showTotal}
+                total={remarksTotal} />
         </div>
     );
 }

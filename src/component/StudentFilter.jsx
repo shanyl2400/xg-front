@@ -1,13 +1,13 @@
-import { Col, Space, Select, Input, TreeSelect, Form, Cascader, DatePicker, message } from "antd";
+import { Col, Space, Select, Input, TreeSelect, Form, Cascader, Button, DatePicker, Modal, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { listOrgsAPI, listSubjectsTreeAPI, listOrderSourcesAPI, listUsersWithOrgIdAPI } from '../api/api';
+import { listOrgsAPI, listSubjectsTreeAPI, exportStudentsAPI, listOrderSourcesAPI, listUsersWithOrgIdAPI } from '../api/api';
 import options from '../component/address';
+import { ExportOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { Search } = Input;
 const { RangePicker } = DatePicker;
-
-
+const { confirm } = Modal;
 async function getOrderSources() {
     let rawSources = await listOrderSourcesAPI();
     if (rawSources.err_msg != "success") {
@@ -58,6 +58,19 @@ function StudentFilter(props) {
         orderSources: [],
         users: [],
     });
+    const doExport = () => {
+        confirm({
+            title: '确认导出?',
+            icon: <ExportOutlined />,
+            content: '是否确认导出学员名单？',
+            onOk() {
+                exportStudentsAPI(getFilter());
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
     let getFilter = () => {
         return {
             status: status,
@@ -268,6 +281,13 @@ function StudentFilter(props) {
                     onChange={e => setKeywords(e.target.value)}
                 />
             </Form.Item>
+            {props.hasExport && (<Form.Item
+            >
+
+                {/* <Button onClick={doExport}>导出</Button> */}
+                <Button onClick={doExport} icon={<ExportOutlined />} >导出</Button>
+            </Form.Item>
+            )}
         </Space>
 
     )

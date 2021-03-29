@@ -6,6 +6,7 @@ import CreateOrderModal from '../component/CreateOrderModal';
 import { getStudentByIdAPI, listSubOrgsAPI, listOrgsAPI } from '../api/api';
 import { parseAddress } from '../utils/address';
 import { formatDate } from "../utils/date";
+import { showTotal } from '../utils/page';
 import { hideTelephone } from "../utils/telephone";
 
 const { Title } = Typography;
@@ -283,7 +284,7 @@ function CreateStudentOrder(props) {
                         ))}
                     </div>
                 </Descriptions.Item>
-                <Descriptions.Item label="订单来源" span={3}>{student.order_source_name}</Descriptions.Item>
+                <Descriptions.Item label="订单来源" span={3}>{student.order_source_name}{student.order_source_ext != "" && " (" + student.order_source_ext + ")"}</Descriptions.Item>
                 <Descriptions.Item label="备注">{student.note}</Descriptions.Item>
             </Descriptions>
 
@@ -304,7 +305,14 @@ function CreateStudentOrder(props) {
                 dataSource={orgs.data}
                 scroll={{ x: "max-content" }}
             />
-            <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgs.total} />
+            <Pagination
+                showSizeChanger={false}
+                onChange={handleChangePage}
+                style={{ textAlign: "right", marginTop: 10 }}
+                defaultPageSize={pageSize}
+                size="small"
+                showTotal={showTotal}
+                total={orgs.total} />
             <CreateOrderModal
                 studentId={id}
                 visible={createOrderModalVisible}

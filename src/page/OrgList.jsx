@@ -9,6 +9,7 @@ import { listOrgsAPI, getOrgAPI } from '../api/api';
 import { getOrgStatus } from '../utils/status';
 import { checkAuthorities } from '../utils/auth';
 import { hideTelephone } from "../utils/telephone";
+import { showTotal } from '../utils/page';
 
 const pageSize = 10;
 let pageIndex = 1;
@@ -43,6 +44,9 @@ function OrgList(props) {
       title: '#',
       dataIndex: 'id',
       key: 'id',
+      render: (text, record, index) => (
+        <span>{index + 1 + (pageIndex - 1) * pageSize}</span>
+      )
     },
     {
       title: '机构名称',
@@ -167,7 +171,14 @@ function OrgList(props) {
         columns={columns}
         dataSource={orgList}
       />
-      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orgCount} />
+      <Pagination
+        showSizeChanger={false}
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={orgCount} />
       <RevokeOrgModel refreshData={() => fetchData(pageIndex)} orgData={orgData} visible={revokeOrgModelVisible} closeModel={() => { setRevokeOrgModelVisible(false) }} />
       <RenewOrgModel refreshData={() => fetchData(pageIndex)} orgData={orgData} visible={renewOrgModelVisible} closeModel={() => { setRenewOrgModelVisible(false) }} />
     </div>

@@ -165,7 +165,7 @@ function SideMenu(props) {
         }>
         {checkAuthForMenu(["查看所有订单", "录单权"], <Menu.Item key={"/main/order_notify"} icon={<BellOutlined />}>系统消息</Menu.Item>)}
 
-        <Menu.Item key={"/main/remark_list"} icon={<CustomerServiceOutlined />}>回访消息</Menu.Item>
+        <Menu.Item key={"/main/remark_list"} icon={<CustomerServiceOutlined />}>回访记录</Menu.Item>
       </SubMenu>)}
 
       <Menu.Item key={"/main/user_info"} icon={<UserOutlined />}>个人中心</Menu.Item>

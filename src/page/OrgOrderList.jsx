@@ -8,7 +8,7 @@ import OrderPayModel from '../component/OrderPayModel'
 import OrderDepositModel from '../component/OrderDepositModel'
 import OrderSignupModel from '../component/OrderSignupModel'
 import { hideTelephone } from "../utils/telephone";
-
+import { showTotal } from '../utils/page';
 import { formatDate } from "../utils/date";
 const pageSize = 10;
 let currentPage = 1;
@@ -196,7 +196,14 @@ function OrgOrderList(props) {
         columns={columns}
         dataSource={orders.data}
       />
-      <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={orders.total} />
+      <Pagination
+        showSizeChanger={false}
+        onChange={handleChangePage}
+        style={{ textAlign: "right", marginTop: 10 }}
+        defaultPageSize={pageSize}
+        size="small"
+        showTotal={showTotal}
+        total={orders.total} />
 
       <OrderSignupModel refreshData={() => fetchData(currentPage)} id={orderId} visible={signupOrderModelVisible} closeModel={handleCloseSignupOrderModel} />
       <OrderDepositModel refreshData={() => fetchData(currentPage)} id={orderId} visible={depositOrderModelVisible} closeModel={handleCloseDepositOrderModel} />

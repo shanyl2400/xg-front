@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Breadcrumb, Radio, Cascader, message, Select } from 'antd';
+import { Form, Input, Button, Breadcrumb, Radio, message, Select } from 'antd';
 import IntentSubjectForm from '../component/IntentSubjectForm';
 import NewIntentSubjects from '../component/NewIntentSubjects';
 import options from '../component/address';
+import OrderSourceForm from '../component/OrderSourceForm';
 import AddressForm from '../component/AddressForm';
 import { useHistory } from "react-router-dom";
-import { listSubjectsAPI, createStudentAPI, listOrderSourcesAPI, listSubjectsTreeAPI } from '../api/api';
+import { listSubjectsAPI, createStudentAPI, listSubjectsTreeAPI } from '../api/api';
 
 const { Option } = Select;
 const layout = {
@@ -52,14 +53,6 @@ async function getSubjects() {
   return subjects
 }
 
-async function getOrderSources() {
-  let rawSources = await listOrderSourcesAPI();
-  if (rawSources.err_msg != "success") {
-    message.error("无法获取订单来源信息：" + rawSources.err_msg);
-    return [];
-  }
-  return rawSources.sources;
-}
 
 function CreateStudent(props) {
   const [form] = Form.useForm();
@@ -87,7 +80,8 @@ function CreateStudent(props) {
       "address_ext": address.ext,
       "intent_subject": intentSubjects,
       "note": form.getFieldValue("note"),
-      "order_source_id": form.getFieldValue("order_source_id")
+      "order_source_id": form.getFieldValue("order_source").order_source_id,
+      "order_source_ext": form.getFieldValue("order_source").order_source_ext,
     })
     if (res.err_msg == "success") {
       switch (res.result.status) {
@@ -188,16 +182,13 @@ function CreateStudent(props) {
   const [formDatas, setSormDatas] = useState({
     // subjects: [],
     subjectsTree: [],
-    orderSources: []
   })
   useEffect(() => {
     const fetchData = async () => {
       // const sub = await getSubjects();
-      const orderSources = await getOrderSources();
       const subjectsTree = await listSubjectsTreeAPI();
       setSormDatas({
         // subjects: sub,
-        orderSources: orderSources,
         subjectsTree: subjectsTree,
       });
     }
@@ -244,12 +235,13 @@ function CreateStudent(props) {
           <Input />
         </Form.Item>
 
-        <Form.Item name="order_source_id" label="订单来源" rules={[{ required: true }]} >
-          <Select placeholder="请选择" style={{ width: 120 }} >
+        <Form.Item name="order_source" label="订单来源" rules={[{ required: true }]} >
+          {/* <Select placeholder="请选择" style={{ width: 120 }} >
             {formDatas.orderSources.map((os) => (
               <Option key={os.is} value={os.id}>{os.name}</Option>
             ))}
-          </Select>
+          </Select> */}
+          <OrderSourceForm />
         </Form.Item>
 
         <Form.Item name="intentSubject" label="报名意向" rules={[{ required: true }]}>

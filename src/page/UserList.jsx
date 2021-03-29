@@ -4,6 +4,7 @@ import { ExclamationCircleOutlined, ReloadOutlined, SearchOutlined } from '@ant-
 import UserFilter from '../component/UserFilter';
 import UserDetails from '../component/UserDetailsModel';
 import { listUsersAPI, resetUserPasswordAPI, website } from '../api/api';
+import { showTotal } from '../utils/page';
 
 const { confirm } = Modal;
 const { Meta } = Card;
@@ -166,7 +167,14 @@ function UserList(props) {
 
       <Row>
         <Col span={12}>
-          <Pagination showSizeChanger={false} onChange={handleChangePage} style={{ textAlign: "right", marginTop: 10 }} defaultPageSize={pageSize} size="small" total={users.total} />
+          <Pagination
+            showSizeChanger={false}
+            onChange={handleChangePage}
+            style={{ textAlign: "right", marginTop: 10 }}
+            defaultPageSize={pageSize}
+            size="small"
+            showTotal={showTotal}
+            total={users.total} />
         </Col>
       </Row>
 
