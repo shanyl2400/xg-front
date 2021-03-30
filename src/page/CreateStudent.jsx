@@ -71,6 +71,7 @@ function CreateStudent(props) {
       message.error('请选择报名意向');
       return;
     }
+
     let res = await createStudentAPI({
       "name": form.getFieldValue("name"),
       "gender": form.getFieldValue("gender"),
@@ -141,7 +142,8 @@ function CreateStudent(props) {
         "address_ext": address.ext,
         "intent_subject": intentSubjects,
         "note": form.getFieldValue("note"),
-        "order_source_id": form.getFieldValue("order_source_id")
+        "order_source_id": form.getFieldValue("order_source").order_source_id,
+        "order_source_ext": form.getFieldValue("order_source").order_source_ext,
       })
       if (res.err_msg == "success") {
         switch (res.result.status) {
