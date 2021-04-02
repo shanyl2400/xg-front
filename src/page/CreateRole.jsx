@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Breadcrumb, Input, Form, Button, Checkbox, message } from 'antd';
+import { Breadcrumb, Input, Form, Button, Checkbox, message, Select } from 'antd';
 import { listAuths, createRole } from "../api/api";
 const layout = {
   labelCol: { span: 3 },
@@ -16,8 +16,10 @@ const options = [
 
 function CreateRole(props) {
   const [form] = Form.useForm();
-  const [auths, setAuths] = useState([])
+  const [auths, setAuths] = useState([]);
   const [roleName, setRoleName] = useState("")
+  const [roleMode, setRoleMode] = useState(1)
+  const [authOptions, setAuthOptions] = useState([])
   const handleChange = e => {
     setRoleName(e.target.value)
   }
@@ -33,20 +35,31 @@ function CreateRole(props) {
     }
   }
 
+  const handleChangeRoleMode = e => {
+    setRoleMode(e);
+    filterAuth(auths, e);
+  }
+
+  const filterAuth = (auths, mode) => {
+    let options = [];
+    for (let i = 0; i < auths.length; i++) {
+      if (auths[i].mode == mode) {
+        options = options.concat({
+          key: auths[i].id,
+          label: auths[i].name,
+          value: auths[i].id,
+        })
+      }
+    }
+    setAuthOptions(options);
+  }
+
   const fetchData = async e => {
     let res = await listAuths();
     if (res.err_msg == "success") {
       console.log(res.auths);
-      let auths = [];
-      for (let i = 0; i < res.auths.length; i++) {
-        auths = auths.concat({
-          key: res.auths[i].id,
-          label: res.auths[i].name,
-          value: res.auths[i].id,
-        })
-      }
-
-      setAuths(auths);
+      setAuths(res.auths);
+      filterAuth(res.auths, 1);
     } else {
       message.error("获取用户列表失败，" + res.err_msg);
       return
@@ -71,8 +84,15 @@ function CreateRole(props) {
           <Input style={{ width: 220 }} onChange={handleChange} />
         </Form.Item>
 
+        <Form.Item name="role_mode" label="角色归属" rules={[{ required: true }]} >
+          <Select style={{ width: 220 }} defaultValue={1} value={roleMode} onChange={handleChangeRoleMode}>
+            <Select.Option value={1}>学果网</Select.Option>
+            <Select.Option value={2}>入驻机构</Select.Option>
+          </Select>
+        </Form.Item>
+
         <Form.Item name="auth_ids" label="权限" rules={[{ required: true }]} >
-          <Checkbox.Group options={auths} defaultValue={['人员管理']} />
+          <Checkbox.Group options={authOptions} defaultValue={['人员管理']} />
         </Form.Item>
 
         <Form.Item {...tailLayout}>

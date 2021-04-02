@@ -43,7 +43,7 @@ const columns = [
         key: 'succeed',
         render: succeed => (
             <span>
-                {succeed / 100}%
+                {Number((succeed / 100).toString().match(/^\d+(?:\.\d{0,2})?/))}%
             </span>
         ),
     },

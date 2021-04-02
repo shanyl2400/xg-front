@@ -1,7 +1,7 @@
 import { Menu } from 'antd';
 import React from 'react';
 import { useHistory, useLocation } from "react-router-dom";
-import { TeamOutlined, BankOutlined, MessageOutlined, CustomerServiceOutlined, HistoryOutlined, BellOutlined, ExclamationCircleOutlined, FileTextOutlined, TableOutlined, DatabaseOutlined, PicLeftOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined, HighlightOutlined, UnorderedListOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
+import { TeamOutlined, BankOutlined, ClusterOutlined, MessageOutlined, PicRightOutlined, ScheduleOutlined, CustomerServiceOutlined, TransactionOutlined, HddOutlined, DollarCircleOutlined, HistoryOutlined, BellOutlined, ExclamationCircleOutlined, FileTextOutlined, TableOutlined, DatabaseOutlined, PicLeftOutlined, CompassOutlined, UserSwitchOutlined, IdcardOutlined, HighlightOutlined, UnorderedListOutlined, ProfileOutlined, FileAddOutlined, UserAddOutlined, GroupOutlined, CheckCircleOutlined, PlusCircleOutlined, SolutionOutlined, GoldOutlined, UserOutlined, ApartmentOutlined, FileExcelOutlined, OrderedListOutlined, BarsOutlined, AuditOutlined, FileSyncOutlined } from '@ant-design/icons';
 import { checkAuthorities } from '../utils/auth';
 import logo from '../logo.png';
 import favicon from '../favicon.png';
@@ -67,6 +67,9 @@ function SideMenu(props) {
           </span>
         }>
         <Menu.Item key={"/main/statistics"} icon={<TableOutlined />}>统计表</Menu.Item>
+        <Menu.Item key={"/main/statistics/orgs"} icon={<ClusterOutlined />}>机构数据</Menu.Item>
+        <Menu.Item key={"/main/statistics/users"} icon={<PicRightOutlined />}>员工数据</Menu.Item>
+
       </SubMenu>)}
 
       {checkAuthForMenu(["录单权", "全名单派单权"], <SubMenu
@@ -112,6 +115,19 @@ function SideMenu(props) {
         <Menu.Item key={"/main/subject_list"} icon={<ApartmentOutlined />}>课程分类</Menu.Item>
       </SubMenu>)}
 
+      {checkAuthForMenu(["结算"],
+        <SubMenu
+          key="sub10"
+          title={
+            <span>
+              <DollarCircleOutlined />
+              <span>结算管理</span>
+            </span>
+          }>
+          {checkAuthForMenu(["结算"], <Menu.Item key={"/main/create_settlement"} icon={<TransactionOutlined />}>新建结算</Menu.Item>)}
+          {checkAuthForMenu(["结算"], <Menu.Item key={"/main/list_settlement"} icon={<HddOutlined />}>结算列表</Menu.Item>)}
+        </SubMenu>)}
+
       {checkAuthForMenu(["机构管理", "机构审核"],
         <SubMenu
           key="sub4"
@@ -151,8 +167,8 @@ function SideMenu(props) {
           }>
           {checkAuthForMenu(["用户管理"], <Menu.Item key={"/main/create_user"} icon={<UserAddOutlined />}>添加用户</Menu.Item>)}
           {checkAuthForMenu(["用户管理"], <Menu.Item key={"/main/user_list"} icon={<IdcardOutlined />}>用户列表</Menu.Item>)}
+          {checkAuthForMenu(["角色管理"], <Menu.Item key={"/main/create_role"} icon={<ScheduleOutlined />}>添加角色</Menu.Item>)}
           {checkAuthForMenu(["角色管理"], <Menu.Item key={"/main/role_list"} icon={<ProfileOutlined />}>角色列表</Menu.Item>)}
-          {/* <Menu.Item key={"/main/create_role"} icon={<ScheduleOutlined />}>添加角色</Menu.Item> */}
         </SubMenu>)}
 
       {checkAuthForMenu(["查看所有订单", "自派单权", "全名单派单权", "机构订单权限"], <SubMenu

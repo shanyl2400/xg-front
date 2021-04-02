@@ -40,16 +40,16 @@ function ReviewOrderModel(props) {
         >
             <Card style={{ width: "100%", margin: "5px 5px" }}>
                 <Row gutter={[16, 16]}>
-                    <Col span={12}>姓名：{props.paymentData.student_name}</Col>
-                    <Col span={12}>派单员：{props.paymentData.publisher_name}</Col>
+                    <Col span={12}>姓名：{props.paymentData && props.paymentData.student_name}</Col>
+                    <Col span={12}>派单员：{props.paymentData && props.paymentData.publisher_name}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
-                    <Col span={12}>推荐机构：{props.paymentData.org_name}</Col>
+                    <Col span={12}>推荐机构：{props.paymentData && props.paymentData.org_name}</Col>
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={24}>报名：
                         <ul style={{ margin: "10px 10px" }}>
-                            {props.paymentData.intent_subject.map((v, id) =>
+                            {props.paymentData && props.paymentData.intent_subject.map((v, id) =>
                                 <li key={id}>{v}</li>
                             )}
                         </ul>
@@ -57,14 +57,15 @@ function ReviewOrderModel(props) {
                     </Col>
                 </Row>
                 <Row gutter={[16, 16]} key={1}>
-                    <Col span={12}>状态：{getPaymentStatus(props.paymentData.status)}</Col>
+                    <Col span={12}>状态：{props.paymentData && getPaymentStatus(props.paymentData.status)}</Col>
                 </Row>
+                {props.paymentData &&
+                    <div style={{ float: "right", left: 20, fontSize: 30, color: "#393", marginTop: -40, marginRight: 30 }}>
+                        <span style={props.paymentData.mode == 1 ? { "color": "#52c41a" } : { "color": "#f5222d" }}>
+                            {props.paymentData.mode == 1 ? "+" : "-"}￥{props.paymentData.amount}
+                        </span>
+                    </div>}
 
-                <div style={{ float: "right", left: 20, fontSize: 30, color: "#393", marginTop: -40, marginRight: 30 }}>
-                    <span style={props.paymentData.mode == 1 ? { "color": "#52c41a" } : { "color": "#f5222d" }}>
-                        {props.paymentData.mode == 1 ? "+" : "-"}￥{props.paymentData.amount}
-                    </span>
-                </div>
             </Card>
 
             <Row style={{ marginTop: 30 }}>

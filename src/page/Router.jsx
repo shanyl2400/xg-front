@@ -37,12 +37,21 @@ const UpdateOrgSelf = loadable(() => import('./UpdateOrgSelf'));
 const OrderNotifies = loadable(() => import('./OrderNotifies'));
 const ConflictList = loadable(() => import('./ConflictList'));
 const ConflictHandler = loadable(() => import('./ConflictHandler'));
-
+const CreateSettlement = loadable(() => import('./CreateSettlement'));
+const SettlementList = loadable(() => import('./SettlementList'));
+const UserStatisticTable = loadable(() => import('./UserStatisticsTable'));
+const OrgStatisticTable = loadable(() => import('./OrgStatisticsTable'));
 function XgRouter() {
     return (
         <Switch>
             <Route path="/main/student_list">
                 <StudentList />
+            </Route>
+            <Route path="/main/statistics/orgs">
+                <OrgStatisticTable />
+            </Route>
+            <Route path="/main/statistics/users">
+                <UserStatisticTable />
             </Route>
             <Route path="/main/statistics">
                 <StatisticTable />
@@ -92,11 +101,18 @@ function XgRouter() {
             <Route path="/main/review_org">
                 <OrgReview />
             </Route>
+            <Route path="/main/create_settlement">
+                <CreateSettlement />
+            </Route>
             <Route path="/main/org_list">
                 <OrgList />
             </Route>
             <Route path="/main/org_near_expire_list">
                 <OrgNearExpireList />
+            </Route>
+
+            <Route path="/main/list_settlement">
+                <SettlementList />
             </Route>
             <Route path="/main/create_user">
                 <CreateUser />

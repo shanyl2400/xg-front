@@ -3,10 +3,13 @@ import { useParams, useHistory } from "react-router-dom";
 
 import { FormOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, Modal, Breadcrumb, Row, Col, Input, Typography, Tag, Space, Table, Descriptions, PageHeader, message } from 'antd';
-import { getOrderAPI, marksOrderRemarksRead, acceptPaymentAPI, rejectPaymentAPI } from '../api/api';
+import { getOrderAPI, marksOrderRemarksRead, getCommissionSettlementByPaymentIDAPI, acceptPaymentAPI, rejectPaymentAPI, getOrgAPI } from '../api/api';
 import { getOrderStatus, getPaymentStatusTags } from '../utils/status';
+import ReviewOrderModel from '../component/ReviewOrderModel';
 import AddMarkModel from '../component/AddMarkModel2';
+import CommissionModel from '../component/CommissionModel';
 import UpdatePriceModel from '../component/UpdatePriceModel';
+import CommissionViewModel from '../component/CommissionViewModel';
 import { parseAddress } from '../utils/address';
 import { checkAuthority } from '../utils/auth';
 import { NO } from '../utils/id';
@@ -86,16 +89,6 @@ function OrderDetails(props) {
             dataIndex: 'title',
             key: 'title'
         },
-        // {
-        //     title: '收支',
-        //     dataIndex: 'mode',
-        //     key: 'mode',
-        //     render: mode => (
-        //         <span>
-        //             {mode == 1 ? <Tag color="green">收入</Tag> : <Tag color="red">支出</Tag>}
-        //         </span>
-        //     )
-        // },
         {
             title: '金额',
             dataIndex: 'amount',
@@ -122,15 +115,14 @@ function OrderDetails(props) {
             key: 'action',
             render: (text, record) => {
                 let disableApprove = record.status != 1;
+                let disableUpdatePrice = record.status != 1 && record.status != 2;
+                let disableCommission = record.status != 2;
+                let enableCommission = record.status == 5;
                 return (<div>
-                    {disableApprove ? "" : (
-                        <div>
-                            <a onClick={() => { approveOrder(record.id) }}>通过</a>&nbsp;/&nbsp;
-                            <a onClick={() => { updatePrice(record) }}>改价</a>&nbsp;/&nbsp;
-                            <a onClick={() => { rejectOrder(record.id) }}>拒绝</a>
-                        </div>
-                    )}
-
+                    {!disableApprove && (<span><a onClick={() => { reviewPayment(record.id) }}>审核</a>&nbsp;&nbsp;</span>)}
+                    {!disableUpdatePrice && (<span><a onClick={() => { updatePrice(record) }}>改价</a>&nbsp;&nbsp;</span>)}
+                    {!disableCommission && (<span><a onClick={() => { settlePayment(record) }}>结算</a>&nbsp;&nbsp;</span>)}
+                    {enableCommission && (<span><a onClick={() => { settleViewPayment(record) }}>查看结算</a>&nbsp;&nbsp;</span>)}
                 </div>)
             },
         }
@@ -142,6 +134,15 @@ function OrderDetails(props) {
         record: {}
     });
     let [mark, setMark] = useState("");
+    let [reviewModelInfo, setReviewModelInfo] = useState({
+        visible: false,
+    })
+    let [settleModelInfo, setSettleModelInfo] = useState({
+        visible: false
+    })
+    let [settleViewModelInfo, setSettleViewModelInfo] = useState({
+        visible: false
+    })
     let history = useHistory();
     let [orderInfo, setOrderInfo] = useState({
         student_summary: {
@@ -152,6 +153,7 @@ function OrderDetails(props) {
         PaymentInfo: [],
         RemarkInfo: [],
     })
+    let [orgInfo, setOrgInfo] = useState({});
     useEffect(() => {
         fetchData();
     }, []);
@@ -173,13 +175,58 @@ function OrderDetails(props) {
             history.goBack();
             return;
         }
+
+        let res2 = await getOrgAPI(res.data.to_org_id);
+        if (res2.err_msg == "success") {
+            setOrgInfo(res2.org);
+        } else {
+            message.warning("获取机构信息失败：" + res2.err_msg);
+            history.goBack();
+            return;
+        }
+
+    }
+    const handleReviewOrderModel = (flag) => {
+        setReviewModelInfo({
+            visible: flag,
+        });
+    }
+    const handleSettleModel = () => {
+        setSettleModelInfo({
+            visible: false,
+        });
     }
 
+    const handleSettleViewModel = () => {
+        setSettleViewModelInfo({
+            visible: false,
+        });
+    }
     const updatePrice = async (record) => {
         setUpdatePriceModelInfo({
             visible: true,
             record: record,
         });
+    }
+    const settlePayment = async (record) => {
+        setSettleModelInfo({
+            visible: true,
+            record: record,
+        })
+    }
+    const settleViewPayment = async (record) => {
+        let ret = await getCommissionSettlementByPaymentIDAPI(record.id);
+        if (ret.err_msg == "success") {
+            setSettleViewModelInfo({
+                visible: true,
+                record: record,
+                settlement: ret.settlements[0]
+            })
+        } else {
+            message.warning("获取结算信息失败" + ret.err_msg);
+            return;
+        }
+
     }
     const rejectOrder = async (id) => {
         confirm({
@@ -199,7 +246,23 @@ function OrderDetails(props) {
                 console.log('Cancel');
             },
         });
+    }
 
+    const reviewPayment = async (id) => {
+        for (let i = 0; i < orderInfo.PaymentInfo.length; i++) {
+            if (id == orderInfo.PaymentInfo[i].id) {
+                let orderData = orderInfo;
+                orderData.mode = orderInfo.PaymentInfo[i].mode;
+                orderData.amount = orderInfo.PaymentInfo[i].amount;
+                orderData.id = id;
+                setReviewModelInfo({
+                    visible: true,
+                    paymentData: orderData
+                });
+                return;
+            }
+        }
+        message.warn("找不到这笔收支");
     }
     const approveOrder = async (id) => {
         confirm({
@@ -270,15 +333,16 @@ function OrderDetails(props) {
                 <Descriptions.Item label="录单员">{orderInfo.author_name}</Descriptions.Item>
                 <Descriptions.Item label="派单员">{orderInfo.publisher_name}</Descriptions.Item>
                 <Descriptions.Item label="订单号" span={3}>{NO("OR", orderInfo.id)}</Descriptions.Item>
-                <Descriptions.Item label="推荐机构" span={3}>{orderInfo.org_name}</Descriptions.Item>
-                <Descriptions.Item label="报名意向" span={3}>
+                <Descriptions.Item label="推荐机构" span={1}>{orderInfo.org_name}</Descriptions.Item>
+                <Descriptions.Item label="报名意向" span={1}>
                     <div style={{ margin: "0px 0px" }}>
                         {orderInfo.intent_subject != undefined && orderInfo.intent_subject.map((v, id) => (
                             <div key={id}>{v}</div>
                         ))}
                     </div>
                 </Descriptions.Item>
-                <Descriptions.Item label="状态" span={3}>{getOrderStatus(orderInfo.status)}</Descriptions.Item>
+                <Descriptions.Item label="状态" span={1}>{getOrderStatus(orderInfo.status)}</Descriptions.Item>
+                <Descriptions.Item label="结算比例" span={3}>{orgInfo.settlement_instruction != "" ? orgInfo.settlement_instruction : "默认方案"}</Descriptions.Item>
                 <Descriptions.Item label="备注">{orderInfo.student_summary.note}</Descriptions.Item>
             </Descriptions>
 
@@ -322,6 +386,23 @@ function OrderDetails(props) {
                 visible={updatePriceModelInfo.visible}
                 refreshData={fetchData}
                 record={updatePriceModelInfo.record}
+            />
+            <ReviewOrderModel
+                refreshData={fetchData}
+                paymentData={reviewModelInfo.paymentData}
+                visible={reviewModelInfo.visible}
+                closeModel={() => handleReviewOrderModel(false)} />
+            <CommissionModel
+                refreshData={fetchData}
+                visible={settleModelInfo.visible}
+                closeModel={() => handleSettleModel()}
+                record={settleModelInfo.record}
+            />
+            <CommissionViewModel
+                visible={settleViewModelInfo.visible}
+                closeModel={() => handleSettleViewModel()}
+                record={settleViewModelInfo.record}
+                settlement={settleViewModelInfo.settlement}
             />
         </div >
     );

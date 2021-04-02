@@ -88,6 +88,8 @@ export function getPaymentStatusTags(status) {
       return <Tag icon={<StopOutlined />} color="red">已驳回</Tag>;
     case 4:
       return <Tag icon={<ReloadOutlined />} color="orange">已修改</Tag>;
+    case 5:
+      return <Tag icon={<ReloadOutlined />} color="green">已结算</Tag>;
     default:
       return <Tag icon={<QuestionCircleOutlined />} color="red">未知</Tag>;
   }

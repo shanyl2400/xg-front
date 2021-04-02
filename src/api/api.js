@@ -1,7 +1,7 @@
 import axios from "axios"; //导入axios
 
-// export const website = "http://localhost:8088"
-export const website = "http://101.133.139.38:8088"
+export const website = "http://localhost:8088"
+// export const website = "http://101.133.139.38:8088"
 export const baseURL = website + "/api"
 
 axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("token");
@@ -99,6 +99,15 @@ export async function createRole(data) {
 export async function createStudentAPI(values) {
     try {
         let res = await axios.post(baseURL + "/student/", values);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function createSettlementAPI(values) {
+    try {
+        let res = await axios.post(baseURL + "/settlement/", values);
         return res.data;
     } catch (e) {
         return e.response.data
@@ -229,6 +238,15 @@ export async function createOrderAPI(data) {
     }
 }
 
+export async function createCommissionSettlement(data) {
+    try {
+        let res = await axios.post(baseURL + "/settlement/commission", data);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
 export async function getStatisticsSummaryAPI() {
     try {
         // org_id, author, publisher_id, order_source
@@ -239,6 +257,40 @@ export async function getStatisticsSummaryAPI() {
         return e.response.data
     }
 }
+
+export async function getEnterRankingAPI() {
+    try {
+        // org_id, author, publisher_id, order_source
+        let api = `/statistics/students/author/rank`;
+        let res = await axios.get(baseURL + api);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function getOrgSalesRankingAPI() {
+    try {
+        // org_id, author, publisher_id, order_source
+        let api = `/statistics/orders/payment/rank`;
+        let res = await axios.get(baseURL + api);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function getOrgDispatchRankingAPI() {
+    try {
+        // org_id, author, publisher_id, order_source
+        let api = `/statistics/orders/rank`;
+        let res = await axios.get(baseURL + api);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
 export async function getStatisticsTableAPI(data) {
     try {
         let res = await axios.get(baseURL + `/statistics/table?org_id=${data.org_id}&author=${data.author}&publisher_id=${data.publisher_id}&order_source=${data.order_source}`);
@@ -258,6 +310,43 @@ export async function getStatisticsTableGroupAPI(data) {
             api = api + `&start_at=${start_at ? start_at : ""}&end_at=${end_at ? end_at : ""}`
         }
         let res = await axios.get(api);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+
+export async function getOrderStatistics(data) {
+    try {
+        let params = buildSearchOrderParams(0, 0, data);
+        let api = baseURL + `/statistics/orders?` + params;
+        let res = await axios.get(api);
+        // let res = await axios.get(baseURL + "/orgs/pending");
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function getStudentsStatistics(data) {
+    try {
+        let params = buildStatisticsStudentParams(0, 0, data);
+        let api = baseURL + `/statistics/students/author?` + params;
+        let res = await axios.get(api);
+        // let res = await axios.get(baseURL + "/orgs/pending");
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+export async function getOrderPaymentStatistics(data) {
+    try {
+        let params = buildSearchOrderParams(0, 0, data);
+        let api = baseURL + `/statistics/orders/payment?` + params;
+        let res = await axios.get(api);
+        // let res = await axios.get(baseURL + "/orgs/pending");
         return res.data;
     } catch (e) {
         return e.response.data
@@ -422,8 +511,18 @@ export async function updateOrgAPI(id, data) {
 
 export async function updateOrgSelfAPI(data) {
     try {
-        console.log("Update:", data);
         let res = await axios.put(baseURL + `/org/`, data);
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+export async function getCommissionSettlementByPaymentIDAPI(paymentID) {
+    if (paymentID == "") {
+        return [];
+    }
+    try {
+        let res = await axios.get(baseURL + `/settlements/commission?` + "payment_id=" + paymentID);
         return res.data;
     } catch (e) {
         return e.response.data
@@ -594,6 +693,17 @@ export async function rejectPaymentAPI(id) {
 export async function listRolesAPI() {
     try {
         let res = await axios.get(baseURL + "/roles/");
+        return res.data;
+    } catch (e) {
+        return e.response.data
+    }
+}
+
+
+export async function listSettlementsAPI(page, pageSize) {
+    try {
+        let params = buildSettlementsParams(page, pageSize);
+        let res = await axios.get(baseURL + "/settlements/?" + params);
         return res.data;
     } catch (e) {
         return e.response.data
@@ -777,7 +887,7 @@ function buildSearchOrderParams(page, pageSize, data) {
             data.orgId = "";
         }
 
-        params = params + `&status=${data.status}&to_org_ids=${data.orgId}&keywords=${data.query ? data.query : ""}`
+        params = params + `&status=${data.status}&pay_record_status=${data.pay_record_status}&to_org_ids=${data.orgId}&keywords=${data.query ? data.query : ""}`
         params = params + `&author_id=${data.author}&order_sources=${data.orderSource}&intent_subjects=${data.subject ? data.subject : ""}&address=${data.address ? data.address : ""}`
         if (data.startAt != null && data.endAt != null) {
             params = params + `&created_start_at=${data.startAt}&created_end_at=${data.endAt}`
@@ -827,6 +937,34 @@ function buildSearchStudentParams(page, pageSize, data) {
 }
 
 
+function buildStatisticsStudentParams(page, pageSize, data) {
+    console.log(">>>>>:", data)
+    let params = `page=${page}&page_size=${pageSize}`;
+    if (data != null) {
+        if (data.status == "0") {
+            data.status = "";
+        }
+        if (data.orderSource == "0") {
+            data.orderSource = "";
+        }
+        if (data.author_id == "0") {
+            data.author_id = "";
+        }
+        if (!data.telephone) {
+            data.telephone = "";
+        }
+        params = params + `&status=${data.status}&telephone=${data.telephone}&no_dispatch_order=${data.noDispatch}&keywords=${data.keywords ? data.keywords : ""}`
+        params = params + `&author_id=${data.author}&order_source_ids=${data.orderSource}&intent_subjects=${data.subject ? data.subject : ""}&address=${data.address ? data.address : ""}`
+        if (data.startAt != null && data.endAt != null) {
+            params = params + `&created_start_at=${data.startAt}&created_end_at=${data.endAt}`
+        }
+    }
+    //order by
+    params = params + `&order_by=created_at desc`
+    return params
+}
+
+
 function buildSearchOrgsParams(page, pageSize, data) {
     let params = `page=${page}&page_size=${pageSize}`;
     if (data != null) {
@@ -843,7 +981,12 @@ function buildSearchOrgsParams(page, pageSize, data) {
     }
     return params
 }
+function buildSettlementsParams(page, pageSize) {
+    let params = `page=${page}&page_size=${pageSize}`;
 
+    params = params + `&order_by=created_at desc`
+    return params
+}
 
 function buildSearchConflictParams(page, pageSize, data) {
     let params = `page=${page}&page_size=${pageSize}`;

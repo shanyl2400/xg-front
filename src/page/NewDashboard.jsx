@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SummaryData from '../component/SummaryData';
 import ReactEcharts from "echarts-for-react";
-import { getStatisticsSummaryAPI, listUsersWithOrgIdAPI, getStatisticsTableAPI, listOrderSourcesAPI, listOrgsAPI } from '../api/api';
+import { getStatisticsSummaryAPI, getOrgSalesRankingAPI, getOrgDispatchRankingAPI, getStatisticsTableAPI, getEnterRankingAPI, listOrderSourcesAPI, listOrgsAPI } from '../api/api';
 import { message, Typography, Statistic, Table, Select, Row, Col, Card } from 'antd';
 import { PayCircleOutlined, TeamOutlined, RiseOutlined, BankOutlined } from '@ant-design/icons';
 
@@ -11,32 +11,18 @@ const { Option } = Select;
 function NewDashboard(props) {
   let [data, setData] = useState({ x: [], studnetY: [], performanceY: [], ordersY: [], tableData: [] });
   let [summaryData, setSummaryData] = useState({ performance_total: 0, orgs_total: 0, students_total: 0, success_rate: 0 });
-  let [users, setUsers] = useState([]);
-  let [orgs, setOrgs] = useState([]);
-  let [orderSources, setOrderSources] = useState([]);
   let [selectOrgId, setSelectOrgId] = useState(0);
   let [selectAuthor, setSelectAuthor] = useState(0);
   let [selectPublisherId, setSelectPublisherId] = useState(0);
   let [selectOrderSource, setSelectOrderSource] = useState(0);
-  const timerRef = useRef();
-  const [count, setCount] = useState(0);
+
+  let [enterRank, setEnterRank] = useState([]);
+  let [orgSalesRank, setOrgSalesRank] = useState([]);
+  let [orgDispatchRank, setOrgDispathRank] = useState([]);
+  let [enterRankTabKey, setEnterRankTabKey] = useState('tab1');
+  let [orgRankTabKey, setOrgRankTabKey] = useState('tab1');
   let studentOption = {
-    title: {
-      text: '录单量',
-      textStyle: {
-        //文字颜色
-        color: '#333',
-        //字体风格,'normal','italic','oblique'
-        fontStyle: 'normal',
-        //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-        fontWeight: 'normal',
-        //字体系列
-        fontFamily: 'sans-serif',
-        //字体大小
-        fontSize: 16
-      }
-    },
-    tooltip: {},
+    color: ["#d48265"],
     legend: {
       x: 'center',
       bottom: 0,
@@ -53,23 +39,73 @@ function NewDashboard(props) {
     }]
   };
 
-  let performanceOption = {
-    title: {
-      text: '业绩',
-      textStyle: {
-        //文字颜色
-        color: '#333',
-        //字体风格,'normal','italic','oblique'
-        fontStyle: 'normal',
-        //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-        fontWeight: 'normal',
-        //字体系列
-        fontFamily: 'sans-serif',
-        //字体大小
-        fontSize: 16
-      }
+  let enterRankGraphOption = {
+    tooltip: {
+      trigger: 'item'
     },
-    tooltip: {},
+    legend: {
+      top: '5%',
+      left: 'center'
+    },
+    series: [
+      {
+        name: '录单量',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '40',
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: enterRank,
+      }
+    ]
+  }
+
+  let orgSalesRankGraphOption = {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      top: '5%',
+      left: 'center'
+    },
+    series: [
+      {
+        name: '销售额',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '40',
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: orgSalesRank,
+      }
+    ]
+  }
+  let performanceOption = {
+    color: ["#546570"],
     legend: {
       x: 'center',
       bottom: 0,
@@ -78,10 +114,14 @@ function NewDashboard(props) {
     xAxis: {
       data: data.x
     },
-    yAxis: {},
+    yAxis: {
+      type: 'value'
+    },
     series: [{
       name: '业绩',
       type: 'line',
+      smooth: true,
+      areaStyle: {},
       data: data.performanceY
     }]
   };
@@ -90,6 +130,7 @@ function NewDashboard(props) {
       title: '时间',
       dataIndex: 'name',
       key: 'name',
+      width: 80,
     },
     {
       title: '订单总量',
@@ -127,39 +168,146 @@ function NewDashboard(props) {
       ),
     },
   ];
-  const fetchData = async (filter) => {
-    refreshStatistics(filter);
-    let userRes = await listUsersWithOrgIdAPI(1, 0, 0);
-    if (userRes.err_msg == "success") {
-      console.log("user:", userRes.users);
-      setUsers(userRes.users);
+  const enterRankTab = [
+    {
+      key: 'tab1',
+      tab: '员工录单排名',
+    },
+    {
+      key: 'tab2',
+      tab: '统计图',
+    },
+  ];
+
+  const orgRankTab = [
+    {
+      key: 'tab1',
+      tab: '机构派单排名',
+    },
+    {
+      key: 'tab2',
+      tab: '机构派单统计图',
+    },
+    {
+      key: 'tab3',
+      tab: '统计图',
+    },
+  ];
+  const enterRankColumns = [
+    {
+      title: '排名',
+      dataIndex: 'id',
+      key: 'id',
+      width: 50,
+      render: (id, record, index) => (
+        <span>
+          {index + 1}
+        </span>
+      ),
+    },
+    {
+      title: '录单人',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '录单量',
+      dataIndex: 'count',
+      key: 'count',
+    }
+  ];
+
+  const orgDispatchRankColumns = [
+    {
+      title: '排名',
+      dataIndex: 'id',
+      key: 'id',
+      width: 50,
+      render: (id, record, index) => (
+        <span>
+          {index + 1}
+        </span>
+      ),
+    },
+    {
+      title: '机构',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '派单量',
+      dataIndex: 'count',
+      key: 'count',
+    }
+  ];
+
+  const orgSalesRankColumns = [
+    {
+      title: '排名',
+      dataIndex: 'id',
+      key: 'id',
+      width: 50,
+      render: (id, record, index) => (
+        <span>
+          {index + 1}
+        </span>
+      ),
+    },
+    {
+      title: '机构',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '销售额',
+      dataIndex: 'amount',
+      key: 'amount',
+    }
+  ];
+
+  const fetchRankData = async () => {
+    let res = await getEnterRankingAPI();
+    if (res.err_msg == "success") {
+      if (res.result != null) {
+        for (let i = 0; i < res.result.length; i++) {
+          res.result[i].value = res.result[i].count;
+        }
+        setEnterRank(res.result);
+      }
     } else {
-      message.warning("获取用户信息失败：" + userRes.err_msg);
-      return;
+      message.error("获取录单排名失败，", res.err_msg);
+      return
     }
 
-    let osRes = await listOrderSourcesAPI();
-    if (osRes.err_msg == "success") {
-      console.log("or:", osRes.sources);
-      setOrderSources(osRes.sources);
-    } else {
-      message.warning("获取订单来源信息失败：" + osRes.err_msg);
-      return;
-    }
-    let orgRes = await listOrgsAPI();
-    if (orgRes.err_msg == "success") {
-      console.log("orgs:", orgRes.data.orgs);
-      let tmpOrg = [];
-      for (let i = 0; i < orgRes.data.orgs.length; i++) {
-        if (orgRes.data.orgs[i].id != 1) {
-          tmpOrg.push(orgRes.data.orgs[i]);
+    res = await getOrgSalesRankingAPI();
+    if (res.err_msg == "success") {
+      if (res.result != null) {
+        for (let i = 0; i < res.result.length; i++) {
+          res.result[i].value = res.result[i].amount;
         }
+        setOrgSalesRank(res.result);
       }
-      setOrgs(tmpOrg);
     } else {
-      message.warning("获取机构信息失败：" + orgRes.err_msg);
-      return;
+      message.error("获取销售额排名失败，", res.err_msg);
+      return
     }
+
+    res = await getOrgDispatchRankingAPI();
+    if (res.err_msg == "success") {
+      if (res.result != null) {
+        for (let i = 0; i < res.result.length; i++) {
+          res.result[i].value = res.result[i].count;
+        }
+        setOrgDispathRank(res.result);
+      }
+    } else {
+      message.error("获取派单排名失败，", res.err_msg);
+      return
+    }
+  }
+  const fetchData = async (filter) => {
+    refreshStatistics(filter);
+    fetchRankData();
   }
   useEffect(() => {
     fetchData({
@@ -168,26 +316,7 @@ function NewDashboard(props) {
       publisher_id: selectPublisherId,
       order_source: selectOrderSource,
     });
-
-    // timerRef.current = setInterval(() => {
-    //   if (count < 2) {
-    //     setCount(count => count + 1);
-    //   }
-    //   fetchData({
-    //     org_id: selectOrgId,
-    //     author: selectAuthor,
-    //     publisher_id: selectPublisherId,
-    //     order_source: selectOrderSource,
-    //   });
-    // }, 1000 * 5)
   }, []);
-  // useEffect(() => {
-  //   if (count >= 2) {
-  //     clearInterval(timerRef.current)
-  //   }
-  // }, [count])
-
-
 
   const refreshStatistics = async (filter) => {
     let res = await getStatisticsSummaryAPI();
@@ -266,50 +395,46 @@ function NewDashboard(props) {
     return tableData;
   }
 
-  const handleUpdateOrg = e => {
-    setSelectOrgId(e);
-    refreshStatistics({
-      org_id: e,
-      author: selectAuthor,
-      publisher_id: selectPublisherId,
-      order_source: selectOrderSource,
-    });
+  const enterRankTabList = {
+    "tab1": <Table
+      pagination={false}
+      columns={enterRankColumns}
+      dataSource={enterRank}
+      size="small"
+      bordered
+    />,
+    "tab2": <div>
+      <ReactEcharts
+        option={enterRankGraphOption}
+        notMerge={true}
+        lazyUpdate={true}
+        theme={"theme_name"} />
+    </div>
   }
-  const handleUpdateAuthor = e => {
-    setSelectAuthor(e);
-    refreshStatistics({
-      org_id: selectOrgId,
-      author: e,
-      publisher_id: selectPublisherId,
-      order_source: selectOrderSource,
-    });
+  const orgRankTabList = {
+    "tab1": <Table
+      pagination={false}
+      columns={orgDispatchRankColumns}
+      dataSource={orgDispatchRank}
+      size="small"
+      bordered
+    />,
+    "tab2": <Table
+      pagination={false}
+      columns={orgSalesRankColumns}
+      dataSource={orgSalesRank}
+      size="small"
+      bordered
+    />,
+    "tab3": <ReactEcharts
+      option={orgSalesRankGraphOption}
+      notMerge={true}
+      lazyUpdate={true}
+      theme={"theme_name"} />
   }
-  const handleUpdatePublisherId = e => {
-    setSelectPublisherId(e);
-    refreshStatistics({
-      org_id: selectOrgId,
-      author: selectAuthor,
-      publisher_id: e,
-      order_source: selectOrderSource,
-    });
-  }
-  const handleUpdateOrderSource = e => {
-    setSelectOrderSource(e);
-    refreshStatistics({
-      org_id: selectOrgId,
-      author: selectAuthor,
-      publisher_id: selectPublisherId,
-      order_source: e,
-    });
-  }
-
 
   return (
     <div style={{ padding: 0, height: "100%", width: "100%" }}>
-      {/* <SummaryData color="#c23531" title="总业绩" data={"￥" + summaryData.performance_total} />
-      <SummaryData color="#cd6d4b" title="总名单量" data={summaryData.students_total} />
-      <SummaryData color="#61a0a8" title="机构数量" data={summaryData.orgs_total} />
-      <SummaryData color="#2f4554" title="成功率" data={summaryData.success_rate / 100 + "%"} /> */}
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={6}>
           <Card>
@@ -352,10 +477,33 @@ function NewDashboard(props) {
           </Card>
         </Col>
       </Row>
-
-
-      <Card title="统计信息">
-
+      <Row style={{ marginTop: 20 }} gutter={[16, 24]}>
+        <Col span={12}>
+          <Card
+            tabList={enterRankTab}
+            activeTabKey={enterRankTabKey}
+            style={{ height: 360 }}
+            onTabChange={key => {
+              setEnterRankTabKey(key);
+            }}
+          >
+            {enterRankTabList[enterRankTabKey]}
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card
+            tabList={orgRankTab}
+            activeTabKey={orgRankTabKey}
+            style={{ height: 360 }}
+            onTabChange={key => {
+              setOrgRankTabKey(key);
+            }}
+          >
+            {orgRankTabList[orgRankTabKey]}
+          </Card>
+        </Col>
+      </Row>
+      <Card title="统计信息" style={{ marginTop: 20 }}>
         <div>
           <Table
             pagination={false}
@@ -366,27 +514,29 @@ function NewDashboard(props) {
           />
         </div>
       </Card>
-      <Card title="统计表" style={{ marginTop: 20 }}>
-        <Row >
-          <Col span={12}>
+      <Row style={{ marginTop: 20 }} gutter={[16, 24]}>
+        <Col span={12}>
+          <Card title="录单统计图" >
             <ReactEcharts
               option={studentOption}
               notMerge={true}
               lazyUpdate={true}
               theme={"theme_name"} />
-          </Col>
-          <Col span={12}>
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card title="销售额统计图" >
             <ReactEcharts
               option={performanceOption}
               notMerge={true}
               lazyUpdate={true}
               theme={"theme_name"} />
-          </Col>
-        </Row>
-      </Card>
+          </Card>
+        </Col>
+      </Row>
 
 
-    </div>
+    </div >
   );
 }
 export default NewDashboard;
