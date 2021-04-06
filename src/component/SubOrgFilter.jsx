@@ -38,7 +38,7 @@ function SubOrgFilter(props) {
             return;
         }
         props.onFilterChange({
-            address: e[0] + e[1],
+            address: e[0] + "-" + e[1],
             parent_id: org,
             isFilter: isFilter,
             name: query,
