@@ -169,7 +169,7 @@ function CreateStudentOrder(props) {
                 total: orgRes.data.total
             });
         } else {
-            message.warn("查不到机构信息");
+            message.warn("查不到机构信息" + orgRes.err_msg);
             history.goBack();
         }
     }
@@ -189,7 +189,7 @@ function CreateStudentOrder(props) {
                 total: orgRes.data.total
             });
         } else {
-            message.warn("查不到机构信息");
+            message.warn("查不到机构信息" + orgRes.err_msg);
             history.goBack();
         }
     }
