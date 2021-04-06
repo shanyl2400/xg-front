@@ -328,14 +328,18 @@ function NewDashboard(props) {
     }
 
     let res1 = await getStatisticsTableAPI(filter);
+    let d = new Date();
+    let curMonth = d.getMonth() + 1;
+    console.log(">>>>>>>>:", curMonth);
     if (res1.err_msg == "success") {
       let studentXseries = [];
       let studentYseries = [];
       let performanceYseries = [];
       let ordersYSeries = [];
       let data = res1.data.data;
+      console.log(">>>>>>>>:", data.length);
       for (let i = 0; i < data.length; i++) {
-        studentXseries.push((i + 1) + "月");
+        studentXseries.push(((curMonth + i) % 12 + 1) + "月");
         studentYseries.push(data[i].students);
         performanceYseries.push(data[i].performance);
         ordersYSeries.push(data[i].orders);
