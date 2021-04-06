@@ -17,15 +17,19 @@
   }
 
   .new-student-table-row{
-    background-color:#ffd591;
+    background:#fff;
   }
   .valid-student-table-row{
-    background:#fff;
+    background-color:#ffd591;
+  }
+  .valid-student-table-row:hover{
+    background-color:#ffd591;
   }
   .invalid-student-table-row{
     background-color:#a8071a;
     color:#fff;
   }
   .invalid-student-table-row:hover{
+    background-color:#a8071a;
     color:#000;
   }
