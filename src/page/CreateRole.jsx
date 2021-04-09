@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Breadcrumb, Input, Form, Button, Checkbox, message, Select } from 'antd';
+import { Breadcrumb, Input, Form, Button, Checkbox, message, Select, Modal } from 'antd';
 import { listAuths, createRole } from "../api/api";
+import { PlusCircleOutlined } from '@ant-design/icons';
+const { confirm } = Modal;
 const layout = {
   labelCol: { span: 3 },
   wrapperCol: { span: 10 },
@@ -23,16 +25,34 @@ function CreateRole(props) {
   const handleChange = e => {
     setRoleName(e.target.value)
   }
-  const handleAddRole = async e => {
-    let res = await createRole(form.getFieldsValue());
-    if (res.err_msg == "success") {
-      console.log(res);
-      message.success("创建角色成功");
-      form.resetFields();
-    } else {
-      message.error("创建角色失败，" + res.err_msg);
-      return
-    }
+  const handleAddRole = e => {
+    form.validateFields().then(() => {
+      confirm({
+        title: '确认创建角色?',
+        icon: <PlusCircleOutlined />,
+        content: '创建角色可能会导致角色功能不完整，确认创建角色？',
+        async onOk() {
+          let data = form.getFieldsValue();
+          data.role_mode = roleMode;
+          let res = await createRole(data);
+          if (res.err_msg == "success") {
+            console.log(res);
+            message.success("创建角色成功");
+            form.resetFields();
+          } else {
+            message.error("创建角色失败，" + res.err_msg);
+            return
+          }
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+
+    }).catch(e => {
+
+    })
+
   }
 
   const handleChangeRoleMode = e => {
@@ -84,20 +104,20 @@ function CreateRole(props) {
           <Input style={{ width: 220 }} onChange={handleChange} />
         </Form.Item>
 
-        <Form.Item name="role_mode" label="角色归属" rules={[{ required: true }]} >
+        <Form.Item name="role_mode" label="角色归属" rules={[{ required: false }]} >
           <Select style={{ width: 220 }} defaultValue={1} value={roleMode} onChange={handleChangeRoleMode}>
             <Select.Option value={1}>学果网</Select.Option>
             <Select.Option value={2}>入驻机构</Select.Option>
           </Select>
         </Form.Item>
 
-        <Form.Item name="auth_ids" label="权限" rules={[{ required: true }]} >
+        <Form.Item name="auth_ids" label="权限" rules={[{ required: false }]} >
           <Checkbox.Group options={authOptions} defaultValue={['人员管理']} />
         </Form.Item>
 
         <Form.Item {...tailLayout}>
-          <Button onClick={handleAddRole} htmlType="button">
-            保存
+          <Button onClick={handleAddRole} htmlType="button" type="primary">
+            创建
           </Button>
 
         </Form.Item>

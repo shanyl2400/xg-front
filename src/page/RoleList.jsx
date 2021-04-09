@@ -5,11 +5,6 @@ import { listRolesAPI } from '../api/api';
 function RoleList(props) {
   const columns = [
     {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: '角色名',
       dataIndex: 'name',
       key: 'name',
@@ -55,6 +50,7 @@ function RoleList(props) {
             style={{ marginTop: "30px" }}
             columns={columns}
             dataSource={roles}
+            pagination={{ position: 'bottom', pageSize: 10, size: "small" }}
           />
         </Col>
       </Row>
