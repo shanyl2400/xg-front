@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, InputNumber, Descriptions, message } from 'antd';
+import { Modal, Input, Descriptions, message } from 'antd';
 import { updatePaymentAmountAPI } from '../api/api'
 import { getPaymentStatusTags } from '../utils/status';
 import { formatDate } from '../utils/date';
@@ -22,6 +22,13 @@ function UpdatePriceModel(props) {
         }
     };
 
+    let changeAmount = e => {
+        let x = Number(e.target.value);
+        if (!isNaN(x)) {
+            setAmount(x);
+        }
+    }
+
     let handleCancel = () => {
         props.closeModel();
     };
@@ -42,13 +49,11 @@ function UpdatePriceModel(props) {
                 <Descriptions.Item label="时间" span={3}>{formatDate(new Date(Date.parse(props.record.created_at)))}</Descriptions.Item>
                 <Descriptions.Item label="状态" span={3}>{getPaymentStatusTags(props.record.status)}</Descriptions.Item>
                 <Descriptions.Item label="修改费用">
-                    <InputNumber
-                        formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={value => value.replace(/\￥\s?|(,*)/g, '')}
-                        placeholder="请填写"
+                    <Input
+                        prefix="￥"
                         value={amount}
-                        onChange={e => setAmount(e)}
-                    />
+                        placeholder="请填写"
+                        onChange={changeAmount} />
                 </Descriptions.Item>
             </Descriptions>
 

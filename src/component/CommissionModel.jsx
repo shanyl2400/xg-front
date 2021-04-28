@@ -24,7 +24,10 @@ function CommissionModel(props) {
         setNote(e.target.value)
     }
     let changeCommissionAmount = e => {
-        setCommission(e);
+        let x = Number(e.target.value);
+        if (!isNaN(x)) {
+            setCommission(x);
+        }
     }
     const onSubmit = async e => {
         if (commission == "") {
@@ -70,13 +73,11 @@ function CommissionModel(props) {
                         {props.record && props.record.mode == 1 ? "" : "-"}￥{props.record && props.record.amount}
                     </Descriptions.Item>
                     <Descriptions.Item label="佣金" span={3}>
-                        <InputNumber
-                            formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\￥\s?|(,*)/g, '')}
-                            placeholder="请填写"
+                        <Input
+                            prefix="￥"
                             value={commission}
-                            onChange={changeCommissionAmount}
-                        />
+                            placeholder="请填写"
+                            onChange={changeCommissionAmount} />
                     </Descriptions.Item>
                     <Descriptions.Item label="结算比例" span={3}>
                         <Input

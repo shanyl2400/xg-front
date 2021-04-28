@@ -75,18 +75,29 @@ function CreateSettlement(props) {
                     }
                 }
             }
+            let commissionNum = Number(commission);
+            if (isNaN(commissionNum)) {
+                message.warn("佣金必须是数字");
+                return;
+            }
+            let amountNum = Number(amount);
+            if (isNaN(amountNum)) {
+                message.warn("销售额必须是数字");
+                return;
+            }
 
             let data = {
                 start_at: timeRange.startAt,
                 end_at: timeRange.endAt,
                 success_orders: success_orders_req,
                 failed_orders: failed_orders_req,
-                amount: amount,
-                commission: commission,
+                amount: amountNum,
+                commission: commissionNum,
                 status: status == 0 ? 1 : status,
                 note: note,
-                invoice: invoiceList.source
+                invoice: invoiceList ? invoiceList.source : null
             }
+            console.log(data);
             let res = await createSettlementAPI(data);
             if (res.err_msg == "success") {
                 //status 1 创建成功
@@ -186,16 +197,14 @@ function CreateSettlement(props) {
                 </Form.Item>
 
                 <Form.Item name="amount" label="销售额" rules={[{ required: true }]} >
-                    <InputNumber
-                        formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={value => value.replace(/\￥\s?|(,*)/g, '')}
+                    <Input
+                        prefix="￥"
                         placeholder="请填写" />
                 </Form.Item>
 
                 <Form.Item name="commission" label="佣金金额" rules={[{ required: true }]}>
-                    <InputNumber
-                        formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={value => value.replace(/\￥\s?|(,*)/g, '')}
+                    <Input
+                        prefix="￥"
                         placeholder="请填写" />
                 </Form.Item>
 

@@ -117,11 +117,17 @@ function AddMarkModel(props) {
     }
 
     let changePaymentAmount = e => {
-        setPaymentAmount(e);
+        let x = Number(e.target.value);
+        if (!isNaN(x)) {
+            setPaymentAmount(x);
+        }
     }
 
     let changeStatusAmount = e => {
-        setStatusAmount(e);
+        let x = Number(e.target.value);
+        if (!isNaN(x)) {
+            setStatusAmount(x);
+        }
     }
     let changeTab = e => {
         setCurrentTab(e)
@@ -266,14 +272,11 @@ function AddMarkModel(props) {
                             />
                         </Form.Item>
                         <Form.Item label="金额">
-                            <InputNumber
-                                formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\￥\s?|(,*)/g, '')}
-                                placeholder="请填写"
-                                disabled={disableStatusPayment}
+                            <Input
+                                prefix="￥"
                                 value={statusAmount}
-                                onChange={changeStatusAmount}
-                            />
+                                placeholder="请填写"
+                                onChange={changeStatusAmount} />
                         </Form.Item>
                     </Form>
                     <Row style={{ marginTop: 10 }} justify="end">
@@ -313,12 +316,11 @@ function AddMarkModel(props) {
                         </Form.Item>
 
                         <Form.Item label="金额">
-                            <InputNumber
-                                formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\￥\s?|(,*)/g, '')}
+                            <Input
+                                prefix="￥"
                                 value={paymentAmount}
-                                onChange={changePaymentAmount}
-                                placeholder="请填写" />
+                                placeholder="请填写"
+                                onChange={changePaymentAmount} />
                         </Form.Item>
 
 
