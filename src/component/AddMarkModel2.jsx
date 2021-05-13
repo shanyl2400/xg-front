@@ -30,9 +30,14 @@ function AddMarkModel(props) {
     let [paymentAmount, setPaymentAmount] = useState("");
     let [statusAmount, setStatusAmount] = useState("");
 
+    const [submitPayLoading, setSubmitPayLoading] = useState(false);
+    const [submitStatusLoading, setSubmitStatusLoading] = useState(false);
+    const [submitRemarkLoading, setSubmitRemarkLoading] = useState(false);
+
     const [textForm] = Form.useForm();
     const [statusForm] = Form.useForm();
     const [paymentForm] = Form.useForm();
+
 
 
     let [statusMode, setStatusMode] = useState(0);
@@ -43,6 +48,7 @@ function AddMarkModel(props) {
         props.closeModel();
     }
     let onSubmitTextRemark = async () => {
+        setSubmitRemarkLoading(true);
         let res = await addOrderMarkAPI(props.id, textContent)
         if (res.err_msg == "success") {
             message.success("添加回访成功");
@@ -52,9 +58,11 @@ function AddMarkModel(props) {
         } else {
             message.error("添加回访失败，" + res.err_msg);
         }
+        setSubmitRemarkLoading(false);
     }
 
     let onSubmitStatusRemark = async () => {
+        setSubmitStatusLoading(true);
         let res = await updateOrderStatusAPI({
             order_id: props.id,
             status: statusMode,
@@ -75,9 +83,11 @@ function AddMarkModel(props) {
         } else {
             message.error("修改订单状态成功，" + res.err_msg);
         }
+        setSubmitStatusLoading(false);
     }
 
     let onSubmitPaymentRemark = async () => {
+        setSubmitPayLoading(true);
         let res = await payOrderAPI(props.id, {
             title: paymentTitle,
             mode: paymentDirector,
@@ -97,6 +107,8 @@ function AddMarkModel(props) {
         } else {
             message.error("收支创建失败" + res.err_msg);
         }
+
+        setSubmitPayLoading(false);
     }
 
     let changeTextContent = e => {
@@ -248,7 +260,7 @@ function AddMarkModel(props) {
                             <Button onClick={onCancel}>取消</Button>
                         </Col>
                         <Col offset={1}>
-                            <Button onClick={onSubmitTextRemark} type="primary">发布</Button>
+                            <Button onClick={onSubmitTextRemark} type="primary" loading={submitRemarkLoading}>发布</Button>
                         </Col>
                     </Row>
                 </TabPane>
@@ -276,6 +288,7 @@ function AddMarkModel(props) {
                                 prefix="￥"
                                 value={statusAmount}
                                 placeholder="请填写"
+                                disabled={disableStatusPayment}
                                 onChange={changeStatusAmount} />
                         </Form.Item>
                     </Form>
@@ -284,7 +297,7 @@ function AddMarkModel(props) {
                             <Button onClick={onCancel}>取消</Button>
                         </Col>
                         <Col offset={1}>
-                            <Button onClick={onSubmitStatusRemark} type="primary">发布</Button>
+                            <Button onClick={onSubmitStatusRemark} type="primary" loading={submitStatusLoading}>发布</Button>
                         </Col>
                     </Row>
                 </TabPane>
@@ -331,7 +344,7 @@ function AddMarkModel(props) {
                             <Button onClick={onCancel}>取消</Button>
                         </Col>
                         <Col offset={1}>
-                            <Button onClick={onSubmitPaymentRemark} type="primary">发布</Button>
+                            <Button onClick={onSubmitPaymentRemark} type="primary" loading={submitPayLoading}>发布</Button>
                         </Col>
                     </Row>
                 </TabPane>
