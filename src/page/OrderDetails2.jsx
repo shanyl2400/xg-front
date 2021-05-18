@@ -13,6 +13,7 @@ import CommissionViewModel from '../component/CommissionViewModel';
 import { parseAddress } from '../utils/address';
 import { checkAuthority } from '../utils/auth';
 import { NO } from '../utils/id';
+import { formatOnlyDate } from '../utils/date';
 const { TextArea } = Input;
 const { Title } = Typography;
 const { confirm } = Modal;
@@ -55,6 +56,14 @@ function OrderDetails(props) {
                     {status == 1 ? <Tag color="red">未读</Tag> : <Tag color="green">已读</Tag>}
                 </span>
             )
+        },
+        {
+            title: '回访时间',
+            dataIndex: 'revisit_at',
+            key: 'revisit_at',
+            render: revisitAt => (
+                <span>{revisitAt != null && formatOnlyDate(new Date(Date.parse(revisitAt)))}</span>
+            ),
         },
         {
             title: '操作',

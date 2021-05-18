@@ -469,11 +469,9 @@ export async function batchCreateSubjectAPI(data) {
     }
 }
 
-export async function addOrderMarkAPI(id, content) {
+export async function addOrderMarkAPI(id, req) {
     try {
-        let res = await axios.post(baseURL + `/order/${id}/mark`, {
-            content: content
-        });
+        let res = await axios.post(baseURL + `/order/${id}/mark`, req);
         return res.data;
     } catch (e) {
         return e.response.data

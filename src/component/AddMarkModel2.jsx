@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Row, Col, Button, Tabs, Radio, Form, Input, InputNumber, message } from 'antd';
+import { Modal, Row, Col, Button, Tabs, Radio, Form, Input, DatePicker, Switch, message } from 'antd';
 import { addOrderMarkAPI, updateOrderStatusAPI, payOrderAPI } from '../api/api';
 import TextArea from 'antd/lib/input/TextArea';
 
@@ -11,6 +11,7 @@ const layout = {
 
 let hideStatus = false;
 let hidePayment = false;
+let hideReview = true;
 let statusSelectDisable = [false, false, false, false, false];
 
 const considerStatusOption = 0;
@@ -26,6 +27,10 @@ function AddMarkModel(props) {
     let [paymentContent, setPaymentContent] = useState("");
     let [paymentTitle, setPaymentTitle] = useState("");
     let [paymentDirector, setPaymentDirector] = useState(1);
+
+    let [disableReview, setDisableReview] = useState(false);
+    let [closeReview, setCloseReview] = useState(true);
+    let [reviewAt, setReviewAt] = useState(null);
 
     let [paymentAmount, setPaymentAmount] = useState("");
     let [statusAmount, setStatusAmount] = useState("");
@@ -49,7 +54,14 @@ function AddMarkModel(props) {
     }
     let onSubmitTextRemark = async () => {
         setSubmitRemarkLoading(true);
-        let res = await addOrderMarkAPI(props.id, textContent)
+        let req = {
+            content: textContent,
+            revisit_at: 0,
+        }
+        if (reviewAt != null) {
+            req.revisit_at = reviewAt.unix();
+        }
+        let res = await addOrderMarkAPI(props.id, req)
         if (res.err_msg == "success") {
             message.success("添加回访成功");
             props.closeModel();
@@ -144,6 +156,16 @@ function AddMarkModel(props) {
     let changeTab = e => {
         setCurrentTab(e)
     }
+    let onReviewAtChange = e => {
+        setReviewAt(e);
+    }
+    let onAddReviewAtChange = e => {
+        console.log(e);
+        if (!e) {
+            setReviewAt(null);
+        }
+        setCloseReview(!e);
+    }
 
     let changeStatusMode = e => {
         let option = e.target.value;
@@ -183,6 +205,7 @@ function AddMarkModel(props) {
         if (sessionStorage.getItem("org_id") == 1) {
             hideStatus = true;
             hidePayment = true;
+            hideReview = false;
         }
 
         if (props.orderStatus == 4 || props.orderStatus == 3) {
@@ -252,6 +275,12 @@ function AddMarkModel(props) {
                                 placeholder="请填写回访信息"
                                 autoSize={{ minRows: 3, maxRows: 5 }}
                             />
+                        </Form.Item>
+                        <Form.Item label="添加回访">
+                            <Switch disabled={hideReview} onChange={onAddReviewAtChange} />
+                        </Form.Item>
+                        <Form.Item label="回访时间">
+                            <DatePicker disabled={closeReview} value={reviewAt} onChange={onReviewAtChange} />
                         </Form.Item>
                     </Form>
 
