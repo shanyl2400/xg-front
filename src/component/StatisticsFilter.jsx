@@ -157,6 +157,9 @@ function StatisticsFilter(props) {
                 return;
             }
         }
+
+        val[0].set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        val[1].set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
         let startAt = val[0].unix();
         let endAt = val[1].unix();
 
